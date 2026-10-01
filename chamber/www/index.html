@@ -4,7 +4,6 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
 
-/* ── Bizaxl Design System: tokens ── */
 :root {
   --bx-navy: #05133C;
   --bx-navy-base: #091526;
@@ -13,618 +12,267 @@
   --bx-gray-100: #F4F4F5;
   --bx-gray-400: #71717B;
   --bx-gradient: linear-gradient(90deg, #14F1B1 0%, #114EFF 50%, #091526 100%);
-  --bx-radius-sm: 8px;
-  --bx-radius-md: 10px;
-  --bx-radius-lg: 12px;
-  --bx-radius-xl: 16px;
-  --bx-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.1);
 }
 
-/* ── Typography ── */
-.bx-page { font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-.bx-page input, .bx-page select, .bx-page textarea, .bx-page button { font-family: inherit; font-size: 14px; }
-.bx-page h1, .bx-page h2, .bx-page h3, .bx-page h4, .bx-page h5, .bx-page h6 { font-family: inherit; color: var(--bx-navy); }
+/* ── Hide default Frappe website chrome on portal pages ── */
+body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wrapper, .page-footer { display: none !important; }
 
-/* ── Headings ── */
-.bx-title { display: flex; align-items: center; justify-content: center; gap: 16px; font-size: 32px; font-weight: 700; line-height: 1.2; color: var(--bx-navy); margin: 0 0 8px; }
-.bx-title .lucide { width: 28px; height: 28px; color: var(--bx-blue); flex-shrink: 0; }
-.bx-subtitle { font-size: 16px; line-height: 1.5; color: var(--bx-gray-400); margin: 0 0 32px; text-align: center; }
-.bx-section-title { font-size: 24px; font-weight: 700; color: var(--bx-navy); margin: 0 0 8px; }
-.bx-section-sub { font-size: 16px; color: var(--bx-gray-400); margin: 0 0 32px; }
+/* ── App shell ── */
+.lp { position: fixed; top: 0; right: 0; bottom: 0; left: 0; display: flex; background: #FAFAFB; font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: var(--bx-navy); }
 
-/* ── Buttons ── */
-.bx-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; min-width: 140px; padding: 8px 20px; border-radius: 10px; font-weight: 700; font-size: 14px; line-height: 20px; border: 1px solid transparent; cursor: pointer; text-decoration: none; transition: all 0.2s; }
-.bx-btn .lucide { width: 16px; height: 16px; flex-shrink: 0; }
-.bx-btn:hover { text-decoration: none; }
-.bx-btn-primary { background: #14F1B1; color: #05133C; border-color: #14F1B1; }
-.bx-btn-primary:hover { filter: brightness(0.95); box-shadow: 0 4px 12px rgba(20, 241, 177, 0.35); }
-.bx-btn-secondary { background: #05133C; color: #FFFFFF; border-color: #05133C; min-width: 166px; }
-.bx-btn-secondary:hover { background: #091526; border-color: #091526; }
-.bx-btn-tertiary { background: #FFFFFF; color: #05133C; border: 1px solid rgba(5, 19, 60, 0.5); min-width: 160px; }
-.bx-btn-tertiary:hover { background: #F4F4F5; }
+/* Sidebar */
+.lp-side { width: 268px; flex-shrink: 0; background: var(--bx-navy); display: flex; flex-direction: column; padding: 22px 16px 18px; overflow-y: auto; }
+.lp-brand { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; padding: 0 6px; }
+.lp-logo { width: 38px; height: 38px; border-radius: 11px; background: var(--bx-mint); color: var(--bx-navy); font-weight: 700; font-size: 15px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.lp-brand-txt { flex: 1; min-width: 0; }
+.lp-brand-name { color: #fff; font-size: 15px; font-weight: 700; line-height: 1.2; }
+.lp-brand-sub { color: rgba(255, 255, 255, 0.5); font-size: 12px; margin-top: 2px; }
+.lp-brand .lucide { width: 18px; height: 18px; color: rgba(255, 255, 255, 0.7); flex-shrink: 0; }
+.lp-searchbox { display: flex; align-items: center; gap: 10px; height: 42px; padding: 0 12px; border-radius: 10px; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.1); color: rgba(255, 255, 255, 0.45); font-size: 14px; margin-bottom: 22px; cursor: default; }
+.lp-searchbox .lucide { width: 16px; height: 16px; }
+.lp-kbd { margin-left: auto; background: rgba(255, 255, 255, 0.1); border-radius: 6px; padding: 2px 7px; font-size: 11px; color: rgba(255, 255, 255, 0.55); }
+.lp-nav { display: flex; flex-direction: column; gap: 4px; }
+.lp-nav-item { display: flex; align-items: center; gap: 16px; padding: 11px 14px; border-radius: 10px; color: rgba(255, 255, 255, 0.72); font-size: 14px; font-weight: 500; text-decoration: none; transition: background 0.15s, color 0.15s; }
+.lp-nav-item:hover { background: rgba(255, 255, 255, 0.07); color: #fff; text-decoration: none; }
+.lp-nav-item.is-active, .lp-nav-item.is-active:hover { background: var(--bx-mint); color: var(--bx-navy); font-weight: 700; }
+.lp-nav-item .lucide { width: 20px; height: 20px; flex-shrink: 0; }
+.lp-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(5, 19, 60, 0.65); margin-left: auto; }
+.lp-user { display: flex; align-items: center; gap: 12px; padding: 14px 8px 2px; margin-top: auto; border-top: 1px solid rgba(255, 255, 255, 0.1); }
+.lp-avatar { width: 34px; height: 34px; border-radius: 50%; background: var(--bx-mint); color: var(--bx-navy); font-weight: 700; font-size: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.lp-user-txt { flex: 1; min-width: 0; }
+.lp-user-name { color: #fff; font-size: 14px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lp-user-role { color: rgba(255, 255, 255, 0.5); font-size: 12px; }
+.lp-user .lucide { width: 16px; height: 16px; color: rgba(255, 255, 255, 0.5); flex-shrink: 0; }
 
-/* ── Badges ── */
-.bx-badge { display: inline-block; background: #F4F4F5; color: #05133C; padding: 2px 12px; border-radius: 999px; font-weight: 500; font-size: 12px; line-height: 20px; white-space: nowrap; }
-.bx-badge--active { background: #14F1B1; color: #05133C; }
-.bx-badge--accent { background: #FFFFFF; color: #114EFF; border: 1px solid #114EFF; }
-.bx-badge--navy { background: #05133C; color: #FFFFFF; }
-.bx-badge--muted { background: #F4F4F5; color: #71717B; }
-.bx-badge--success { background: #00C950; color: #FFFFFF; }
+/* Main */
+.lp-main { flex: 1; min-width: 0; overflow-y: auto; padding: 40px 44px 56px; }
+.lp-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; flex-wrap: wrap; margin-bottom: 28px; }
+.lp-h1 { font-size: 36px; font-weight: 700; letter-spacing: -0.5px; color: var(--bx-navy); margin: 0 0 6px; display: flex; align-items: center; gap: 12px; line-height: 1.15; }
+.lp-h1 .lucide { width: 30px; height: 30px; color: var(--bx-blue); flex-shrink: 0; }
+.lp-sub { font-size: 16px; color: var(--bx-gray-400); margin: 0; }
+.lp-head-actions { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
 
-/* ── Cards ── */
-.bx-card { background: #FFFFFF; border: 1px solid #F4F4F5; border-radius: 12px; box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.1); overflow: hidden; }
-.bx-card + .bx-card { margin-top: 20px; }
-.bx-card-head { background: #05133C; color: #FFFFFF; padding: 14px 24px; font-size: 18px; font-weight: 600; display: flex; align-items: center; gap: 8px; border-bottom: 2px solid #14F1B1; }
-.bx-card-head--blue { background: #114EFF; }
-.bx-card-head .lucide { width: 20px; height: 20px; flex-shrink: 0; }
-.bx-card-head h4, .bx-card-title { font-size: 18px; font-weight: 600; color: inherit; margin: 0; }
-.bx-card-body { padding: 24px; }
+/* Stat cards */
+.lp-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 24px; }
+.lp-stat { background: #fff; border: 1px solid var(--bx-gray-100); border-radius: 12px; padding: 20px; box-shadow: 0 1px 2px rgba(5, 19, 60, 0.04); }
+.lp-stat-top { display: flex; align-items: center; gap: 16px; margin-bottom: 12px; }
+.lp-ico { width: 40px; height: 40px; border-radius: 10px; background: rgba(20, 241, 177, 0.16); color: var(--bx-navy); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.lp-ico .lucide { width: 20px; height: 20px; }
+.lp-ico--blue { background: rgba(17, 78, 255, 0.1); color: var(--bx-blue); }
+.lp-ico--navy { background: var(--bx-navy); color: var(--bx-mint); }
+.lp-stat-label { font-size: 12px; font-weight: 600; letter-spacing: 0.6px; text-transform: uppercase; color: var(--bx-gray-400); }
+.lp-stat-num { font-size: 32px; font-weight: 700; line-height: 1.1; color: var(--bx-navy); }
+.lp-stat-note { font-size: 12px; color: var(--bx-gray-400); margin-top: 6px; }
 
-/* ── Feature / list items ── */
-.bx-list { list-style: none; padding: 0; margin: 0; }
-.bx-list li { display: flex; align-items: flex-start; gap: 8px; padding: 8px 0; font-size: 16px; line-height: 26px; color: #737373; }
-.bx-list li .lucide { width: 16px; height: 16px; margin-top: 5px; flex-shrink: 0; color: #114EFF; }
-.bx-list--feature li .lucide { color: #00C950; }
+/* Panels */
+.lp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+.lp-panel { background: #fff; border: 1px solid var(--bx-gray-100); border-radius: 12px; padding: 22px 24px; box-shadow: 0 1px 2px rgba(5, 19, 60, 0.04); }
+.lp-panel + .lp-panel { margin-top: 20px; }
+.lp-panel-title { display: flex; align-items: center; gap: 10px; font-size: 17px; font-weight: 700; color: var(--bx-navy); margin: 0 0 14px; }
+.lp-panel-title .lucide { width: 20px; height: 20px; color: var(--bx-blue); flex-shrink: 0; }
+.lp-panel-desc { font-size: 14px; color: var(--bx-gray-400); margin: -6px 0 16px; }
+.lp-section { margin-bottom: 24px; }
 
-/* ── Forms ── */
-.bx-page .form-group { margin-bottom: 16px; }
-.bx-page .form-group label { font-size: 14px; font-weight: 600; color: #05133C; margin-bottom: 6px; }
-.bx-page .form-control { border: 1px solid #F4F4F5; border-radius: 8px; padding: 10px 14px; font-size: 14px; color: #000000; background: #FFFFFF; box-shadow: none; transition: border-color 0.15s, box-shadow 0.15s; }
-.bx-page .form-control:focus { border-color: #114EFF; box-shadow: 0 0 0 3px rgba(17, 78, 255, 0.15); outline: 0; }
-.bx-page .form-control::placeholder { color: #A1A1A1; }
+/* Empty states */
+.lp-empty { text-align: center; padding: 36px 12px; color: var(--bx-gray-400); }
+.lp-empty-ico { width: 48px; height: 48px; border-radius: 50%; background: var(--bx-gray-100); color: #A1A1A1; display: flex; align-items: center; justify-content: center; margin: 0 auto 14px; }
+.lp-empty-ico .lucide { width: 22px; height: 22px; }
+.lp-empty h4 { font-size: 15px; font-weight: 600; color: var(--bx-navy); margin: 0 0 4px; }
+.lp-empty p { font-size: 14px; color: var(--bx-gray-400); margin: 0; }
 
-/* ── Dynamic content (search results) ── */
-.bx-page .table > thead > tr > th { border-bottom: 2px solid #14F1B1; color: #05133C; font-weight: 600; font-size: 14px; }
-.bx-page .table > tbody > tr > td { font-size: 14px; color: #000000; vertical-align: middle; }
-.bx-page .list-group-item { border-color: #F4F4F5; }
-.bx-page .list-group-item-heading { color: #05133C; font-size: 15px; font-weight: 600; }
-.bx-page .list-group-item-text { font-size: 14px; color: #71717B; }
-.bx-page .badge { background: #F4F4F5; color: #05133C; border-radius: 999px; font-weight: 500; font-size: 12px; padding: 2px 10px; }
-.bx-page .label { border-radius: 999px; font-weight: 500; font-size: 12px; }
-.bx-page .label-success { background: #00C950; }
+/* List rows */
+.lp-row { display: flex; align-items: center; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--bx-gray-100); }
+.lp-row:last-child { border-bottom: none; }
+.lp-row:first-child { padding-top: 2px; }
+.lp-row-body { flex: 1; min-width: 0; }
+.lp-row-title { font-size: 15px; font-weight: 700; color: var(--bx-navy); }
+.lp-row-sub { font-size: 13px; color: var(--bx-gray-400); margin-top: 3px; }
+.lp-row-side { flex-shrink: 0; display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+.lp-row-date { font-size: 12px; color: var(--bx-gray-400); }
 
-/* ── Glassmorphism ── */
-.bx-glass { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); border: 1px solid #F4F4F5; border-radius: 16px; }
+/* Pills */
+.lp-pill { display: inline-block; padding: 3px 12px; border-radius: 999px; font-size: 12px; font-weight: 600; background: var(--bx-gray-100); color: var(--bx-navy); white-space: nowrap; }
+.lp-pill--mint { background: var(--bx-mint); color: var(--bx-navy); }
+.lp-pill--blue { background: rgba(17, 78, 255, 0.1); color: var(--bx-blue); }
+.lp-pill--navy { background: var(--bx-navy); color: #fff; }
+.lp-due { color: #DC2626; font-weight: 600; }
 
-/* ── Responsive heading scale ── */
-@media (max-width: 768px) {
-  .bx-title { font-size: 24px; }
-}
+/* Buttons */
+.lp-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; padding: 8px 18px; border-radius: 10px; font-size: 14px; font-weight: 700; border: 1px solid transparent; cursor: pointer; text-decoration: none; transition: all 0.2s; }
+.lp-btn .lucide { width: 16px; height: 16px; flex-shrink: 0; }
+.lp-btn--mint { background: var(--bx-mint); color: var(--bx-navy); }
+.lp-btn--mint:hover { filter: brightness(0.95); text-decoration: none; }
+.lp-btn--navy { background: var(--bx-navy); color: #fff; }
+.lp-btn--navy:hover { background: var(--bx-navy-base); color: #fff; text-decoration: none; }
+.lp-btn--ghost { background: #fff; color: var(--bx-navy); border-color: rgba(5, 19, 60, 0.5); }
+.lp-btn--ghost:hover { background: var(--bx-gray-100); text-decoration: none; }
 
-/* ── Page: Hero ── */
-.ch-hero {
-  background: var(--bx-navy);
-  color: #fff;
-  padding: 80px 0 60px;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-}
-.ch-hero::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  right: -20%;
-  width: 600px;
-  height: 600px;
-  background: radial-gradient(circle, rgba(20, 241, 177, 0.15) 0%, transparent 70%);
-  border-radius: 50%;
-}
-.ch-hero::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: var(--bx-gradient);
-}
-.ch-hero .container { position: relative; z-index: 2; }
-.ch-hero h1 {
-  font-size: 48px;
-  font-weight: 700;
-  margin: 0 0 8px;
-  letter-spacing: -1px;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-}
-.ch-hero h1 .lucide { width: 40px; height: 40px; color: var(--bx-mint); }
-.ch-hero .subtitle { font-size: 18px; font-weight: 500; opacity: 0.9; margin: 0 0 6px; }
-.ch-hero .tagline { font-size: 16px; opacity: 0.7; max-width: 600px; margin: 0 auto 32px; }
+/* Forms */
+.lp .form-group { margin-bottom: 16px; }
+.lp .form-group label { font-size: 14px; font-weight: 600; color: var(--bx-navy); margin-bottom: 6px; }
+.lp .form-control { border: 1px solid var(--bx-gray-100); border-radius: 8px; padding: 9px 14px; font-size: 14px; color: #000; background: #fff; box-shadow: none; transition: border-color 0.15s, box-shadow 0.15s; }
+.lp .form-control:focus { border-color: var(--bx-blue); box-shadow: 0 0 0 3px rgba(17, 78, 255, 0.15); outline: 0; }
+.lp .form-control::placeholder { color: #A1A1A1; }
 
-/* ── Page: Workflow section ── */
-.ch-workflow-section {
-  background: #fff;
-  padding: 60px 0 50px;
-  border-bottom: 1px solid var(--bx-gray-100);
-}
-.ch-section-title {
-  text-align: center;
-  font-size: 24px;
-  font-weight: 700;
-  color: var(--bx-navy);
-  margin: 0 0 8px;
-}
-.ch-section-sub {
-  text-align: center;
-  color: var(--bx-gray-400);
-  font-size: 16px;
-  margin: 0 0 40px;
-}
-.ch-workflow {
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  gap: 0;
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 0 20px;
-  flex-wrap: wrap;
-}
-.ch-wf-step {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  flex: 1 1 0;
-  min-width: 130px;
-  max-width: 170px;
-  position: relative;
-}
-.ch-wf-icon {
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #05133C;
-  color: #14F1B1;
-  margin-bottom: 12px;
-  position: relative;
-  z-index: 2;
-  box-shadow: 0 4px 12px rgba(5, 19, 60, 0.12);
-  transition: transform 0.2s;
-}
-.ch-wf-icon .lucide { width: 24px; height: 24px; }
-.ch-wf-step:hover .ch-wf-icon { transform: scale(1.08); }
-.ch-wf-step .ch-wf-num {
-  position: absolute;
-  top: -6px;
-  right: -6px;
-  width: 22px;
-  height: 22px;
-  background: #14F1B1;
-  border-radius: 50%;
-  font-size: 11px;
-  font-weight: 700;
-  color: #05133C;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
-  z-index: 3;
-}
-.ch-wf-step h5 {
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--bx-navy);
-  margin: 0 0 4px;
-}
-.ch-wf-step p {
-  font-size: 12px;
-  color: var(--bx-gray-400);
-  margin: 0;
-  line-height: 1.4;
-  padding: 0 4px;
-}
-.ch-wf-arrow {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding-top: 24px;
-  color: #A1A1A1;
-  width: 36px;
-  flex-shrink: 0;
-}
-.ch-wf-arrow .lucide { width: 20px; height: 20px; }
+/* Dynamic content (search results) */
+.lp .table > thead > tr > th { border-bottom: 2px solid var(--bx-mint); color: var(--bx-navy); font-weight: 600; font-size: 14px; }
+.lp .table > tbody > tr > td { font-size: 14px; color: #000; vertical-align: middle; }
+.lp .list-group-item { border-color: var(--bx-gray-100); }
+.lp .list-group-item-heading { color: var(--bx-navy); font-size: 15px; font-weight: 600; }
+.lp .list-group-item-text { font-size: 14px; color: var(--bx-gray-400); }
+.lp .badge { background: var(--bx-gray-100); color: var(--bx-navy); border-radius: 999px; font-weight: 500; font-size: 12px; padding: 2px 10px; }
+.lp .label { border-radius: 999px; font-weight: 600; font-size: 12px; padding: 3px 12px; }
+.lp .label-success { background: var(--bx-mint); color: var(--bx-navy); }
 
-/* Status flow bar */
-.ch-status-bar {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  margin-top: 40px;
-  flex-wrap: wrap;
-}
-.ch-status-arrow { color: #A1A1A1; display: inline-flex; }
-.ch-status-arrow .lucide { width: 16px; height: 16px; }
-
-/* ── Page: Verticals ── */
-.ch-verticals {
-  padding: 60px 0;
-  background: var(--bx-gray-100);
-}
-.ch-vert-card {
-  background: #fff;
-  border-radius: 12px;
-  padding: 24px;
-  text-align: center;
-  border: 1px solid var(--bx-gray-100);
-  box-shadow: var(--bx-shadow);
-  transition: all 0.25s;
-  height: 100%;
-}
-.ch-vert-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
-}
-.ch-vert-icon {
-  width: 56px;
-  height: 56px;
-  border-radius: 12px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--bx-gray-100);
-  color: var(--bx-blue);
-  font-size: 24px;
-  margin-bottom: 16px;
-  transition: all 0.25s;
-}
-.ch-vert-card:hover .ch-vert-icon { background: var(--bx-navy); color: var(--bx-mint); }
-.ch-vert-icon .lucide { width: 24px; height: 24px; }
-.ch-vert-card h4 {
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--bx-navy);
-  margin: 0 0 8px;
-}
-.ch-vert-card p {
-  font-size: 14px;
-  color: var(--bx-gray-400);
-  margin: 0;
-  line-height: 1.5;
-}
-
-/* ── Page: Stats ── */
-.ch-stats {
-  padding: 50px 0;
-  background: #fff;
-  border-top: 1px solid var(--bx-gray-100);
-  border-bottom: 1px solid var(--bx-gray-100);
-}
-.ch-stat-item { text-align: center; padding: 16px; }
-.ch-stat-num {
-  font-size: 48px;
-  font-weight: 700;
-  color: var(--bx-blue);
-  line-height: 1;
-}
-.ch-stat-label {
-  font-size: 14px;
-  color: var(--bx-gray-400);
-  margin-top: 8px;
-}
-
-/* ── Page: CTA ── */
-.ch-cta {
-  padding: 60px 0;
-  background: var(--bx-navy);
-  color: #fff;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-}
-.ch-cta::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: var(--bx-gradient);
-}
-.ch-cta h2 { font-size: 32px; font-weight: 700; margin: 0 0 12px; color: #fff; }
-.ch-cta p { font-size: 16px; opacity: 0.85; max-width: 550px; margin: 0 auto 32px; }
-
-/* ── Page: Footer ── */
-.ch-footer {
-  background: var(--bx-navy-base);
-  color: rgba(255, 255, 255, 0.6);
-  padding: 32px 0;
-  text-align: center;
-  font-size: 14px;
-}
-.ch-footer a { color: var(--bx-mint); text-decoration: none; }
-.ch-footer a:hover { text-decoration: underline; }
-.ch-footer-links { margin-top: 10px; }
-.ch-footer-links a { margin: 0 12px; }
-
-/* ── Quick links nav (glassmorphism) ── */
-.ch-quick-nav {
-  display: flex;
-  justify-content: center;
-  gap: 16px;
-  margin-top: 28px;
-  flex-wrap: wrap;
-}
-.ch-quick-nav a {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 20px;
-  border-radius: 16px;
-  font-size: 14px;
-  font-weight: 500;
-  text-decoration: none;
-  transition: all 0.2s;
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  border: 1px solid var(--bx-gray-100);
-  color: var(--bx-navy);
-}
-.ch-quick-nav a:hover { background: #fff; }
-.ch-quick-nav .lucide { width: 16px; height: 16px; flex-shrink: 0; }
-.ch-quick-nav .nav-intake {
-  background: var(--bx-mint);
-  border: 1px solid var(--bx-mint);
-  color: var(--bx-navy);
-  font-weight: 700;
-}
-.ch-quick-nav .nav-intake:hover { filter: brightness(0.95); background: var(--bx-mint); }
-
-@media (max-width: 768px) {
-  .ch-hero { padding: 50px 0 40px; }
-  .ch-hero h1 { font-size: 32px; }
-  .ch-wf-step { min-width: 100px; }
-  .ch-wf-step h5 { font-size: 12px; }
-  .ch-wf-step p { font-size: 11px; }
-  .ch-wf-arrow { width: 24px; }
-  .ch-wf-icon { width: 50px; height: 50px; }
-  .ch-stat-num { font-size: 32px; }
+@media (max-width: 992px) {
+  .lp { flex-direction: column; }
+  .lp-side { width: 100%; max-height: 46vh; }
+  .lp-main { padding: 26px 20px 40px; }
+  .lp-stats, .lp-grid { grid-template-columns: 1fr; }
+  .lp-h1 { font-size: 26px; }
 }
 </style>
 
-<div class="bx-page">
-
-<!-- ═══════ HERO ═══════ -->
-<section class="ch-hero">
-  <div class="container">
-    <h1><i data-lucide="briefcase"></i> Chamber</h1>
-    <p class="subtitle">Legal Practice &amp; Chamber Work Management</p>
-    <p class="tagline">Vertical-wise case intake, litigation timelines, eCourts CNR sync and AI-assisted drafting.</p>
-    <div style="margin-bottom: 8px;">
-      <a href="/intake" class="bx-btn bx-btn-primary" style="margin-right: 10px;">
-        <i data-lucide="circle-plus"></i> New Case Intake
-      </a>
-      <a href="/case-status" class="bx-btn bx-btn-tertiary">
-        <i data-lucide="search"></i> Check Case Status
-      </a>
+{% set bx_user = frappe.session.user or "Guest" %}
+<div class="lp">
+  <!-- ── Sidebar ── -->
+  <aside class="lp-side">
+    <div class="lp-brand">
+      <div class="lp-logo">ba</div>
+      <div class="lp-brand-txt">
+        <div class="lp-brand-name">Chamber</div>
+        <div class="lp-brand-sub">Lawyer Portal</div>
+      </div>
+      <i data-lucide="bell"></i>
     </div>
-    <nav class="ch-quick-nav">
-      <a href="/intake" class="nav-intake"><i data-lucide="file-text"></i> Submit Intake Form</a>
-      <a href="/case-status" class="nav-status"><i data-lucide="chart-column"></i> Case Status</a>
-      <a href="/about" class="nav-about"><i data-lucide="info"></i> About Us</a>
-      <a href="/login" class="nav-login"><i data-lucide="log-in"></i> Client Login</a>
+
+    <div class="lp-searchbox">
+      <i data-lucide="search"></i>
+      <span>Search...</span>
+      <span class="lp-kbd">Ctrl K</span>
+    </div>
+
+    <nav class="lp-nav">
+      <a href="/" class="lp-nav-item is-active"><i data-lucide="layout-dashboard"></i>Dashboard<span class="lp-dot"></span></a>
+      <a href="/intake" class="lp-nav-item"><i data-lucide="user-plus"></i>Client Intake</a>
+      <a href="/case-status" class="lp-nav-item"><i data-lucide="search"></i>Case Status</a>
+      <a href="/workflow" class="lp-nav-item"><i data-lucide="git-branch"></i>Workflow</a>
+      <a href="/about" class="lp-nav-item"><i data-lucide="info"></i>About</a>
+      <a href="/login" class="lp-nav-item"><i data-lucide="log-in"></i>Login</a>
     </nav>
-  </div>
-</section>
 
-<!-- ═══════ WORKFLOW ═══════ -->
-<section class="ch-workflow-section">
-  <div class="container">
-    <h2 class="ch-section-title">How It Works</h2>
-    <p class="ch-section-sub">From intake to case closure — your complete litigation lifecycle in six steps.</p>
-
-    <div class="ch-workflow">
-      <!-- Step 1 -->
-      <div class="ch-wf-step">
-        <div class="ch-wf-icon">
-          <i data-lucide="file-text"></i>
-          <span class="ch-wf-num">1</span>
-        </div>
-        <h5>Intake</h5>
-        <p>Client submits case details via the online intake form.</p>
+    <div class="lp-user">
+      <div class="lp-avatar">{{ bx_user[0] | upper }}</div>
+      <div class="lp-user-txt">
+        <div class="lp-user-name">{{ bx_user.split("@")[0] }}</div>
+        <div class="lp-user-role">Firm staff</div>
       </div>
-      <div class="ch-wf-arrow"><i data-lucide="chevron-right"></i></div>
+      <i data-lucide="chevron-down"></i>
+    </div>
+  </aside>
 
-      <!-- Step 2 -->
-      <div class="ch-wf-step">
-        <div class="ch-wf-icon">
-          <i data-lucide="clipboard-list"></i>
-          <span class="ch-wf-num">2</span>
-        </div>
-        <h5>Register</h5>
-        <p>Team reviews and creates a Legal Matter with auto-routing.</p>
-      </div>
-      <div class="ch-wf-arrow"><i data-lucide="chevron-right"></i></div>
-
-      <!-- Step 3 -->
-      <div class="ch-wf-step">
-        <div class="ch-wf-icon">
-          <i data-lucide="zap"></i>
-          <span class="ch-wf-num">3</span>
-        </div>
-        <h5>Active</h5>
-        <p>Matter goes active — timelines, hearings, and documents tracked.</p>
-      </div>
-      <div class="ch-wf-arrow"><i data-lucide="chevron-right"></i></div>
-
-      <!-- Step 4 -->
-      <div class="ch-wf-step">
-        <div class="ch-wf-icon">
-          <i data-lucide="gavel"></i>
-          <span class="ch-wf-num">4</span>
-        </div>
-        <h5>Hearings &amp; Docs</h5>
-        <p>Court hearings scheduled, AI-assisted documents drafted and reviewed.</p>
-      </div>
-      <div class="ch-wf-arrow"><i data-lucide="chevron-right"></i></div>
-
-      <!-- Step 5 -->
-      <div class="ch-wf-step">
-        <div class="ch-wf-icon">
-          <i data-lucide="cloud-download"></i>
-          <span class="ch-wf-num">5</span>
-        </div>
-        <h5>eCourts Sync</h5>
-        <p>Auto-sync case status from eCourts, IP India, and NCLT portals.</p>
-      </div>
-      <div class="ch-wf-arrow"><i data-lucide="chevron-right"></i></div>
-
-      <!-- Step 6 -->
-      <div class="ch-wf-step">
-        <div class="ch-wf-icon">
-          <i data-lucide="circle-check"></i>
-          <span class="ch-wf-num">6</span>
-        </div>
-        <h5>Close</h5>
-        <p>Matter disposed or settled. Archived with full audit trail.</p>
+  <!-- ── Main ── -->
+  <main class="lp-main">
+    <div class="lp-head">
+      <div>
+        <h1 class="lp-h1">Welcome back, {{ bx_user.split("@")[0] }}</h1>
+        <p class="lp-sub">Your practice at a glance.</p>
       </div>
     </div>
 
-    <!-- Status flow bar -->
-    <div class="ch-status-bar">
-      <span class="bx-badge bx-badge--accent">Intake Pending</span>
-      <span class="ch-status-arrow"><i data-lucide="arrow-right"></i></span>
-      <span class="bx-badge bx-badge--active">Active</span>
-      <span class="ch-status-arrow"><i data-lucide="arrow-right"></i></span>
-      <span class="bx-badge bx-badge--navy">On Hold</span>
-      <span class="ch-status-arrow"><i data-lucide="arrow-right"></i></span>
-      <span class="bx-badge bx-badge--muted">Disposed</span>
-      <span class="bx-badge bx-badge--muted">Withdrawn</span>
-      <span class="bx-badge bx-badge--muted">Closed</span>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════ VERTICALS ═══════ -->
-<section class="ch-verticals">
-  <div class="container">
-    <h2 class="ch-section-title">Practice Areas</h2>
-    <p class="ch-section-sub">Specialized workflows tailored to each legal vertical.</p>
-
-    <div class="row">
-      <div class="col-sm-4" style="margin-bottom: 24px;">
-        <div class="ch-vert-card">
-          <div class="ch-vert-icon">
-            <i data-lucide="shield"></i>
-          </div>
-          <h4>Criminal Defense</h4>
-          <p>Bail applications, anticipatory bail, quashing petitions, FIR matters, and appeal management.</p>
+    <!-- Stat cards -->
+    <div class="lp-stats">
+      <div class="lp-stat">
+        <div class="lp-stat-top">
+          <div class="lp-ico"><i data-lucide="briefcase"></i></div>
+          <div class="lp-stat-label">Open matters</div>
         </div>
+        <div class="lp-stat-num">19</div>
       </div>
-      <div class="col-sm-4" style="margin-bottom: 24px;">
-        <div class="ch-vert-card">
-          <div class="ch-vert-icon">
-            <i data-lucide="banknote"></i>
-          </div>
-          <h4>Cheque Bounce / NI Act 138</h4>
-          <p>Statutory demand notices, complaint filing, trial management, and settlement tracking.</p>
+      <div class="lp-stat">
+        <div class="lp-stat-top">
+          <div class="lp-ico lp-ico--blue"><i data-lucide="gavel"></i></div>
+          <div class="lp-stat-label">Today's hearings</div>
         </div>
+        <div class="lp-stat-num">0</div>
       </div>
-      <div class="col-sm-4" style="margin-bottom: 24px;">
-        <div class="ch-vert-card">
-          <div class="ch-vert-icon">
-            <i data-lucide="house"></i>
-          </div>
-          <h4>Civil Litigation</h4>
-          <p>Money suits, property disputes, consumer complaints, and contract enforcement.</p>
+      <div class="lp-stat">
+        <div class="lp-stat-top">
+          <div class="lp-ico"><i data-lucide="file-text"></i></div>
+          <div class="lp-stat-label">Docs to review</div>
         </div>
+        <div class="lp-stat-num">5</div>
       </div>
-      <div class="col-sm-4" style="margin-bottom: 24px;">
-        <div class="ch-vert-card">
-          <div class="ch-vert-icon">
-            <i data-lucide="users"></i>
-          </div>
-          <h4>Family Law</h4>
-          <p>Divorce, custody, maintenance, domestic violence, and mutual consent proceedings.</p>
+      <div class="lp-stat">
+        <div class="lp-stat-top">
+          <div class="lp-ico lp-ico--blue"><i data-lucide="message-square"></i></div>
+          <div class="lp-stat-label">Unread messages</div>
         </div>
-      </div>
-      <div class="col-sm-4" style="margin-bottom: 24px;">
-        <div class="ch-vert-card">
-          <div class="ch-vert-icon">
-            <i data-lucide="building-2"></i>
-          </div>
-          <h4>Property / Real Estate</h4>
-          <p>Title disputes, eviction, RERA complaints, landlord-tenant matters.</p>
-        </div>
-      </div>
-      <div class="col-sm-4" style="margin-bottom: 24px;">
-        <div class="ch-vert-card">
-          <div class="ch-vert-icon">
-            <i data-lucide="lightbulb"></i>
-          </div>
-          <h4>IP Law</h4>
-          <p>Trademark, copyright, patent disputes, and intellectual property enforcement.</p>
-        </div>
+        <div class="lp-stat-num">0</div>
       </div>
     </div>
-  </div>
-</section>
 
-<!-- ═══════ STATS ═══════ -->
-<section class="ch-stats">
-  <div class="container">
-    <div class="row">
-      <div class="col-sm-3">
-        <div class="ch-stat-item">
-          <div class="ch-stat-num">6</div>
-          <div class="ch-stat-label">Practice Verticals</div>
+    <!-- Panels -->
+    <div class="lp-grid">
+      <div class="lp-panel">
+        <h3 class="lp-panel-title">Today's Hearings</h3>
+        <div class="lp-empty">
+          <div class="lp-empty-ico"><i data-lucide="gavel"></i></div>
+          <p>No hearings today</p>
         </div>
       </div>
-      <div class="col-sm-3">
-        <div class="ch-stat-item">
-          <div class="ch-stat-num">5</div>
-          <div class="ch-stat-label">Doc Workflow Stages</div>
+
+      <div class="lp-panel">
+        <h3 class="lp-panel-title">Upcoming Appointments</h3>
+        <div class="lp-empty">
+          <div class="lp-empty-ico"><i data-lucide="inbox"></i></div>
+          <p>No upcoming appointments</p>
         </div>
       </div>
-      <div class="col-sm-3">
-        <div class="ch-stat-item">
-          <div class="ch-stat-num">3</div>
-          <div class="ch-stat-label">Court Portal Integrations</div>
+
+      <div class="lp-panel">
+        <h3 class="lp-panel-title">Recent Matters</h3>
+        <div class="lp-row">
+          <div class="lp-row-body">
+            <div class="lp-row-title">MID-26-023</div>
+            <div class="lp-row-sub">Sharma · Domestic violence · District Court Cases</div>
+          </div>
+          <div class="lp-row-side">
+            <span class="lp-pill">Working</span>
+            <span class="lp-row-date">11 Aug 2026</span>
+          </div>
+        </div>
+        <div class="lp-row">
+          <div class="lp-row-body">
+            <div class="lp-row-title">MID-26-022</div>
+            <div class="lp-row-sub">Anu · Family issue · District Court Cases</div>
+          </div>
+          <div class="lp-row-side">
+            <span class="lp-pill">Working</span>
+            <span class="lp-row-date">11 Aug 2026</span>
+          </div>
+        </div>
+        <div class="lp-row">
+          <div class="lp-row-body">
+            <div class="lp-row-title">MID-26-021</div>
+            <div class="lp-row-sub">Arun · Family issue · District Court Cases</div>
+          </div>
+          <div class="lp-row-side">
+            <span class="lp-pill lp-pill--mint">Open</span>
+            <span class="lp-row-date">10 Aug 2026</span>
+          </div>
         </div>
       </div>
-      <div class="col-sm-3">
-        <div class="ch-stat-item">
-          <div class="ch-stat-num">24/7</div>
-          <div class="ch-stat-label">Client Intake Portal</div>
+
+      <div class="lp-panel">
+        <h3 class="lp-panel-title">Upcoming Cause List</h3>
+        <div class="lp-empty">
+          <div class="lp-empty-ico"><i data-lucide="calendar"></i></div>
+          <p>No hearings scheduled</p>
         </div>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- ═══════ CTA ═══════ -->
-<section class="ch-cta">
-  <div class="container">
-    <h2>Ready to Get Started?</h2>
-    <p>Submit your case intake form online. Our team will review and register your matter within 24 hours.</p>
-    <a href="/intake" class="bx-btn bx-btn-primary">
-      <i data-lucide="file-text"></i> Submit Intake Form
-    </a>
-  </div>
-</section>
-
-<!-- ═══════ FOOTER ═══════ -->
-<footer class="ch-footer">
-  <div class="container">
-    <div>Chamber — Legal Practice &amp; Chamber Work Management</div>
-    <div class="ch-footer-links">
-      <a href="/intake">Intake</a>
-      <a href="/case-status">Case Status</a>
-      <a href="/about">About</a>
-      <a href="/login">Login</a>
-    </div>
-  </div>
-</footer>
-
+  </main>
 </div>
 
 <script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.js"></script>

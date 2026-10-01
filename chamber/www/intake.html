@@ -4,7 +4,6 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
 
-/* ── Bizaxl Design System: tokens ── */
 :root {
   --bx-navy: #05133C;
   --bx-navy-base: #091526;
@@ -13,122 +12,162 @@
   --bx-gray-100: #F4F4F5;
   --bx-gray-400: #71717B;
   --bx-gradient: linear-gradient(90deg, #14F1B1 0%, #114EFF 50%, #091526 100%);
-  --bx-radius-sm: 8px;
-  --bx-radius-md: 10px;
-  --bx-radius-lg: 12px;
-  --bx-radius-xl: 16px;
-  --bx-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.1);
 }
 
-/* ── Typography ── */
-.bx-page { font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-.bx-page input, .bx-page select, .bx-page textarea, .bx-page button { font-family: inherit; font-size: 14px; }
-.bx-page h1, .bx-page h2, .bx-page h3, .bx-page h4, .bx-page h5, .bx-page h6 { font-family: inherit; color: var(--bx-navy); }
+/* ── Hide default Frappe website chrome on portal pages ── */
+body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wrapper, .page-footer { display: none !important; }
 
-/* ── Headings ── */
-.bx-title { display: flex; align-items: center; justify-content: center; gap: 16px; font-size: 32px; font-weight: 700; line-height: 1.2; color: var(--bx-navy); margin: 0 0 8px; }
-.bx-title .lucide { width: 28px; height: 28px; color: var(--bx-blue); flex-shrink: 0; }
-.bx-subtitle { font-size: 16px; line-height: 1.5; color: var(--bx-gray-400); margin: 0 0 32px; text-align: center; }
-.bx-section-title { font-size: 24px; font-weight: 700; color: var(--bx-navy); margin: 0 0 8px; }
-.bx-section-sub { font-size: 16px; color: var(--bx-gray-400); margin: 0 0 32px; }
+/* ── App shell ── */
+.lp { position: fixed; top: 0; right: 0; bottom: 0; left: 0; display: flex; background: #FAFAFB; font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: var(--bx-navy); }
 
-/* ── Buttons ── */
-.bx-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; min-width: 140px; padding: 8px 20px; border-radius: 10px; font-weight: 700; font-size: 14px; line-height: 20px; border: 1px solid transparent; cursor: pointer; text-decoration: none; transition: all 0.2s; }
-.bx-btn .lucide { width: 16px; height: 16px; flex-shrink: 0; }
-.bx-btn:hover { text-decoration: none; }
-.bx-btn-primary { background: #14F1B1; color: #05133C; border-color: #14F1B1; }
-.bx-btn-primary:hover { filter: brightness(0.95); box-shadow: 0 4px 12px rgba(20, 241, 177, 0.35); }
-.bx-btn-secondary { background: #05133C; color: #FFFFFF; border-color: #05133C; min-width: 166px; }
-.bx-btn-secondary:hover { background: #091526; border-color: #091526; }
-.bx-btn-tertiary { background: #FFFFFF; color: #05133C; border: 1px solid rgba(5, 19, 60, 0.5); min-width: 160px; }
-.bx-btn-tertiary:hover { background: #F4F4F5; }
+/* Sidebar */
+.lp-side { width: 268px; flex-shrink: 0; background: var(--bx-navy); display: flex; flex-direction: column; padding: 22px 16px 18px; overflow-y: auto; }
+.lp-brand { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; padding: 0 6px; }
+.lp-logo { width: 38px; height: 38px; border-radius: 11px; background: var(--bx-mint); color: var(--bx-navy); font-weight: 700; font-size: 15px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.lp-brand-txt { flex: 1; min-width: 0; }
+.lp-brand-name { color: #fff; font-size: 15px; font-weight: 700; line-height: 1.2; }
+.lp-brand-sub { color: rgba(255, 255, 255, 0.5); font-size: 12px; margin-top: 2px; }
+.lp-brand .lucide { width: 18px; height: 18px; color: rgba(255, 255, 255, 0.7); flex-shrink: 0; }
+.lp-searchbox { display: flex; align-items: center; gap: 10px; height: 42px; padding: 0 12px; border-radius: 10px; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.1); color: rgba(255, 255, 255, 0.45); font-size: 14px; margin-bottom: 22px; cursor: default; }
+.lp-searchbox .lucide { width: 16px; height: 16px; }
+.lp-kbd { margin-left: auto; background: rgba(255, 255, 255, 0.1); border-radius: 6px; padding: 2px 7px; font-size: 11px; color: rgba(255, 255, 255, 0.55); }
+.lp-nav { display: flex; flex-direction: column; gap: 4px; }
+.lp-nav-item { display: flex; align-items: center; gap: 16px; padding: 11px 14px; border-radius: 10px; color: rgba(255, 255, 255, 0.72); font-size: 14px; font-weight: 500; text-decoration: none; transition: background 0.15s, color 0.15s; }
+.lp-nav-item:hover { background: rgba(255, 255, 255, 0.07); color: #fff; text-decoration: none; }
+.lp-nav-item.is-active, .lp-nav-item.is-active:hover { background: var(--bx-mint); color: var(--bx-navy); font-weight: 700; }
+.lp-nav-item .lucide { width: 20px; height: 20px; flex-shrink: 0; }
+.lp-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(5, 19, 60, 0.65); margin-left: auto; }
+.lp-user { display: flex; align-items: center; gap: 12px; padding: 14px 8px 2px; margin-top: auto; border-top: 1px solid rgba(255, 255, 255, 0.1); }
+.lp-avatar { width: 34px; height: 34px; border-radius: 50%; background: var(--bx-mint); color: var(--bx-navy); font-weight: 700; font-size: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.lp-user-txt { flex: 1; min-width: 0; }
+.lp-user-name { color: #fff; font-size: 14px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lp-user-role { color: rgba(255, 255, 255, 0.5); font-size: 12px; }
+.lp-user .lucide { width: 16px; height: 16px; color: rgba(255, 255, 255, 0.5); flex-shrink: 0; }
 
-/* ── Badges ── */
-.bx-badge { display: inline-block; background: #F4F4F5; color: #05133C; padding: 2px 12px; border-radius: 999px; font-weight: 500; font-size: 12px; line-height: 20px; white-space: nowrap; }
-.bx-badge--active { background: #14F1B1; color: #05133C; }
-.bx-badge--accent { background: #FFFFFF; color: #114EFF; border: 1px solid #114EFF; }
-.bx-badge--navy { background: #05133C; color: #FFFFFF; }
-.bx-badge--muted { background: #F4F4F5; color: #71717B; }
-.bx-badge--success { background: #00C950; color: #FFFFFF; }
+/* Main */
+.lp-main { flex: 1; min-width: 0; overflow-y: auto; padding: 40px 44px 56px; }
+.lp-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; flex-wrap: wrap; margin-bottom: 28px; }
+.lp-h1 { font-size: 36px; font-weight: 700; letter-spacing: -0.5px; color: var(--bx-navy); margin: 0 0 6px; display: flex; align-items: center; gap: 12px; line-height: 1.15; }
+.lp-h1 .lucide { width: 30px; height: 30px; color: var(--bx-blue); flex-shrink: 0; }
+.lp-sub { font-size: 16px; color: var(--bx-gray-400); margin: 0; }
+.lp-head-actions { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
 
-/* ── Cards ── */
-.bx-card { background: #FFFFFF; border: 1px solid #F4F4F5; border-radius: 12px; box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.1); overflow: hidden; }
-.bx-card + .bx-card { margin-top: 20px; }
-.bx-card-head { background: #05133C; color: #FFFFFF; padding: 14px 24px; font-size: 18px; font-weight: 600; display: flex; align-items: center; gap: 8px; border-bottom: 2px solid #14F1B1; }
-.bx-card-head--blue { background: #114EFF; }
-.bx-card-head .lucide { width: 20px; height: 20px; flex-shrink: 0; }
-.bx-card-head h4, .bx-card-title { font-size: 18px; font-weight: 600; color: inherit; margin: 0; }
-.bx-card-body { padding: 24px; }
+/* Panels */
+.lp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+.lp-panel { background: #fff; border: 1px solid var(--bx-gray-100); border-radius: 12px; padding: 22px 24px; box-shadow: 0 1px 2px rgba(5, 19, 60, 0.04); }
+.lp-panel + .lp-panel, .lp-section + .lp-section { margin-top: 20px; }
+.lp-grid .lp-panel + .lp-panel { margin-top: 0; }
+.lp-panel-title { display: flex; align-items: center; gap: 10px; font-size: 17px; font-weight: 700; color: var(--bx-navy); margin: 0 0 16px; }
+.lp-panel-title .lucide { width: 20px; height: 20px; color: var(--bx-blue); flex-shrink: 0; }
+.lp-panel-desc { font-size: 14px; color: var(--bx-gray-400); margin: -6px 0 16px; }
+.lp-section { margin-bottom: 24px; }
 
-/* ── Feature / list items ── */
-.bx-list { list-style: none; padding: 0; margin: 0; }
-.bx-list li { display: flex; align-items: flex-start; gap: 8px; padding: 8px 0; font-size: 16px; line-height: 26px; color: #737373; }
-.bx-list li .lucide { width: 16px; height: 16px; margin-top: 5px; flex-shrink: 0; color: #114EFF; }
-.bx-list--feature li .lucide { color: #00C950; }
+/* Empty states */
+.lp-empty { text-align: center; padding: 36px 12px; color: var(--bx-gray-400); }
+.lp-empty-ico { width: 48px; height: 48px; border-radius: 50%; background: var(--bx-gray-100); color: #A1A1A1; display: flex; align-items: center; justify-content: center; margin: 0 auto 14px; }
+.lp-empty-ico .lucide { width: 22px; height: 22px; }
+.lp-empty h4 { font-size: 15px; font-weight: 600; color: var(--bx-navy); margin: 0 0 4px; }
+.lp-empty p { font-size: 14px; color: var(--bx-gray-400); margin: 0; }
 
-/* ── Forms ── */
-.bx-page .form-group { margin-bottom: 16px; }
-.bx-page .form-group label { font-size: 14px; font-weight: 600; color: #05133C; margin-bottom: 6px; }
-.bx-page .form-control { border: 1px solid #F4F4F5; border-radius: 8px; padding: 10px 14px; font-size: 14px; color: #000000; background: #FFFFFF; box-shadow: none; transition: border-color 0.15s, box-shadow 0.15s; }
-.bx-page .form-control:focus { border-color: #114EFF; box-shadow: 0 0 0 3px rgba(17, 78, 255, 0.15); outline: 0; }
-.bx-page .form-control::placeholder { color: #A1A1A1; }
+/* Buttons */
+.lp-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; padding: 8px 18px; border-radius: 10px; font-size: 14px; font-weight: 700; border: 1px solid transparent; cursor: pointer; text-decoration: none; transition: all 0.2s; }
+.lp-btn .lucide { width: 16px; height: 16px; flex-shrink: 0; }
+.lp-btn--mint { background: var(--bx-mint); color: var(--bx-navy); }
+.lp-btn--mint:hover { filter: brightness(0.95); text-decoration: none; }
+.lp-btn--navy { background: var(--bx-navy); color: #fff; }
+.lp-btn--navy:hover { background: var(--bx-navy-base); color: #fff; text-decoration: none; }
+.lp-btn--ghost { background: #fff; color: var(--bx-navy); border-color: rgba(5, 19, 60, 0.5); }
+.lp-btn--ghost:hover { background: var(--bx-gray-100); text-decoration: none; }
 
-/* ── Dynamic content (search results) ── */
-.bx-page .table > thead > tr > th { border-bottom: 2px solid #14F1B1; color: #05133C; font-weight: 600; font-size: 14px; }
-.bx-page .table > tbody > tr > td { font-size: 14px; color: #000000; vertical-align: middle; }
-.bx-page .list-group-item { border-color: #F4F4F5; }
-.bx-page .list-group-item-heading { color: #05133C; font-size: 15px; font-weight: 600; }
-.bx-page .list-group-item-text { font-size: 14px; color: #71717B; }
-.bx-page .badge { background: #F4F4F5; color: #05133C; border-radius: 999px; font-weight: 500; font-size: 12px; padding: 2px 10px; }
-.bx-page .label { border-radius: 999px; font-weight: 500; font-size: 12px; }
-.bx-page .label-success { background: #00C950; }
+/* Forms */
+.lp .form-group { margin-bottom: 16px; }
+.lp .form-group label { font-size: 14px; font-weight: 600; color: var(--bx-navy); margin-bottom: 6px; }
+.lp .form-control { border: 1px solid var(--bx-gray-100); border-radius: 8px; padding: 9px 14px; font-size: 14px; color: #000; background: #fff; box-shadow: none; transition: border-color 0.15s, box-shadow 0.15s; }
+.lp .form-control:focus { border-color: var(--bx-blue); box-shadow: 0 0 0 3px rgba(17, 78, 255, 0.15); outline: 0; }
+.lp .form-control::placeholder { color: #A1A1A1; }
 
-/* ── Glassmorphism ── */
-.bx-glass { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); border: 1px solid #F4F4F5; border-radius: 16px; }
+/* ── Page: intake ── */
+.lp-required { color: #DC2626; }
+.lp-submit { text-align: center; margin: 4px 0 40px; }
+.lp-submit .lp-btn { min-width: 240px; }
+.lp-fineprint { color: var(--bx-gray-400); margin-top: 12px; font-size: 12px; }
+.lp-success { text-align: center; padding: 48px 24px; }
+.lp-success .lucide { width: 56px; height: 56px; color: #00C950; }
+.lp-success h3 { font-size: 22px; font-weight: 700; color: var(--bx-navy); margin: 14px 0 8px; }
+.lp-success p { font-size: 14px; color: var(--bx-gray-400); margin-bottom: 22px; }
 
-/* ── Responsive heading scale ── */
-@media (max-width: 768px) {
-  .bx-title { font-size: 24px; }
+@media (max-width: 992px) {
+  .lp { flex-direction: column; }
+  .lp-side { width: 100%; max-height: 46vh; }
+  .lp-main { padding: 26px 20px 40px; }
+  .lp-grid { grid-template-columns: 1fr; }
+  .lp-h1 { font-size: 26px; }
 }
-
-/* ── Page-specific ── */
-.bx-container { max-width: 800px; }
-.bx-header { text-align: center; margin-bottom: 30px; }
-.bx-submit { text-align: center; margin: 30px 0 40px; }
-.bx-fineprint { color: var(--bx-gray-400); margin-top: 10px; font-size: 12px; }
-.bx-required { color: #DC2626; }
-.bx-success { text-align: center; margin: 40px 0; }
-.bx-success .lucide { width: 64px; height: 64px; color: #00C950; }
-.bx-success h3 { font-size: 24px; font-weight: 700; color: var(--bx-navy); margin: 12px 0 8px; }
-.bx-success p { font-size: 14px; color: var(--bx-gray-400); margin-bottom: 20px; }
 </style>
 
-<div class="bx-page">
-<div class="container bx-container">
-  <div class="bx-header">
-    <h2 class="bx-title"><i data-lucide="file-text"></i> Case Intake Form</h2>
-    <p class="bx-subtitle">Submit your case details. Our team will review and get back to you within 24 hours.</p>
-  </div>
-
-  <form id="intake-form" method="POST" action="/api/method/chamber.www.intake.submit_intake">
-    <input type="hidden" name="csrf_token" value="{{ frappe.session.csrf_token }}">
-
-    <!-- Client Information -->
-    <div class="bx-card">
-      <div class="bx-card-head">
-        <i data-lucide="user"></i> Client Information
+{% set bx_user = frappe.session.user or "Guest" %}
+<div class="lp">
+  <!-- ── Sidebar ── -->
+  <aside class="lp-side">
+    <div class="lp-brand">
+      <div class="lp-logo">ba</div>
+      <div class="lp-brand-txt">
+        <div class="lp-brand-name">Chamber</div>
+        <div class="lp-brand-sub">Lawyer Portal</div>
       </div>
-      <div class="bx-card-body">
+      <i data-lucide="bell"></i>
+    </div>
+
+    <div class="lp-searchbox">
+      <i data-lucide="search"></i>
+      <span>Search...</span>
+      <span class="lp-kbd">Ctrl K</span>
+    </div>
+
+    <nav class="lp-nav">
+      <a href="/" class="lp-nav-item"><i data-lucide="layout-dashboard"></i>Dashboard</a>
+      <a href="/intake" class="lp-nav-item is-active"><i data-lucide="user-plus"></i>Client Intake</a>
+      <a href="/case-status" class="lp-nav-item"><i data-lucide="search"></i>Case Status<span class="lp-dot"></span></a>
+      <a href="/workflow" class="lp-nav-item"><i data-lucide="git-branch"></i>Workflow</a>
+      <a href="/about" class="lp-nav-item"><i data-lucide="info"></i>About</a>
+      <a href="/login" class="lp-nav-item"><i data-lucide="log-in"></i>Login</a>
+    </nav>
+
+    <div class="lp-user">
+      <div class="lp-avatar">{{ bx_user[0] | upper }}</div>
+      <div class="lp-user-txt">
+        <div class="lp-user-name">{{ bx_user.split("@")[0] }}</div>
+        <div class="lp-user-role">Firm staff</div>
+      </div>
+      <i data-lucide="chevron-down"></i>
+    </div>
+  </aside>
+
+  <!-- ── Main ── -->
+  <main class="lp-main">
+    <div class="lp-head">
+      <div>
+        <h1 class="lp-h1"><i data-lucide="file-text"></i> Client Intake</h1>
+        <p class="lp-sub">Log a new matter for review — our team responds within 24 hours.</p>
+      </div>
+    </div>
+
+    <form id="intake-form" method="POST" action="/api/method/chamber.www.intake.submit_intake">
+      <input type="hidden" name="csrf_token" value="{{ frappe.session.csrf_token }}">
+
+      <!-- Client Information -->
+      <div class="lp-panel lp-section">
+        <h3 class="lp-panel-title"><i data-lucide="user"></i> Client Information</h3>
         <div class="row">
           <div class="col-sm-6">
             <div class="form-group">
-              <label>Full Name <span class="bx-required">*</span></label>
+              <label>Full Name <span class="lp-required">*</span></label>
               <input type="text" class="form-control" name="client_name" required placeholder="e.g. Rajesh Kumar Singh">
             </div>
           </div>
           <div class="col-sm-6">
             <div class="form-group">
-              <label>Contact Number <span class="bx-required">*</span></label>
+              <label>Contact Number <span class="lp-required">*</span></label>
               <input type="tel" class="form-control" name="contact_number" required placeholder="+91-XXXXXXXXXX">
             </div>
           </div>
@@ -148,18 +187,14 @@
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- Case Details -->
-    <div class="bx-card">
-      <div class="bx-card-head bx-card-head--blue">
-        <i data-lucide="gavel"></i> Case Details
-      </div>
-      <div class="bx-card-body">
+      <!-- Case Details -->
+      <div class="lp-panel lp-section">
+        <h3 class="lp-panel-title"><i data-lucide="gavel"></i> Case Details</h3>
         <div class="row">
           <div class="col-sm-6">
             <div class="form-group">
-              <label>Legal Vertical <span class="bx-required">*</span></label>
+              <label>Legal Vertical <span class="lp-required">*</span></label>
               <select class="form-control" name="vertical" required>
                 <option value="">Select vertical...</option>
                 {% for v in verticals %}
@@ -187,13 +222,13 @@
         </div>
 
         <div class="form-group">
-          <label>Case Title / Brief Description <span class="bx-required">*</span></label>
+          <label>Case Title / Brief Description <span class="lp-required">*</span></label>
           <input type="text" class="form-control" name="matter_title" required
                  placeholder="e.g. Cheque Bounce case against XYZ Corp">
         </div>
 
         <div class="form-group">
-          <label>Detailed Description <span class="bx-required">*</span></label>
+          <label>Detailed Description <span class="lp-required">*</span></label>
           <textarea class="form-control" name="description" rows="5" required
                     placeholder="Describe your case in detail. Include dates, parties involved, and key facts..."></textarea>
         </div>
@@ -233,27 +268,26 @@
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- Submit -->
-    <div class="bx-submit">
-      <button type="submit" class="bx-btn bx-btn-primary" id="submit-btn" style="min-width: 220px;">
-        <i class="fa fa-paper-plane"></i> Submit Intake Form
-      </button>
-      <p class="bx-fineprint">
-        By submitting, you agree to our terms of engagement. Your data is kept strictly confidential.
-      </p>
-    </div>
-  </form>
+      <!-- Submit -->
+      <div class="lp-submit">
+        <button type="submit" class="lp-btn lp-btn--mint" id="submit-btn">
+          <i class="fa fa-paper-plane"></i> Submit Intake Form
+        </button>
+        <p class="lp-fineprint">
+          By submitting, you agree to our terms of engagement. Your data is kept strictly confidential.
+        </p>
+      </div>
+    </form>
 
-  <!-- Success Message (hidden by default) -->
-  <div id="success-msg" class="bx-success" style="display: none;">
-    <i data-lucide="circle-check"></i>
-    <h3>Intake Form Submitted!</h3>
-    <p>Thank you. Our legal team will review your case and contact you within 24 hours.</p>
-    <a href="/" class="bx-btn bx-btn-tertiary">Back to Home</a>
-  </div>
-</div>
+    <!-- Success Message (hidden by default) -->
+    <div id="success-msg" class="lp-panel lp-success" style="display: none;">
+      <i data-lucide="circle-check"></i>
+      <h3>Intake Form Submitted!</h3>
+      <p>Thank you. Our legal team will review your case and contact you within 24 hours.</p>
+      <a href="/" class="lp-btn lp-btn--ghost">Back to Dashboard</a>
+    </div>
+  </main>
 </div>
 
 <script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.js"></script>

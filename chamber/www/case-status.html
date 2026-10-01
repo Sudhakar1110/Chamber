@@ -4,7 +4,6 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
 
-/* ── Bizaxl Design System: tokens ── */
 :root {
   --bx-navy: #05133C;
   --bx-navy-base: #091526;
@@ -13,173 +12,245 @@
   --bx-gray-100: #F4F4F5;
   --bx-gray-400: #71717B;
   --bx-gradient: linear-gradient(90deg, #14F1B1 0%, #114EFF 50%, #091526 100%);
-  --bx-radius-sm: 8px;
-  --bx-radius-md: 10px;
-  --bx-radius-lg: 12px;
-  --bx-radius-xl: 16px;
-  --bx-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.1);
 }
 
-/* ── Typography ── */
-.bx-page { font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-.bx-page input, .bx-page select, .bx-page textarea, .bx-page button { font-family: inherit; font-size: 14px; }
-.bx-page h1, .bx-page h2, .bx-page h3, .bx-page h4, .bx-page h5, .bx-page h6 { font-family: inherit; color: var(--bx-navy); }
+/* ── Hide default Frappe website chrome on portal pages ── */
+body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wrapper, .page-footer { display: none !important; }
 
-/* ── Headings ── */
-.bx-title { display: flex; align-items: center; justify-content: center; gap: 16px; font-size: 32px; font-weight: 700; line-height: 1.2; color: var(--bx-navy); margin: 0 0 8px; }
-.bx-title .lucide { width: 28px; height: 28px; color: var(--bx-blue); flex-shrink: 0; }
-.bx-subtitle { font-size: 16px; line-height: 1.5; color: var(--bx-gray-400); margin: 0 0 32px; text-align: center; }
-.bx-section-title { font-size: 24px; font-weight: 700; color: var(--bx-navy); margin: 0 0 8px; }
-.bx-section-sub { font-size: 16px; color: var(--bx-gray-400); margin: 0 0 32px; }
+/* ── App shell ── */
+.lp { position: fixed; top: 0; right: 0; bottom: 0; left: 0; display: flex; background: #FAFAFB; font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: var(--bx-navy); }
 
-/* ── Buttons ── */
-.bx-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; min-width: 140px; padding: 8px 20px; border-radius: 10px; font-weight: 700; font-size: 14px; line-height: 20px; border: 1px solid transparent; cursor: pointer; text-decoration: none; transition: all 0.2s; }
-.bx-btn .lucide { width: 16px; height: 16px; flex-shrink: 0; }
-.bx-btn:hover { text-decoration: none; }
-.bx-btn-primary { background: #14F1B1; color: #05133C; border-color: #14F1B1; }
-.bx-btn-primary:hover { filter: brightness(0.95); box-shadow: 0 4px 12px rgba(20, 241, 177, 0.35); }
-.bx-btn-secondary { background: #05133C; color: #FFFFFF; border-color: #05133C; min-width: 166px; }
-.bx-btn-secondary:hover { background: #091526; border-color: #091526; }
-.bx-btn-tertiary { background: #FFFFFF; color: #05133C; border: 1px solid rgba(5, 19, 60, 0.5); min-width: 160px; }
-.bx-btn-tertiary:hover { background: #F4F4F5; }
+/* Sidebar */
+.lp-side { width: 268px; flex-shrink: 0; background: var(--bx-navy); display: flex; flex-direction: column; padding: 22px 16px 18px; overflow-y: auto; }
+.lp-brand { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; padding: 0 6px; }
+.lp-logo { width: 38px; height: 38px; border-radius: 11px; background: var(--bx-mint); color: var(--bx-navy); font-weight: 700; font-size: 15px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.lp-brand-txt { flex: 1; min-width: 0; }
+.lp-brand-name { color: #fff; font-size: 15px; font-weight: 700; line-height: 1.2; }
+.lp-brand-sub { color: rgba(255, 255, 255, 0.5); font-size: 12px; margin-top: 2px; }
+.lp-brand .lucide { width: 18px; height: 18px; color: rgba(255, 255, 255, 0.7); flex-shrink: 0; }
+.lp-searchbox { display: flex; align-items: center; gap: 10px; height: 42px; padding: 0 12px; border-radius: 10px; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.1); color: rgba(255, 255, 255, 0.45); font-size: 14px; margin-bottom: 22px; cursor: default; }
+.lp-searchbox .lucide { width: 16px; height: 16px; }
+.lp-kbd { margin-left: auto; background: rgba(255, 255, 255, 0.1); border-radius: 6px; padding: 2px 7px; font-size: 11px; color: rgba(255, 255, 255, 0.55); }
+.lp-nav { display: flex; flex-direction: column; gap: 4px; }
+.lp-nav-item { display: flex; align-items: center; gap: 16px; padding: 11px 14px; border-radius: 10px; color: rgba(255, 255, 255, 0.72); font-size: 14px; font-weight: 500; text-decoration: none; transition: background 0.15s, color 0.15s; }
+.lp-nav-item:hover { background: rgba(255, 255, 255, 0.07); color: #fff; text-decoration: none; }
+.lp-nav-item.is-active, .lp-nav-item.is-active:hover { background: var(--bx-mint); color: var(--bx-navy); font-weight: 700; }
+.lp-nav-item .lucide { width: 20px; height: 20px; flex-shrink: 0; }
+.lp-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(5, 19, 60, 0.65); margin-left: auto; }
+.lp-user { display: flex; align-items: center; gap: 12px; padding: 14px 8px 2px; margin-top: auto; border-top: 1px solid rgba(255, 255, 255, 0.1); }
+.lp-avatar { width: 34px; height: 34px; border-radius: 50%; background: var(--bx-mint); color: var(--bx-navy); font-weight: 700; font-size: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.lp-user-txt { flex: 1; min-width: 0; }
+.lp-user-name { color: #fff; font-size: 14px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lp-user-role { color: rgba(255, 255, 255, 0.5); font-size: 12px; }
+.lp-user .lucide { width: 16px; height: 16px; color: rgba(255, 255, 255, 0.5); flex-shrink: 0; }
 
-/* ── Badges ── */
-.bx-badge { display: inline-block; background: #F4F4F5; color: #05133C; padding: 2px 12px; border-radius: 999px; font-weight: 500; font-size: 12px; line-height: 20px; white-space: nowrap; }
-.bx-badge--active { background: #14F1B1; color: #05133C; }
-.bx-badge--accent { background: #FFFFFF; color: #114EFF; border: 1px solid #114EFF; }
-.bx-badge--navy { background: #05133C; color: #FFFFFF; }
-.bx-badge--muted { background: #F4F4F5; color: #71717B; }
-.bx-badge--success { background: #00C950; color: #FFFFFF; }
+/* Main */
+.lp-main { flex: 1; min-width: 0; overflow-y: auto; padding: 40px 44px 56px; }
+.lp-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; flex-wrap: wrap; margin-bottom: 28px; }
+.lp-h1 { font-size: 36px; font-weight: 700; letter-spacing: -0.5px; color: var(--bx-navy); margin: 0 0 6px; display: flex; align-items: center; gap: 12px; line-height: 1.15; }
+.lp-h1 .lucide { width: 30px; height: 30px; color: var(--bx-blue); flex-shrink: 0; }
+.lp-sub { font-size: 16px; color: var(--bx-gray-400); margin: 0; }
+.lp-head-actions { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
 
-/* ── Cards ── */
-.bx-card { background: #FFFFFF; border: 1px solid #F4F4F5; border-radius: 12px; box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.1); overflow: hidden; }
-.bx-card + .bx-card { margin-top: 20px; }
-.bx-card-head { background: #05133C; color: #FFFFFF; padding: 14px 24px; font-size: 18px; font-weight: 600; display: flex; align-items: center; gap: 8px; border-bottom: 2px solid #14F1B1; }
-.bx-card-head--blue { background: #114EFF; }
-.bx-card-head .lucide { width: 20px; height: 20px; flex-shrink: 0; }
-.bx-card-head h4, .bx-card-title { font-size: 18px; font-weight: 600; color: inherit; margin: 0; }
-.bx-card-body { padding: 24px; }
+/* Stat cards */
+.lp-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 24px; }
+.lp-stat { background: #fff; border: 1px solid var(--bx-gray-100); border-radius: 12px; padding: 20px; box-shadow: 0 1px 2px rgba(5, 19, 60, 0.04); }
+.lp-stat-top { display: flex; align-items: center; gap: 16px; margin-bottom: 12px; }
+.lp-ico { width: 40px; height: 40px; border-radius: 10px; background: rgba(20, 241, 177, 0.16); color: var(--bx-navy); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.lp-ico .lucide { width: 20px; height: 20px; }
+.lp-ico--blue { background: rgba(17, 78, 255, 0.1); color: var(--bx-blue); }
+.lp-ico--navy { background: var(--bx-navy); color: var(--bx-mint); }
+.lp-stat-label { font-size: 12px; font-weight: 600; letter-spacing: 0.6px; text-transform: uppercase; color: var(--bx-gray-400); }
+.lp-stat-num { font-size: 32px; font-weight: 700; line-height: 1.1; color: var(--bx-navy); }
+.lp-stat-note { font-size: 12px; color: var(--bx-gray-400); margin-top: 6px; }
 
-/* ── Feature / list items ── */
-.bx-list { list-style: none; padding: 0; margin: 0; }
-.bx-list li { display: flex; align-items: flex-start; gap: 8px; padding: 8px 0; font-size: 16px; line-height: 26px; color: #737373; }
-.bx-list li .lucide { width: 16px; height: 16px; margin-top: 5px; flex-shrink: 0; color: #114EFF; }
-.bx-list--feature li .lucide { color: #00C950; }
+/* Panels */
+.lp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+.lp-panel { background: #fff; border: 1px solid var(--bx-gray-100); border-radius: 12px; padding: 22px 24px; box-shadow: 0 1px 2px rgba(5, 19, 60, 0.04); }
+.lp-panel + .lp-panel { margin-top: 20px; }
+.lp-grid .lp-panel + .lp-panel { margin-top: 0; }
+.lp-panel-title { display: flex; align-items: center; gap: 10px; font-size: 17px; font-weight: 700; color: var(--bx-navy); margin: 0 0 14px; }
+.lp-panel-title .lucide { width: 20px; height: 20px; color: var(--bx-blue); flex-shrink: 0; }
+.lp-panel-desc { font-size: 14px; color: var(--bx-gray-400); margin: -6px 0 16px; }
+.lp-section { margin-bottom: 24px; }
 
-/* ── Forms ── */
-.bx-page .form-group { margin-bottom: 16px; }
-.bx-page .form-group label { font-size: 14px; font-weight: 600; color: #05133C; margin-bottom: 6px; }
-.bx-page .form-control { border: 1px solid #F4F4F5; border-radius: 8px; padding: 10px 14px; font-size: 14px; color: #000000; background: #FFFFFF; box-shadow: none; transition: border-color 0.15s, box-shadow 0.15s; }
-.bx-page .form-control:focus { border-color: #114EFF; box-shadow: 0 0 0 3px rgba(17, 78, 255, 0.15); outline: 0; }
-.bx-page .form-control::placeholder { color: #A1A1A1; }
+/* Empty states */
+.lp-empty { text-align: center; padding: 36px 12px; color: var(--bx-gray-400); }
+.lp-empty-ico { width: 48px; height: 48px; border-radius: 50%; background: var(--bx-gray-100); color: #A1A1A1; display: flex; align-items: center; justify-content: center; margin: 0 auto 14px; }
+.lp-empty-ico .lucide { width: 22px; height: 22px; }
+.lp-empty h4 { font-size: 15px; font-weight: 600; color: var(--bx-navy); margin: 0 0 4px; }
+.lp-empty p { font-size: 14px; color: var(--bx-gray-400); margin: 0; }
 
-/* ── Dynamic content (search results) ── */
-.bx-page .table > thead > tr > th { border-bottom: 2px solid #14F1B1; color: #05133C; font-weight: 600; font-size: 14px; }
-.bx-page .table > tbody > tr > td { font-size: 14px; color: #000000; vertical-align: middle; }
-.bx-page .list-group-item { border-color: #F4F4F5; }
-.bx-page .list-group-item-heading { color: #05133C; font-size: 15px; font-weight: 600; }
-.bx-page .list-group-item-text { font-size: 14px; color: #71717B; }
-.bx-page .badge { background: #F4F4F5; color: #05133C; border-radius: 999px; font-weight: 500; font-size: 12px; padding: 2px 10px; }
-.bx-page .label { border-radius: 999px; font-weight: 500; font-size: 12px; }
-.bx-page .label-success { background: #00C950; }
+/* List rows */
+.lp-row { display: flex; align-items: center; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--bx-gray-100); }
+.lp-row:last-child { border-bottom: none; }
+.lp-row:first-child { padding-top: 2px; }
+.lp-row-body { flex: 1; min-width: 0; }
+.lp-row-title { font-size: 15px; font-weight: 700; color: var(--bx-navy); }
+.lp-row-sub { font-size: 13px; color: var(--bx-gray-400); margin-top: 3px; }
+.lp-row-side { flex-shrink: 0; display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+.lp-row-date { font-size: 12px; color: var(--bx-gray-400); }
 
-/* ── Glassmorphism ── */
-.bx-glass { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); border: 1px solid #F4F4F5; border-radius: 16px; }
+/* Pills */
+.lp-pill { display: inline-block; padding: 3px 12px; border-radius: 999px; font-size: 12px; font-weight: 600; background: var(--bx-gray-100); color: var(--bx-navy); white-space: nowrap; }
+.lp-pill--mint { background: var(--bx-mint); color: var(--bx-navy); }
+.lp-pill--blue { background: rgba(17, 78, 255, 0.1); color: var(--bx-blue); }
+.lp-pill--navy { background: var(--bx-navy); color: #fff; }
+.lp-due { color: #DC2626; font-weight: 600; }
 
-/* ── Responsive heading scale ── */
-@media (max-width: 768px) {
-  .bx-title { font-size: 24px; }
+/* Buttons */
+.lp-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; padding: 8px 18px; border-radius: 10px; font-size: 14px; font-weight: 700; border: 1px solid transparent; cursor: pointer; text-decoration: none; transition: all 0.2s; }
+.lp-btn .lucide { width: 16px; height: 16px; flex-shrink: 0; }
+.lp-btn--mint { background: var(--bx-mint); color: var(--bx-navy); }
+.lp-btn--mint:hover { filter: brightness(0.95); text-decoration: none; }
+.lp-btn--navy { background: var(--bx-navy); color: #fff; }
+.lp-btn--navy:hover { background: var(--bx-navy-base); color: #fff; text-decoration: none; }
+.lp-btn--ghost { background: #fff; color: var(--bx-navy); border-color: rgba(5, 19, 60, 0.5); }
+.lp-btn--ghost:hover { background: var(--bx-gray-100); text-decoration: none; }
+
+/* Forms */
+.lp .form-group { margin-bottom: 16px; }
+.lp .form-group label { font-size: 14px; font-weight: 600; color: var(--bx-navy); margin-bottom: 6px; }
+.lp .form-control { border: 1px solid var(--bx-gray-100); border-radius: 8px; padding: 9px 14px; font-size: 14px; color: #000; background: #fff; box-shadow: none; transition: border-color 0.15s, box-shadow 0.15s; }
+.lp .form-control:focus { border-color: var(--bx-blue); box-shadow: 0 0 0 3px rgba(17, 78, 255, 0.15); outline: 0; }
+.lp .form-control::placeholder { color: #A1A1A1; }
+
+/* Dynamic content (search results) */
+.lp .table > thead > tr > th { border-bottom: 2px solid var(--bx-mint); color: var(--bx-navy); font-weight: 600; font-size: 14px; }
+.lp .table > tbody > tr > td { font-size: 14px; color: #000; vertical-align: middle; }
+.lp .list-group-item { border-color: var(--bx-gray-100); }
+.lp .list-group-item-heading { color: var(--bx-navy); font-size: 15px; font-weight: 600; }
+.lp .list-group-item-text { font-size: 14px; color: var(--bx-gray-400); }
+.lp .badge { background: var(--bx-gray-100); color: var(--bx-navy); border-radius: 999px; font-weight: 500; font-size: 12px; padding: 2px 10px; }
+.lp .label { border-radius: 999px; font-weight: 600; font-size: 12px; padding: 3px 12px; }
+.lp .label-success { background: var(--bx-mint); color: var(--bx-navy); }
+
+/* ── Page: case status ── */
+.lp-searchrow { display: flex; gap: 8px; align-items: center; }
+.lp-searchrow .form-control { flex: 1; height: 44px; font-size: 15px; padding: 10px 16px; }
+.lp-matter-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-bottom: 14px; border-bottom: 1px solid var(--bx-gray-100); margin-bottom: 6px; }
+.lp-matter-head h4 { font-size: 17px; font-weight: 700; color: var(--bx-navy); margin: 0; }
+.lp-kv { display: flex; gap: 16px; padding: 10px 0; border-bottom: 1px solid var(--bx-gray-100); font-size: 14px; }
+.lp-kv:last-child { border-bottom: none; }
+.lp-kv-key { flex: 0 0 170px; font-weight: 600; color: var(--bx-navy); }
+.lp-kv-val { flex: 1; min-width: 0; color: #000; }
+
+@media (max-width: 992px) {
+  .lp { flex-direction: column; }
+  .lp-side { width: 100%; max-height: 46vh; }
+  .lp-main { padding: 26px 20px 40px; }
+  .lp-stats, .lp-grid { grid-template-columns: 1fr; }
+  .lp-h1 { font-size: 26px; }
+  .lp-kv-key { flex-basis: 120px; }
 }
-
-/* ── Page-specific ── */
-.bx-container { max-width: 700px; }
-.bx-header { text-align: center; margin-bottom: 30px; }
-.bx-search { display: flex; gap: 8px; align-items: stretch; }
-.bx-search .form-control { flex: 1; font-size: 16px; padding: 12px 16px; }
-.bx-search .bx-btn { height: auto; min-width: 0; padding: 12px 24px; }
-.bx-result-row { display: flex; padding: 10px 0; border-bottom: 1px solid var(--bx-gray-100); font-size: 14px; }
-.bx-result-row:last-child { border-bottom: none; }
-.bx-result-label { flex: 0 0 33%; font-weight: 600; color: var(--bx-navy); }
-.bx-result-value { flex: 1; color: #000000; }
-.bx-empty { text-align: center; margin-top: 30px; color: var(--bx-gray-400); }
-.bx-empty .lucide { width: 48px; height: 48px; color: var(--bx-gray-400); }
-.bx-loading { text-align: center; margin-top: 30px; color: var(--bx-navy); }
 </style>
 
-<div class="bx-page">
-<div class="container bx-container">
-  <div class="bx-header">
-    <h2 class="bx-title"><i data-lucide="search"></i> Check Case Status</h2>
-    <p class="bx-subtitle">Enter your case reference number or CNR number to check the current status.</p>
-  </div>
+{% set bx_user = frappe.session.user or "Guest" %}
+<div class="lp">
+  <!-- ── Sidebar ── -->
+  <aside class="lp-side">
+    <div class="lp-brand">
+      <div class="lp-logo">ba</div>
+      <div class="lp-brand-txt">
+        <div class="lp-brand-name">Chamber</div>
+        <div class="lp-brand-sub">Lawyer Portal</div>
+      </div>
+      <i data-lucide="bell"></i>
+    </div>
 
-  <!-- Search Form -->
-  <div class="bx-card" id="search-panel">
-    <div class="bx-card-body">
+    <div class="lp-searchbox">
+      <i data-lucide="search"></i>
+      <span>Search...</span>
+      <span class="lp-kbd">Ctrl K</span>
+    </div>
+
+    <nav class="lp-nav">
+      <a href="/" class="lp-nav-item"><i data-lucide="layout-dashboard"></i>Dashboard</a>
+      <a href="/intake" class="lp-nav-item"><i data-lucide="user-plus"></i>Client Intake</a>
+      <a href="/case-status" class="lp-nav-item is-active"><i data-lucide="search"></i>Case Status<span class="lp-dot"></span></a>
+      <a href="/workflow" class="lp-nav-item"><i data-lucide="git-branch"></i>Workflow</a>
+      <a href="/about" class="lp-nav-item"><i data-lucide="info"></i>About</a>
+      <a href="/login" class="lp-nav-item"><i data-lucide="log-in"></i>Login</a>
+    </nav>
+
+    <div class="lp-user">
+      <div class="lp-avatar">{{ bx_user[0] | upper }}</div>
+      <div class="lp-user-txt">
+        <div class="lp-user-name">{{ bx_user.split("@")[0] }}</div>
+        <div class="lp-user-role">Firm staff</div>
+      </div>
+      <i data-lucide="chevron-down"></i>
+    </div>
+  </aside>
+
+  <!-- ── Main ── -->
+  <main class="lp-main">
+    <div class="lp-head">
+      <div>
+        <h1 class="lp-h1">Case Status</h1>
+        <p class="lp-sub">Search a matter by case number, CNR, or party name to see where it stands.</p>
+      </div>
+    </div>
+
+    <!-- Search -->
+    <div class="lp-panel lp-section" id="search-panel">
       <form id="status-form">
         <div class="form-group" style="margin-bottom: 0;">
           <label>Case Reference Number or CNR Number</label>
-          <div class="bx-search">
+          <div class="lp-searchrow">
             <input type="text" class="form-control" id="search-input"
                    placeholder="e.g. MATTER-2026-00001 or DLNT01-000123-2026">
-            <button type="submit" class="bx-btn bx-btn-primary">
+            <button type="submit" class="lp-btn lp-btn--mint">
               <i data-lucide="search"></i> Search
             </button>
           </div>
         </div>
       </form>
     </div>
-  </div>
 
-  <!-- Results (hidden by default) -->
-  <div id="results" style="display: none; margin-top: 20px;">
-    <!-- Matter Card -->
-    <div class="bx-card" id="matter-card">
-      <div class="bx-card-head">
-        <h4 id="matter-title"></h4>
-        <div style="margin-left: auto;"><span class="label" id="matter-status" style="font-size: 0.85em; padding: 5px 12px;"></span></div>
+    <!-- Results (hidden by default) -->
+    <div id="results" style="display: none;">
+      <!-- Matter Card -->
+      <div class="lp-panel lp-section" id="matter-card">
+        <div class="lp-matter-head">
+          <h4 id="matter-title"></h4>
+          <span class="label" id="matter-status" style="font-size: 0.85em; padding: 5px 12px;"></span>
+        </div>
+        <div class="lp-kv"><span class="lp-kv-key">Vertical</span><span class="lp-kv-val" id="matter-vertical"></span></div>
+        <div class="lp-kv"><span class="lp-kv-key">Case Number</span><span class="lp-kv-val" id="matter-case-number"></span></div>
+        <div class="lp-kv"><span class="lp-kv-key">Court</span><span class="lp-kv-val" id="matter-court"></span></div>
+        <div class="lp-kv"><span class="lp-kv-key">Judge</span><span class="lp-kv-val" id="matter-judge"></span></div>
+        <div class="lp-kv"><span class="lp-kv-key">Filing Date</span><span class="lp-kv-val" id="matter-filing-date"></span></div>
+        <div class="lp-kv"><span class="lp-kv-key">Priority</span><span class="lp-kv-val" id="matter-priority"></span></div>
+        <div class="lp-kv"><span class="lp-kv-key">Description</span><span class="lp-kv-val" id="matter-description"></span></div>
       </div>
-      <div class="bx-card-body">
-        <div class="bx-result-row"><div class="bx-result-label">Vertical:</div><div class="bx-result-value" id="matter-vertical"></div></div>
-        <div class="bx-result-row"><div class="bx-result-label">Case Number:</div><div class="bx-result-value" id="matter-case-number"></div></div>
-        <div class="bx-result-row"><div class="bx-result-label">Court:</div><div class="bx-result-value" id="matter-court"></div></div>
-        <div class="bx-result-row"><div class="bx-result-label">Judge:</div><div class="bx-result-value" id="matter-judge"></div></div>
-        <div class="bx-result-row"><div class="bx-result-label">Filing Date:</div><div class="bx-result-value" id="matter-filing-date"></div></div>
-        <div class="bx-result-row"><div class="bx-result-label">Priority:</div><div class="bx-result-value" id="matter-priority"></div></div>
-        <div class="bx-result-row"><div class="bx-result-label">Description:</div><div class="bx-result-value" id="matter-description"></div></div>
+
+      <!-- Upcoming Hearings -->
+      <div class="lp-panel lp-section" id="hearings-panel" style="display: none;">
+        <h3 class="lp-panel-title"><i data-lucide="calendar"></i> Upcoming Hearings</h3>
+        <div id="hearings-list"></div>
+      </div>
+
+      <!-- Timeline -->
+      <div class="lp-panel lp-section" id="timeline-panel" style="display: none;">
+        <h3 class="lp-panel-title"><i data-lucide="clock"></i> Case Timeline</h3>
+        <div id="timeline-list"></div>
       </div>
     </div>
 
-    <!-- Upcoming Hearings -->
-    <div class="bx-card" id="hearings-panel" style="display: none;">
-      <div class="bx-card-head">
-        <i data-lucide="calendar"></i> Upcoming Hearings
-      </div>
-      <div class="bx-card-body" id="hearings-list"></div>
+    <!-- No Results -->
+    <div id="no-results" class="lp-empty lp-section" style="display: none;">
+      <div class="lp-empty-ico"><i data-lucide="triangle-alert"></i></div>
+      <h4>No case found</h4>
+      <p>Please check the reference number and try again.</p>
     </div>
 
-    <!-- Timeline -->
-    <div class="bx-card" id="timeline-panel" style="display: none;">
-      <div class="bx-card-head bx-card-head--blue">
-        <i data-lucide="clock"></i> Case Timeline
-      </div>
-      <div class="bx-card-body" id="timeline-list"></div>
+    <!-- Loading -->
+    <div id="loading" class="lp-empty lp-section" style="display: none;">
+      <div class="lp-empty-ico"><i class="fa fa-spinner fa-spin"></i></div>
+      <p>Searching...</p>
     </div>
-  </div>
-
-  <!-- No Results -->
-  <div id="no-results" class="bx-empty" style="display: none;">
-    <i data-lucide="triangle-alert"></i>
-    <h4>No case found</h4>
-    <p>Please check the reference number and try again.</p>
-  </div>
-
-  <!-- Loading -->
-  <div id="loading" class="bx-loading" style="display: none;">
-    <i class="fa fa-spinner fa-spin fa-3x" style="color: #05133C;"></i>
-    <p>Searching...</p>
-  </div>
-</div>
+  </main>
 </div>
 
 <script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.js"></script>
