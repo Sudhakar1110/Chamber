@@ -1,5 +1,14 @@
 {%- extends "templates/web.html" -%}
 
+{% block favicon %}
+<link rel="shortcut icon" href="/assets/chamber/images/ba-logo.jpeg" type="image/jpeg">
+{% endblock %}
+
+{%- block head_include -%}
+{{ super() }}
+<link rel="stylesheet" href="/assets/frappe/css/fonts/fontawesome/font-awesome.min.css">
+{%- endblock -%}
+
 {%- block page_content -%}
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
@@ -29,7 +38,8 @@ body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wra
 .lp-brand-name { color: #fff; font-size: 15px; font-weight: 700; line-height: 1.2; }
 .lp-brand-sub { color: rgba(255, 255, 255, 0.5); font-size: 12px; margin-top: 2px; }
 .lp-brand .lucide { width: 18px; height: 18px; color: rgba(255, 255, 255, 0.7); flex-shrink: 0; }
-.lp-searchbox { display: flex; align-items: center; gap: 10px; height: 42px; padding: 0 12px; border-radius: 10px; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.1); color: rgba(255, 255, 255, 0.45); font-size: 14px; margin-bottom: 22px; cursor: default; }
+.lp-searchbox { display: flex; align-items: center; gap: 10px; height: 42px; padding: 0 12px; border-radius: 10px; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.1); color: rgba(255, 255, 255, 0.45); font-size: 14px; margin-bottom: 22px; text-decoration: none; transition: background 0.15s, color 0.15s; }
+.lp-searchbox:hover { background: rgba(255, 255, 255, 0.12); color: rgba(255, 255, 255, 0.75); text-decoration: none; }
 .lp-searchbox .lucide { width: 16px; height: 16px; }
 .lp-searchbox .lp-search-ico { width: 18px; height: 18px; border-radius: 5px; object-fit: cover; flex-shrink: 0; }
 .lp-kbd { margin-left: auto; background: rgba(255, 255, 255, 0.1); border-radius: 6px; padding: 2px 7px; font-size: 11px; color: rgba(255, 255, 255, 0.55); }
@@ -45,6 +55,8 @@ body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wra
 .lp-user-name { color: #fff; font-size: 14px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .lp-user-role { color: rgba(255, 255, 255, 0.5); font-size: 12px; }
 .lp-user .lucide { width: 16px; height: 16px; color: rgba(255, 255, 255, 0.5); flex-shrink: 0; }
+.lp-user-act { font-size: 12px; font-weight: 700; color: var(--bx-mint); background: none; border: 0; padding: 0; cursor: pointer; text-decoration: none; white-space: nowrap; font-family: inherit; }
+.lp-user-act:hover { text-decoration: underline; }
 
 /* Main */
 .lp-main { flex: 1; min-width: 0; overflow-y: auto; padding: 40px 44px 56px; }
@@ -117,30 +129,34 @@ body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wra
         <div class="lp-brand-name">Chamber</div>
         <div class="lp-brand-sub">Lawyer Portal</div>
       </div>
-      <i data-lucide="bell"></i>
+      <i aria-hidden="true" data-lucide="bell"></i>
     </div>
 
-    <div class="lp-searchbox">
+    <a href="/case-status" class="lp-searchbox" aria-label="Search cases">
       <img class="lp-search-ico" src="/assets/chamber/images/ba-logo.jpeg" alt="">
-      <span>Search...</span>
+      <span>Search cases...</span>
       <span class="lp-kbd">Ctrl K</span>
-    </div>
+    </a>
 
     <nav class="lp-nav">
-      <a href="/" class="lp-nav-item"><i data-lucide="layout-dashboard"></i>Dashboard</a>
-      <a href="/intake" class="lp-nav-item is-active"><i data-lucide="user-plus"></i>Client Intake</a>
-      <a href="/case-status" class="lp-nav-item"><i data-lucide="search"></i>Case Status<span class="lp-dot"></span></a>
-      <a href="/workflow" class="lp-nav-item"><i data-lucide="git-branch"></i>Workflow</a>
-      <a href="/about" class="lp-nav-item"><i data-lucide="info"></i>About</a>
+      <a href="/" class="lp-nav-item"><i aria-hidden="true" data-lucide="layout-dashboard"></i>Dashboard</a>
+      <a href="/intake" class="lp-nav-item is-active" aria-current="page"><i aria-hidden="true" data-lucide="user-plus"></i>Client Intake</a>
+      <a href="/case-status" class="lp-nav-item"><i aria-hidden="true" data-lucide="search"></i>Case Status<span class="lp-dot"></span></a>
+      <a href="/workflow" class="lp-nav-item"><i aria-hidden="true" data-lucide="git-branch"></i>Workflow</a>
+      <a href="/about" class="lp-nav-item"><i aria-hidden="true" data-lucide="info"></i>About</a>
     </nav>
 
     <div class="lp-user">
       <div class="lp-avatar">{{ bx_user[0] | upper }}</div>
       <div class="lp-user-txt">
         <div class="lp-user-name">{{ bx_user.split("@")[0] }}</div>
-        <div class="lp-user-role">Firm staff</div>
+        <div class="lp-user-role">{% if bx_user == "Guest" %}Not signed in{% else %}Firm staff{% endif %}</div>
       </div>
-      <i data-lucide="chevron-down"></i>
+      {% if bx_user == "Guest" %}
+      <a href="/login" class="lp-user-act">Sign in</a>
+      {% else %}
+      <button type="button" class="lp-user-act lp-logout-btn">Log out</button>
+      {% endif %}
     </div>
   </aside>
 
@@ -148,7 +164,7 @@ body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wra
   <main class="lp-main">
     <div class="lp-head">
       <div>
-        <h1 class="lp-h1"><i data-lucide="file-text"></i> Client Intake</h1>
+        <h1 class="lp-h1"><i aria-hidden="true" data-lucide="file-text"></i> Client Intake</h1>
         <p class="lp-sub">Log a new matter for review — our team responds within 24 hours.</p>
       </div>
     </div>
@@ -158,32 +174,32 @@ body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wra
 
       <!-- Client Information -->
       <div class="lp-panel lp-section">
-        <h3 class="lp-panel-title"><i data-lucide="user"></i> Client Information</h3>
+        <h3 class="lp-panel-title"><i aria-hidden="true" data-lucide="user"></i> Client Information</h3>
         <div class="row">
           <div class="col-sm-6">
             <div class="form-group">
-              <label>Full Name <span class="lp-required">*</span></label>
-              <input type="text" class="form-control" name="client_name" required placeholder="e.g. Rajesh Kumar Singh">
+              <label for="client_name">Full Name <span class="lp-required">*</span></label>
+              <input type="text" class="form-control" id="client_name" name="client_name" required placeholder="e.g. Rajesh Kumar Singh">
             </div>
           </div>
           <div class="col-sm-6">
             <div class="form-group">
-              <label>Contact Number <span class="lp-required">*</span></label>
-              <input type="tel" class="form-control" name="contact_number" required placeholder="+91-XXXXXXXXXX">
+              <label for="contact_number">Contact Number <span class="lp-required">*</span></label>
+              <input type="tel" class="form-control" id="contact_number" name="contact_number" required placeholder="+91-XXXXXXXXXX">
             </div>
           </div>
         </div>
         <div class="row">
           <div class="col-sm-6">
             <div class="form-group">
-              <label>Email Address</label>
-              <input type="email" class="form-control" name="email" placeholder="email@example.com">
+              <label for="email">Email Address</label>
+              <input type="email" class="form-control" id="email" name="email" placeholder="email@example.com">
             </div>
           </div>
           <div class="col-sm-6">
             <div class="form-group">
-              <label>City</label>
-              <input type="text" class="form-control" name="city" placeholder="New Delhi">
+              <label for="city">City</label>
+              <input type="text" class="form-control" id="city" name="city" placeholder="New Delhi">
             </div>
           </div>
         </div>
@@ -191,12 +207,12 @@ body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wra
 
       <!-- Case Details -->
       <div class="lp-panel lp-section">
-        <h3 class="lp-panel-title"><i data-lucide="gavel"></i> Case Details</h3>
+        <h3 class="lp-panel-title"><i aria-hidden="true" data-lucide="gavel"></i> Case Details</h3>
         <div class="row">
           <div class="col-sm-6">
             <div class="form-group">
-              <label>Legal Vertical <span class="lp-required">*</span></label>
-              <select class="form-control" name="vertical" required>
+              <label for="vertical">Legal Vertical <span class="lp-required">*</span></label>
+              <select class="form-control" id="vertical" name="vertical" required>
                 <option value="">Select vertical...</option>
                 {% for v in verticals %}
                 <option value="{{ v.name }}">{{ v.vertical_name }}</option>
@@ -206,8 +222,8 @@ body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wra
           </div>
           <div class="col-sm-6">
             <div class="form-group">
-              <label>Case Category</label>
-              <select class="form-control" name="case_category">
+              <label for="case_category">Case Category</label>
+              <select class="form-control" id="case_category" name="case_category">
                 <option value="">Select category...</option>
                 <option value="Criminal">Criminal</option>
                 <option value="Civil">Civil</option>
@@ -223,28 +239,28 @@ body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wra
         </div>
 
         <div class="form-group">
-          <label>Case Title / Brief Description <span class="lp-required">*</span></label>
-          <input type="text" class="form-control" name="matter_title" required
+          <label for="matter_title">Case Title / Brief Description <span class="lp-required">*</span></label>
+          <input type="text" class="form-control" id="matter_title" name="matter_title" required
                  placeholder="e.g. Cheque Bounce case against XYZ Corp">
         </div>
 
         <div class="form-group">
-          <label>Detailed Description <span class="lp-required">*</span></label>
-          <textarea class="form-control" name="description" rows="5" required
+          <label for="description">Detailed Description <span class="lp-required">*</span></label>
+          <textarea class="form-control" id="description" name="description" rows="5" required
                     placeholder="Describe your case in detail. Include dates, parties involved, and key facts..."></textarea>
         </div>
 
         <div class="row">
           <div class="col-sm-6">
             <div class="form-group">
-              <label>FIR Number (if applicable)</label>
-              <input type="text" class="form-control" name="fir_number" placeholder="e.g. FIR 142/2026">
+              <label for="fir_number">FIR Number (if applicable)</label>
+              <input type="text" class="form-control" id="fir_number" name="fir_number" placeholder="e.g. FIR 142/2026">
             </div>
           </div>
           <div class="col-sm-6">
             <div class="form-group">
-              <label>CNR Number (if known)</label>
-              <input type="text" class="form-control" name="cnr_number" placeholder="e.g. DLNT01-000123-2026">
+              <label for="cnr_number">CNR Number (if known)</label>
+              <input type="text" class="form-control" id="cnr_number" name="cnr_number" placeholder="e.g. DLNT01-000123-2026">
             </div>
           </div>
         </div>
@@ -252,8 +268,8 @@ body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wra
         <div class="row">
           <div class="col-sm-6">
             <div class="form-group">
-              <label>Priority</label>
-              <select class="form-control" name="priority">
+              <label for="priority">Priority</label>
+              <select class="form-control" id="priority" name="priority">
                 <option value="Medium">Medium</option>
                 <option value="Low">Low</option>
                 <option value="High">High - Urgent attention needed</option>
@@ -263,8 +279,8 @@ body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wra
           </div>
           <div class="col-sm-6">
             <div class="form-group">
-              <label>Opposing Party Name (if known)</label>
-              <input type="text" class="form-control" name="opposing_counsel" placeholder="e.g. Adv. John Doe">
+              <label for="opposing_counsel">Opposing Party Name (if known)</label>
+              <input type="text" class="form-control" id="opposing_counsel" name="opposing_counsel" placeholder="e.g. Adv. John Doe">
             </div>
           </div>
         </div>
@@ -283,7 +299,7 @@ body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wra
 
     <!-- Success Message (hidden by default) -->
     <div id="success-msg" class="lp-panel lp-success" style="display: none;">
-      <i data-lucide="circle-check"></i>
+      <i aria-hidden="true" data-lucide="circle-check"></i>
       <h3>Intake Form Submitted!</h3>
       <p>Thank you. Our legal team will review your case and contact you within 24 hours.</p>
       <a href="/" class="lp-btn lp-btn--ghost">Back to Dashboard</a>
@@ -291,7 +307,7 @@ body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wra
   </main>
 </div>
 
-<script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.js"></script>
+<script src="/assets/chamber/js/lucide.js"></script>
 <script>
   (function () {
     function bxInitIcons() {
@@ -301,6 +317,29 @@ body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wra
       document.addEventListener('DOMContentLoaded', bxInitIcons);
     } else {
       bxInitIcons();
+    }
+  })();
+</script>
+
+<script>
+  (function () {
+    document.addEventListener("keydown", function (e) {
+      if ((e.ctrlKey || e.metaKey) && String(e.key).toLowerCase() === "k") {
+        e.preventDefault();
+        var inp = document.getElementById("search-input");
+        if (inp) { inp.focus(); inp.select(); }
+        else { window.location.href = "/case-status"; }
+      }
+    });
+    var lo = document.querySelector(".lp-logout-btn");
+    if (lo) {
+      lo.addEventListener("click", function () {
+        if (window.frappe && frappe.call) {
+          frappe.call({ method: "logout", callback: function () { window.location.href = "/login"; } });
+        } else {
+          window.location.href = "/login";
+        }
+      });
     }
   })();
 </script>
