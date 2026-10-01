@@ -400,12 +400,12 @@ frappe.ready(function() {
   }
 
   function doSync(method, btn) {
-    if (!window.__bxMatter) { return; }
+    if (!window.bxMatter) { return; }
     var $btn = $(btn);
     $btn.addClass('lp-btn--busy');
     frappe.call({
       method: method,
-      args: { legal_matter: window.__bxMatter },
+      args: { legal_matter: window.bxMatter },
       callback: function(r) {
         $btn.removeClass('lp-btn--busy');
         var msg = (r.message && (r.message.message || r.message.status)) ? (r.message.message || JSON.stringify(r.message)) : 'Sync completed.';
@@ -424,12 +424,12 @@ frappe.ready(function() {
     $syncEc.on('click', function () { doSync('chamber.api.ecourts.sync', this); });
     $('#sync-ext').on('click', function () { doSync('chamber.api.ecourts.sync_extended', this); });
     $('#sync-cov').on('click', function () {
-      if (!window.__bxMatter) { return; }
+      if (!window.bxMatter) { return; }
       var $btn = $(this);
       $btn.addClass('lp-btn--busy');
       frappe.call({
         method: 'chamber.api.ecourts.check_coverage',
-        args: { legal_matter: window.__bxMatter },
+        args: { legal_matter: window.bxMatter },
         callback: function (r) {
           $btn.removeClass('lp-btn--busy');
           var cov = r.message;
@@ -480,7 +480,7 @@ function renderMatter(data) {
   $('#matter-coverage').text(m.ecourts_coverage || '-');
 
   if ($('#sync-panel').length && m.name) {
-    window.__bxMatter = m.name;
+    window.bxMatter = m.name;
     $('#timeline-link').attr('href', '/timeline?matter=' + encodeURIComponent(m.name));
     $('#sync-out').text('');
     $('#sync-panel').show();
