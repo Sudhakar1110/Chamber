@@ -129,11 +129,17 @@ def report_upcoming_hearings(from_date=None, vertical=None, source=None):
 
 @frappe.whitelist(allow_guest=True)
 def global_search(query):
-	"""Quick matter lookup for the portal search overlay (Ctrl+K)."""
+	"""Quick matter lookup for the portal search overlay (Ctrl+K).
+
+	Guests always get an empty list so matters cannot be enumerated
+	without signing in, and signed-in users only see matters their
+	role and matter-level permissions allow (frappe.get_list applies
+	the chamber permission query conditions).
+	"""
 	query = (query or "").strip()
-	if not query:
+	if not query or frappe.session.user == "Guest":
 		return []
-	rows = frappe.get_all(
+	rows = frappe.get_list(
 		"Legal Matter",
 		fields=["name", "matter_title", "case_number", "cnr_number", "status"],
 		or_filters=[

@@ -515,6 +515,43 @@ frappe.ready(function() {
     return values;
   }
 
+  function uploadAttachFiles(values, done) {
+    var inputs = $("input.chamber-file-input").toArray().filter(function (el) {
+      return el.files && el.files.length && el.files[0];
+    });
+    if (!inputs.length) { done(true); return; }
+    var remaining = inputs.length;
+    var failed = false;
+    inputs.forEach(function (el) {
+      var fd = new FormData();
+      fd.append("file", el.files[0]);
+      fd.append("is_private", "1");
+      $.ajax({
+        url: "/api/method/frappe.handler.upload_file",
+        type: "POST",
+        data: fd,
+        processData: false,
+        contentType: false,
+        headers: { "X-Frappe-CSRF-Token": frappe.csrf_token },
+        success: function (r) {
+          var f = (r && r.message) || {};
+          if (f.file_url) {
+            values[el.getAttribute("data-fieldname")] = f.file_url;
+          } else {
+            failed = true;
+          }
+          if (--remaining === 0) { done(!failed); }
+        },
+        error: function (xhr) {
+          failed = true;
+          frappe.msgprint("Upload failed for " + (el.files[0].name || "file") +
+            (xhr && xhr.responseJSON && xhr.responseJSON.exception ? ": " + xhr.responseJSON.exception : ""));
+          if (--remaining === 0) { done(!failed); }
+        }
+      });
+    });
+  }
+
   function missingRequired() {
     var missing = [];
     if (!tplState.api) { return missing; }
@@ -528,14 +565,14 @@ frappe.ready(function() {
     return missing;
   }
 
-  function saveTemplate(matter, done) {
+  function saveTemplate(matter, responses, done) {
     if (!tplState.template || !tplState.api) { done(true); return; }
     frappe.call({
       method: "chamber.api.intake.submit",
       args: {
         legal_matter: matter,
         intake_form_template: tplState.template,
-        responses: collectResponses()
+        responses: responses
       },
       callback: function () { done(true); },
       error: function () {
@@ -547,6 +584,7 @@ frappe.ready(function() {
 
   $('#intake-form').on('submit', function(e) {
     e.preventDefault();
+    var $form = $(this);
     var $btn = $('#submit-btn');
     $btn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Submitting...');
 
@@ -557,33 +595,42 @@ frappe.ready(function() {
       return;
     }
 
-    frappe.call({
-      method: 'chamber.www.intake.submit_intake',
-      args: $(this).serializeArray().reduce(function(obj, item) {
-        obj[item.name] = item.value; return obj;
-      }, {}),
-      callback: function(r) {
-        if (r.message && r.message.status === 'ok') {
-          var matter = r.message.matter;
-          saveTemplate(matter, function () {
-            $('#intake-form').hide();
-            $('#tpl-panel').hide();
-            if (matter) {
-              $('#success-matter').show();
-              $('#success-matter-link').attr('href', '/timeline?matter=' + encodeURIComponent(matter));
-            }
-            $('#success-msg').show();
-            if (window.bxIcons) { bxIcons(); }
-          });
-        } else {
-          frappe.msgprint(r.message || 'Error submitting form');
+    var responses = collectResponses();
+    uploadAttachFiles(responses, function (ok) {
+      if (!ok) {
+        frappe.msgprint("File upload failed. Please retry the attachment before submitting.");
+        $btn.prop('disabled', false).html('<i class="fa fa-paper-plane"></i> Submit Intake Form');
+        return;
+      }
+
+      frappe.call({
+        method: 'chamber.www.intake.submit_intake',
+        args: $form.serializeArray().reduce(function(obj, item) {
+          obj[item.name] = item.value; return obj;
+        }, {}),
+        callback: function(r) {
+          if (r.message && r.message.status === 'ok') {
+            var matter = r.message.matter;
+            saveTemplate(matter, responses, function () {
+              $('#intake-form').hide();
+              $('#tpl-panel').hide();
+              if (matter) {
+                $('#success-matter').show();
+                $('#success-matter-link').attr('href', '/timeline?matter=' + encodeURIComponent(matter));
+              }
+              $('#success-msg').show();
+              if (window.bxIcons) { bxIcons(); }
+            });
+          } else {
+            frappe.msgprint(r.message || 'Error submitting form');
+            $btn.prop('disabled', false).html('<i class="fa fa-paper-plane"></i> Submit Intake Form');
+          }
+        },
+        error: function(err) {
+          frappe.msgprint('Error: ' + (err.message || 'Submission failed'));
           $btn.prop('disabled', false).html('<i class="fa fa-paper-plane"></i> Submit Intake Form');
         }
-      },
-      error: function(err) {
-        frappe.msgprint('Error: ' + (err.message || 'Submission failed'));
-        $btn.prop('disabled', false).html('<i class="fa fa-paper-plane"></i> Submit Intake Form');
-      }
+      });
     });
   });
 });
