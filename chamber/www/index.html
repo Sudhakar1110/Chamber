@@ -2,362 +2,416 @@
 
 {%- block page_content -%}
 <style>
-  :root {
-    --chamber-primary: #0f172a;
-    --chamber-accent: #1e40af;
-    --chamber-gold: #d97706;
-    --chamber-light: #f8fafc;
-    --chamber-border: #e2e8f0;
-  }
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
 
-  /* ── Hero ── */
-  .ch-hero {
-    background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #1e40af 100%);
-    color: #fff;
-    padding: 80px 0 60px;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-  }
-  .ch-hero::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    right: -20%;
-    width: 600px;
-    height: 600px;
-    background: radial-gradient(circle, rgba(217,119,6,0.15) 0%, transparent 70%);
-    border-radius: 50%;
-  }
-  .ch-hero h1 {
-    font-size: 3em;
-    font-weight: 800;
-    margin: 0 0 8px;
-    letter-spacing: -1px;
-  }
-  .ch-hero h1 .fa { color: #d97706; }
-  .ch-hero .subtitle {
-    font-size: 1.25em;
-    font-weight: 300;
-    opacity: 0.9;
-    margin: 0 0 6px;
-  }
-  .ch-hero .tagline {
-    font-size: 1em;
-    opacity: 0.7;
-    max-width: 600px;
-    margin: 0 auto 32px;
-  }
-  .ch-hero .btn-primary {
-    background: #d97706;
-    border: none;
-    padding: 12px 32px;
-    font-weight: 600;
-    border-radius: 8px;
-    font-size: 1.05em;
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-  .ch-hero .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(217,119,6,0.4); }
-  .ch-hero .btn-outline {
-    background: transparent;
-    border: 2px solid rgba(255,255,255,0.4);
-    color: #fff;
-    padding: 10px 30px;
-    font-weight: 600;
-    border-radius: 8px;
-    font-size: 1.05em;
-    transition: all 0.2s;
-  }
-  .ch-hero .btn-outline:hover { border-color: #fff; background: rgba(255,255,255,0.1); }
+/* ── Bizaxl Design System: tokens ── */
+:root {
+  --bx-navy: #05133C;
+  --bx-navy-base: #091526;
+  --bx-mint: #14F1B1;
+  --bx-blue: #114EFF;
+  --bx-gray-100: #F4F4F5;
+  --bx-gray-400: #71717B;
+  --bx-gradient: linear-gradient(90deg, #14F1B1 0%, #114EFF 50%, #091526 100%);
+  --bx-radius-sm: 8px;
+  --bx-radius-md: 10px;
+  --bx-radius-lg: 12px;
+  --bx-radius-xl: 16px;
+  --bx-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.1);
+}
 
-  /* ── Workflow Section ── */
-  .ch-workflow-section {
-    background: #fff;
-    padding: 60px 0 50px;
-    border-bottom: 1px solid var(--chamber-border);
-  }
-  .ch-section-title {
-    text-align: center;
-    font-size: 1.8em;
-    font-weight: 700;
-    color: var(--chamber-primary);
-    margin: 0 0 8px;
-  }
-  .ch-section-sub {
-    text-align: center;
-    color: #64748b;
-    font-size: 1.05em;
-    margin: 0 0 40px;
-  }
-  .ch-workflow {
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    gap: 0;
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 0 20px;
-    flex-wrap: wrap;
-  }
-  .ch-wf-step {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    flex: 1 1 0;
-    min-width: 130px;
-    max-width: 170px;
-    position: relative;
-  }
-  .ch-wf-icon {
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    color: #fff;
-    margin-bottom: 12px;
-    position: relative;
-    z-index: 2;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
-    transition: transform 0.2s;
-  }
-  .ch-wf-step:hover .ch-wf-icon { transform: scale(1.08); }
-  .ch-wf-step .ch-wf-num {
-    position: absolute;
-    top: -6px;
-    right: -6px;
-    width: 22px;
-    height: 22px;
-    background: #fff;
-    border-radius: 50%;
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--chamber-primary);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.15);
-    z-index: 3;
-  }
-  .ch-wf-step h5 {
-    font-size: 0.85em;
-    font-weight: 700;
-    color: var(--chamber-primary);
-    margin: 0 0 4px;
-  }
-  .ch-wf-step p {
-    font-size: 0.78em;
-    color: #64748b;
-    margin: 0;
-    line-height: 1.4;
-    padding: 0 4px;
-  }
-  .ch-wf-arrow {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding-top: 24px;
-    color: #cbd5e1;
-    font-size: 22px;
-    flex-shrink: 0;
-    width: 36px;
-  }
+/* ── Typography ── */
+.bx-page { font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+.bx-page input, .bx-page select, .bx-page textarea, .bx-page button { font-family: inherit; font-size: 14px; }
+.bx-page h1, .bx-page h2, .bx-page h3, .bx-page h4, .bx-page h5, .bx-page h6 { font-family: inherit; color: var(--bx-navy); }
 
-  /* Status flow bar */
-  .ch-status-bar {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    margin-top: 40px;
-    flex-wrap: wrap;
-  }
-  .ch-status-pill {
-    padding: 5px 16px;
-    border-radius: 20px;
-    font-size: 0.8em;
-    font-weight: 600;
-    white-space: nowrap;
-  }
-  .ch-status-arrow { color: #cbd5e1; font-size: 14px; }
+/* ── Headings ── */
+.bx-title { display: flex; align-items: center; justify-content: center; gap: 16px; font-size: 32px; font-weight: 700; line-height: 1.2; color: var(--bx-navy); margin: 0 0 8px; }
+.bx-title .lucide { width: 28px; height: 28px; color: var(--bx-blue); flex-shrink: 0; }
+.bx-subtitle { font-size: 16px; line-height: 1.5; color: var(--bx-gray-400); margin: 0 0 32px; text-align: center; }
+.bx-section-title { font-size: 24px; font-weight: 700; color: var(--bx-navy); margin: 0 0 8px; }
+.bx-section-sub { font-size: 16px; color: var(--bx-gray-400); margin: 0 0 32px; }
 
-  /* ── Verticals ── */
-  .ch-verticals {
-    padding: 60px 0;
-    background: var(--chamber-light);
-  }
-  .ch-vert-card {
-    background: #fff;
-    border-radius: 12px;
-    padding: 32px 24px;
-    text-align: center;
-    border: 1px solid var(--chamber-border);
-    transition: all 0.25s;
-    height: 100%;
-  }
-  .ch-vert-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 32px rgba(0,0,0,0.08);
-    border-color: transparent;
-  }
-  .ch-vert-icon {
-    width: 56px;
-    height: 56px;
-    border-radius: 12px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 22px;
-    margin-bottom: 16px;
-  }
-  .ch-vert-card h4 {
-    font-size: 1.05em;
-    font-weight: 700;
-    color: var(--chamber-primary);
-    margin: 0 0 8px;
-  }
-  .ch-vert-card p {
-    font-size: 0.9em;
-    color: #64748b;
-    margin: 0;
-    line-height: 1.5;
-  }
+/* ── Buttons ── */
+.bx-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; min-width: 140px; padding: 8px 20px; border-radius: 10px; font-weight: 700; font-size: 14px; line-height: 20px; border: 1px solid transparent; cursor: pointer; text-decoration: none; transition: all 0.2s; }
+.bx-btn .lucide { width: 16px; height: 16px; flex-shrink: 0; }
+.bx-btn:hover { text-decoration: none; }
+.bx-btn-primary { background: #14F1B1; color: #05133C; border-color: #14F1B1; }
+.bx-btn-primary:hover { filter: brightness(0.95); box-shadow: 0 4px 12px rgba(20, 241, 177, 0.35); }
+.bx-btn-secondary { background: #05133C; color: #FFFFFF; border-color: #05133C; min-width: 166px; }
+.bx-btn-secondary:hover { background: #091526; border-color: #091526; }
+.bx-btn-tertiary { background: #FFFFFF; color: #05133C; border: 1px solid rgba(5, 19, 60, 0.5); min-width: 160px; }
+.bx-btn-tertiary:hover { background: #F4F4F5; }
 
-  /* ── Stats ── */
-  .ch-stats {
-    padding: 50px 0;
-    background: #fff;
-    border-top: 1px solid var(--chamber-border);
-    border-bottom: 1px solid var(--chamber-border);
-  }
-  .ch-stat-item {
-    text-align: center;
-    padding: 16px;
-  }
-  .ch-stat-num {
-    font-size: 2.4em;
-    font-weight: 800;
-    color: var(--chamber-accent);
-    line-height: 1;
-  }
-  .ch-stat-label {
-    font-size: 0.9em;
-    color: #64748b;
-    margin-top: 4px;
-  }
+/* ── Badges ── */
+.bx-badge { display: inline-block; background: #F4F4F5; color: #05133C; padding: 2px 12px; border-radius: 999px; font-weight: 500; font-size: 12px; line-height: 20px; white-space: nowrap; }
+.bx-badge--active { background: #14F1B1; color: #05133C; }
+.bx-badge--accent { background: #FFFFFF; color: #114EFF; border: 1px solid #114EFF; }
+.bx-badge--navy { background: #05133C; color: #FFFFFF; }
+.bx-badge--muted { background: #F4F4F5; color: #71717B; }
+.bx-badge--success { background: #00C950; color: #FFFFFF; }
 
-  /* ── CTA ── */
-  .ch-cta {
-    padding: 60px 0;
-    background: linear-gradient(135deg, #0f172a, #1e40af);
-    color: #fff;
-    text-align: center;
-  }
-  .ch-cta h2 { font-size: 2em; font-weight: 700; margin: 0 0 12px; }
-  .ch-cta p { font-size: 1.1em; opacity: 0.85; margin: 0 0 32px; max-width: 550px; margin-left: auto; margin-right: auto; }
-  .ch-cta .btn-gold {
-    background: #d97706;
-    border: none;
-    color: #fff;
-    padding: 14px 36px;
-    font-weight: 700;
-    border-radius: 8px;
-    font-size: 1.1em;
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-  .ch-cta .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(217,119,6,0.4); }
+/* ── Cards ── */
+.bx-card { background: #FFFFFF; border: 1px solid #F4F4F5; border-radius: 12px; box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.1); overflow: hidden; }
+.bx-card + .bx-card { margin-top: 20px; }
+.bx-card-head { background: #05133C; color: #FFFFFF; padding: 14px 24px; font-size: 18px; font-weight: 600; display: flex; align-items: center; gap: 8px; border-bottom: 2px solid #14F1B1; }
+.bx-card-head--blue { background: #114EFF; }
+.bx-card-head .lucide { width: 20px; height: 20px; flex-shrink: 0; }
+.bx-card-head h4, .bx-card-title { font-size: 18px; font-weight: 600; color: inherit; margin: 0; }
+.bx-card-body { padding: 24px; }
 
-  /* ── Footer ── */
-  .ch-footer {
-    background: #0f172a;
-    color: rgba(255,255,255,0.6);
-    padding: 32px 0;
-    text-align: center;
-    font-size: 0.9em;
-  }
-  .ch-footer a { color: #d97706; text-decoration: none; }
-  .ch-footer a:hover { text-decoration: underline; }
-  .ch-footer-links { margin-top: 10px; }
-  .ch-footer-links a { margin: 0 12px; }
+/* ── Feature / list items ── */
+.bx-list { list-style: none; padding: 0; margin: 0; }
+.bx-list li { display: flex; align-items: flex-start; gap: 8px; padding: 8px 0; font-size: 16px; line-height: 26px; color: #737373; }
+.bx-list li .lucide { width: 16px; height: 16px; margin-top: 5px; flex-shrink: 0; color: #114EFF; }
+.bx-list--feature li .lucide { color: #00C950; }
 
-  /* ── Quick Links Nav ── */
-  .ch-quick-nav {
-    display: flex;
-    justify-content: center;
-    gap: 16px;
-    margin-top: 28px;
-    flex-wrap: wrap;
-  }
-  .ch-quick-nav a {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 8px 20px;
-    border-radius: 8px;
-    font-size: 0.92em;
-    font-weight: 500;
-    text-decoration: none;
-    transition: all 0.2s;
-  }
-  .ch-quick-nav .nav-intake {
-    background: rgba(217,119,6,0.15);
-    color: #fbbf24;
-    border: 1px solid rgba(217,119,6,0.3);
-  }
-  .ch-quick-nav .nav-intake:hover { background: rgba(217,119,6,0.25); }
-  .ch-quick-nav .nav-status {
-    background: rgba(255,255,255,0.1);
-    color: rgba(255,255,255,0.8);
-    border: 1px solid rgba(255,255,255,0.2);
-  }
-  .ch-quick-nav .nav-status:hover { background: rgba(255,255,255,0.18); }
-  .ch-quick-nav .nav-about {
-    background: rgba(255,255,255,0.1);
-    color: rgba(255,255,255,0.8);
-    border: 1px solid rgba(255,255,255,0.2);
-  }
-  .ch-quick-nav .nav-about:hover { background: rgba(255,255,255,0.18); }
-  .ch-quick-nav .nav-login {
-    background: rgba(255,255,255,0.1);
-    color: rgba(255,255,255,0.8);
-    border: 1px solid rgba(255,255,255,0.2);
-  }
-  .ch-quick-nav .nav-login:hover { background: rgba(255,255,255,0.18); }
+/* ── Forms ── */
+.bx-page .form-group { margin-bottom: 16px; }
+.bx-page .form-group label { font-size: 14px; font-weight: 600; color: #05133C; margin-bottom: 6px; }
+.bx-page .form-control { border: 1px solid #F4F4F5; border-radius: 8px; padding: 10px 14px; font-size: 14px; color: #000000; background: #FFFFFF; box-shadow: none; transition: border-color 0.15s, box-shadow 0.15s; }
+.bx-page .form-control:focus { border-color: #114EFF; box-shadow: 0 0 0 3px rgba(17, 78, 255, 0.15); outline: 0; }
+.bx-page .form-control::placeholder { color: #A1A1A1; }
 
-  @media (max-width: 768px) {
-    .ch-hero { padding: 50px 0 40px; }
-    .ch-hero h1 { font-size: 2em; }
-    .ch-workflow { gap: 0; }
-    .ch-wf-step { min-width: 100px; }
-    .ch-wf-step h5 { font-size: 0.75em; }
-    .ch-wf-step p { font-size: 0.7em; }
-    .ch-wf-arrow { width: 24px; font-size: 16px; }
-    .ch-wf-icon { width: 50px; height: 50px; font-size: 20px; }
-  }
+/* ── Dynamic content (search results) ── */
+.bx-page .table > thead > tr > th { border-bottom: 2px solid #14F1B1; color: #05133C; font-weight: 600; font-size: 14px; }
+.bx-page .table > tbody > tr > td { font-size: 14px; color: #000000; vertical-align: middle; }
+.bx-page .list-group-item { border-color: #F4F4F5; }
+.bx-page .list-group-item-heading { color: #05133C; font-size: 15px; font-weight: 600; }
+.bx-page .list-group-item-text { font-size: 14px; color: #71717B; }
+.bx-page .badge { background: #F4F4F5; color: #05133C; border-radius: 999px; font-weight: 500; font-size: 12px; padding: 2px 10px; }
+.bx-page .label { border-radius: 999px; font-weight: 500; font-size: 12px; }
+.bx-page .label-success { background: #00C950; }
+
+/* ── Glassmorphism ── */
+.bx-glass { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); border: 1px solid #F4F4F5; border-radius: 16px; }
+
+/* ── Responsive heading scale ── */
+@media (max-width: 768px) {
+  .bx-title { font-size: 24px; }
+}
+
+/* ── Page: Hero ── */
+.ch-hero {
+  background: var(--bx-navy);
+  color: #fff;
+  padding: 80px 0 60px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.ch-hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(20, 241, 177, 0.15) 0%, transparent 70%);
+  border-radius: 50%;
+}
+.ch-hero::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--bx-gradient);
+}
+.ch-hero .container { position: relative; z-index: 2; }
+.ch-hero h1 {
+  font-size: 48px;
+  font-weight: 700;
+  margin: 0 0 8px;
+  letter-spacing: -1px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+.ch-hero h1 .lucide { width: 40px; height: 40px; color: var(--bx-mint); }
+.ch-hero .subtitle { font-size: 18px; font-weight: 500; opacity: 0.9; margin: 0 0 6px; }
+.ch-hero .tagline { font-size: 16px; opacity: 0.7; max-width: 600px; margin: 0 auto 32px; }
+
+/* ── Page: Workflow section ── */
+.ch-workflow-section {
+  background: #fff;
+  padding: 60px 0 50px;
+  border-bottom: 1px solid var(--bx-gray-100);
+}
+.ch-section-title {
+  text-align: center;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--bx-navy);
+  margin: 0 0 8px;
+}
+.ch-section-sub {
+  text-align: center;
+  color: var(--bx-gray-400);
+  font-size: 16px;
+  margin: 0 0 40px;
+}
+.ch-workflow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 20px;
+  flex-wrap: wrap;
+}
+.ch-wf-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  flex: 1 1 0;
+  min-width: 130px;
+  max-width: 170px;
+  position: relative;
+}
+.ch-wf-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #05133C;
+  color: #14F1B1;
+  margin-bottom: 12px;
+  position: relative;
+  z-index: 2;
+  box-shadow: 0 4px 12px rgba(5, 19, 60, 0.12);
+  transition: transform 0.2s;
+}
+.ch-wf-icon .lucide { width: 24px; height: 24px; }
+.ch-wf-step:hover .ch-wf-icon { transform: scale(1.08); }
+.ch-wf-step .ch-wf-num {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 22px;
+  height: 22px;
+  background: #14F1B1;
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: 700;
+  color: #05133C;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+  z-index: 3;
+}
+.ch-wf-step h5 {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--bx-navy);
+  margin: 0 0 4px;
+}
+.ch-wf-step p {
+  font-size: 12px;
+  color: var(--bx-gray-400);
+  margin: 0;
+  line-height: 1.4;
+  padding: 0 4px;
+}
+.ch-wf-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 24px;
+  color: #A1A1A1;
+  width: 36px;
+  flex-shrink: 0;
+}
+.ch-wf-arrow .lucide { width: 20px; height: 20px; }
+
+/* Status flow bar */
+.ch-status-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 40px;
+  flex-wrap: wrap;
+}
+.ch-status-arrow { color: #A1A1A1; display: inline-flex; }
+.ch-status-arrow .lucide { width: 16px; height: 16px; }
+
+/* ── Page: Verticals ── */
+.ch-verticals {
+  padding: 60px 0;
+  background: var(--bx-gray-100);
+}
+.ch-vert-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+  border: 1px solid var(--bx-gray-100);
+  box-shadow: var(--bx-shadow);
+  transition: all 0.25s;
+  height: 100%;
+}
+.ch-vert-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+}
+.ch-vert-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bx-gray-100);
+  color: var(--bx-blue);
+  font-size: 24px;
+  margin-bottom: 16px;
+  transition: all 0.25s;
+}
+.ch-vert-card:hover .ch-vert-icon { background: var(--bx-navy); color: var(--bx-mint); }
+.ch-vert-icon .lucide { width: 24px; height: 24px; }
+.ch-vert-card h4 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--bx-navy);
+  margin: 0 0 8px;
+}
+.ch-vert-card p {
+  font-size: 14px;
+  color: var(--bx-gray-400);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ── Page: Stats ── */
+.ch-stats {
+  padding: 50px 0;
+  background: #fff;
+  border-top: 1px solid var(--bx-gray-100);
+  border-bottom: 1px solid var(--bx-gray-100);
+}
+.ch-stat-item { text-align: center; padding: 16px; }
+.ch-stat-num {
+  font-size: 48px;
+  font-weight: 700;
+  color: var(--bx-blue);
+  line-height: 1;
+}
+.ch-stat-label {
+  font-size: 14px;
+  color: var(--bx-gray-400);
+  margin-top: 8px;
+}
+
+/* ── Page: CTA ── */
+.ch-cta {
+  padding: 60px 0;
+  background: var(--bx-navy);
+  color: #fff;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.ch-cta::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--bx-gradient);
+}
+.ch-cta h2 { font-size: 32px; font-weight: 700; margin: 0 0 12px; color: #fff; }
+.ch-cta p { font-size: 16px; opacity: 0.85; max-width: 550px; margin: 0 auto 32px; }
+
+/* ── Page: Footer ── */
+.ch-footer {
+  background: var(--bx-navy-base);
+  color: rgba(255, 255, 255, 0.6);
+  padding: 32px 0;
+  text-align: center;
+  font-size: 14px;
+}
+.ch-footer a { color: var(--bx-mint); text-decoration: none; }
+.ch-footer a:hover { text-decoration: underline; }
+.ch-footer-links { margin-top: 10px; }
+.ch-footer-links a { margin: 0 12px; }
+
+/* ── Quick links nav (glassmorphism) ── */
+.ch-quick-nav {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 28px;
+  flex-wrap: wrap;
+}
+.ch-quick-nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 20px;
+  border-radius: 16px;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid var(--bx-gray-100);
+  color: var(--bx-navy);
+}
+.ch-quick-nav a:hover { background: #fff; }
+.ch-quick-nav .lucide { width: 16px; height: 16px; flex-shrink: 0; }
+.ch-quick-nav .nav-intake {
+  background: var(--bx-mint);
+  border: 1px solid var(--bx-mint);
+  color: var(--bx-navy);
+  font-weight: 700;
+}
+.ch-quick-nav .nav-intake:hover { filter: brightness(0.95); background: var(--bx-mint); }
+
+@media (max-width: 768px) {
+  .ch-hero { padding: 50px 0 40px; }
+  .ch-hero h1 { font-size: 32px; }
+  .ch-wf-step { min-width: 100px; }
+  .ch-wf-step h5 { font-size: 12px; }
+  .ch-wf-step p { font-size: 11px; }
+  .ch-wf-arrow { width: 24px; }
+  .ch-wf-icon { width: 50px; height: 50px; }
+  .ch-stat-num { font-size: 32px; }
+}
 </style>
+
+<div class="bx-page">
 
 <!-- ═══════ HERO ═══════ -->
 <section class="ch-hero">
   <div class="container">
-    <h1><i class="fa fa-briefcase"></i> Chamber</h1>
+    <h1><i data-lucide="briefcase"></i> Chamber</h1>
     <p class="subtitle">Legal Practice &amp; Chamber Work Management</p>
     <p class="tagline">Vertical-wise case intake, litigation timelines, eCourts CNR sync and AI-assisted drafting.</p>
     <div style="margin-bottom: 8px;">
-      <a href="/intake" class="btn btn-primary" style="margin-right: 10px;">
-        <i class="fa fa-plus-circle"></i> New Case Intake
+      <a href="/intake" class="bx-btn bx-btn-primary" style="margin-right: 10px;">
+        <i data-lucide="circle-plus"></i> New Case Intake
       </a>
-      <a href="/case-status" class="btn btn-outline">
-        <i class="fa fa-search"></i> Check Case Status
+      <a href="/case-status" class="bx-btn bx-btn-tertiary">
+        <i data-lucide="search"></i> Check Case Status
       </a>
     </div>
     <nav class="ch-quick-nav">
-      <a href="/intake" class="nav-intake"><i class="fa fa-file-text-o"></i> Submit Intake Form</a>
-      <a href="/case-status" class="nav-status"><i class="fa fa-bar-chart"></i> Case Status</a>
-      <a href="/about" class="nav-about"><i class="fa fa-info-circle"></i> About Us</a>
-      <a href="/login" class="nav-login"><i class="fa fa-sign-in"></i> Client Login</a>
+      <a href="/intake" class="nav-intake"><i data-lucide="file-text"></i> Submit Intake Form</a>
+      <a href="/case-status" class="nav-status"><i data-lucide="chart-column"></i> Case Status</a>
+      <a href="/about" class="nav-about"><i data-lucide="info"></i> About Us</a>
+      <a href="/login" class="nav-login"><i data-lucide="log-in"></i> Client Login</a>
     </nav>
   </div>
 </section>
@@ -371,63 +425,63 @@
     <div class="ch-workflow">
       <!-- Step 1 -->
       <div class="ch-wf-step">
-        <div class="ch-wf-icon" style="background: linear-gradient(135deg, #2563eb, #3b82f6);">
-          <i class="fa fa-file-text-o"></i>
+        <div class="ch-wf-icon">
+          <i data-lucide="file-text"></i>
           <span class="ch-wf-num">1</span>
         </div>
         <h5>Intake</h5>
         <p>Client submits case details via the online intake form.</p>
       </div>
-      <div class="ch-wf-arrow"><i class="fa fa-chevron-right"></i></div>
+      <div class="ch-wf-arrow"><i data-lucide="chevron-right"></i></div>
 
       <!-- Step 2 -->
       <div class="ch-wf-step">
-        <div class="ch-wf-icon" style="background: linear-gradient(135deg, #d97706, #f59e0b);">
-          <i class="fa fa-clipboard"></i>
+        <div class="ch-wf-icon">
+          <i data-lucide="clipboard-list"></i>
           <span class="ch-wf-num">2</span>
         </div>
         <h5>Register</h5>
         <p>Team reviews and creates a Legal Matter with auto-routing.</p>
       </div>
-      <div class="ch-wf-arrow"><i class="fa fa-chevron-right"></i></div>
+      <div class="ch-wf-arrow"><i data-lucide="chevron-right"></i></div>
 
       <!-- Step 3 -->
       <div class="ch-wf-step">
-        <div class="ch-wf-icon" style="background: linear-gradient(135deg, #16a34a, #22c55e);">
-          <i class="fa fa-bolt"></i>
+        <div class="ch-wf-icon">
+          <i data-lucide="zap"></i>
           <span class="ch-wf-num">3</span>
         </div>
         <h5>Active</h5>
         <p>Matter goes active — timelines, hearings, and documents tracked.</p>
       </div>
-      <div class="ch-wf-arrow"><i class="fa fa-chevron-right"></i></div>
+      <div class="ch-wf-arrow"><i data-lucide="chevron-right"></i></div>
 
       <!-- Step 4 -->
       <div class="ch-wf-step">
-        <div class="ch-wf-icon" style="background: linear-gradient(135deg, #7c3aed, #a855f7);">
-          <i class="fa fa-gavel"></i>
+        <div class="ch-wf-icon">
+          <i data-lucide="gavel"></i>
           <span class="ch-wf-num">4</span>
         </div>
         <h5>Hearings &amp; Docs</h5>
         <p>Court hearings scheduled, AI-assisted documents drafted and reviewed.</p>
       </div>
-      <div class="ch-wf-arrow"><i class="fa fa-chevron-right"></i></div>
+      <div class="ch-wf-arrow"><i data-lucide="chevron-right"></i></div>
 
       <!-- Step 5 -->
       <div class="ch-wf-step">
-        <div class="ch-wf-icon" style="background: linear-gradient(135deg, #0891b2, #22d3ee);">
-          <i class="fa fa-cloud-download"></i>
+        <div class="ch-wf-icon">
+          <i data-lucide="cloud-download"></i>
           <span class="ch-wf-num">5</span>
         </div>
         <h5>eCourts Sync</h5>
         <p>Auto-sync case status from eCourts, IP India, and NCLT portals.</p>
       </div>
-      <div class="ch-wf-arrow"><i class="fa fa-chevron-right"></i></div>
+      <div class="ch-wf-arrow"><i data-lucide="chevron-right"></i></div>
 
       <!-- Step 6 -->
       <div class="ch-wf-step">
-        <div class="ch-wf-icon" style="background: linear-gradient(135deg, #475569, #64748b);">
-          <i class="fa fa-check-circle"></i>
+        <div class="ch-wf-icon">
+          <i data-lucide="circle-check"></i>
           <span class="ch-wf-num">6</span>
         </div>
         <h5>Close</h5>
@@ -437,15 +491,15 @@
 
     <!-- Status flow bar -->
     <div class="ch-status-bar">
-      <span class="ch-status-pill" style="background: #eff6ff; color: #2563eb;">Intake Pending</span>
-      <span class="ch-status-arrow"><i class="fa fa-long-arrow-right"></i></span>
-      <span class="ch-status-pill" style="background: #f0fdf4; color: #16a34a;">Active</span>
-      <span class="ch-status-arrow"><i class="fa fa-long-arrow-right"></i></span>
-      <span class="ch-status-pill" style="background: #fefce8; color: #ca8a04;">On Hold</span>
-      <span class="ch-status-arrow"><i class="fa fa-long-arrow-right"></i></span>
-      <span class="ch-status-pill" style="background: #f0fdf4; color: #16a34a;">Disposed</span>
-      <span class="ch-status-pill" style="background: #fef2f2; color: #dc2626;">Withdrawn</span>
-      <span class="ch-status-pill" style="background: #f1f5f9; color: #475569;">Closed</span>
+      <span class="bx-badge bx-badge--accent">Intake Pending</span>
+      <span class="ch-status-arrow"><i data-lucide="arrow-right"></i></span>
+      <span class="bx-badge bx-badge--active">Active</span>
+      <span class="ch-status-arrow"><i data-lucide="arrow-right"></i></span>
+      <span class="bx-badge bx-badge--navy">On Hold</span>
+      <span class="ch-status-arrow"><i data-lucide="arrow-right"></i></span>
+      <span class="bx-badge bx-badge--muted">Disposed</span>
+      <span class="bx-badge bx-badge--muted">Withdrawn</span>
+      <span class="bx-badge bx-badge--muted">Closed</span>
     </div>
   </div>
 </section>
@@ -459,8 +513,8 @@
     <div class="row">
       <div class="col-sm-4" style="margin-bottom: 24px;">
         <div class="ch-vert-card">
-          <div class="ch-vert-icon" style="background: #eff6ff; color: #2563eb;">
-            <i class="fa fa-shield"></i>
+          <div class="ch-vert-icon">
+            <i data-lucide="shield"></i>
           </div>
           <h4>Criminal Defense</h4>
           <p>Bail applications, anticipatory bail, quashing petitions, FIR matters, and appeal management.</p>
@@ -468,8 +522,8 @@
       </div>
       <div class="col-sm-4" style="margin-bottom: 24px;">
         <div class="ch-vert-card">
-          <div class="ch-vert-icon" style="background: #fff7ed; color: #ea580c;">
-            <i class="fa fa-money"></i>
+          <div class="ch-vert-icon">
+            <i data-lucide="banknote"></i>
           </div>
           <h4>Cheque Bounce / NI Act 138</h4>
           <p>Statutory demand notices, complaint filing, trial management, and settlement tracking.</p>
@@ -477,8 +531,8 @@
       </div>
       <div class="col-sm-4" style="margin-bottom: 24px;">
         <div class="ch-vert-card">
-          <div class="ch-vert-icon" style="background: #f0fdf4; color: #16a34a;">
-            <i class="fa fa-home"></i>
+          <div class="ch-vert-icon">
+            <i data-lucide="house"></i>
           </div>
           <h4>Civil Litigation</h4>
           <p>Money suits, property disputes, consumer complaints, and contract enforcement.</p>
@@ -486,8 +540,8 @@
       </div>
       <div class="col-sm-4" style="margin-bottom: 24px;">
         <div class="ch-vert-card">
-          <div class="ch-vert-icon" style="background: #faf5ff; color: #9333ea;">
-            <i class="fa fa-users"></i>
+          <div class="ch-vert-icon">
+            <i data-lucide="users"></i>
           </div>
           <h4>Family Law</h4>
           <p>Divorce, custody, maintenance, domestic violence, and mutual consent proceedings.</p>
@@ -495,8 +549,8 @@
       </div>
       <div class="col-sm-4" style="margin-bottom: 24px;">
         <div class="ch-vert-card">
-          <div class="ch-vert-icon" style="background: #ecfdf5; color: #059669;">
-            <i class="fa fa-building"></i>
+          <div class="ch-vert-icon">
+            <i data-lucide="building-2"></i>
           </div>
           <h4>Property / Real Estate</h4>
           <p>Title disputes, eviction, RERA complaints, landlord-tenant matters.</p>
@@ -504,8 +558,8 @@
       </div>
       <div class="col-sm-4" style="margin-bottom: 24px;">
         <div class="ch-vert-card">
-          <div class="ch-vert-icon" style="background: #eff6ff; color: #2563eb;">
-            <i class="fa fa-lightbulb-o"></i>
+          <div class="ch-vert-icon">
+            <i data-lucide="lightbulb"></i>
           </div>
           <h4>IP Law</h4>
           <p>Trademark, copyright, patent disputes, and intellectual property enforcement.</p>
@@ -552,8 +606,8 @@
   <div class="container">
     <h2>Ready to Get Started?</h2>
     <p>Submit your case intake form online. Our team will review and register your matter within 24 hours.</p>
-    <a href="/intake" class="btn btn-gold">
-      <i class="fa fa-arrow-right"></i> Submit Intake Form
+    <a href="/intake" class="bx-btn bx-btn-primary">
+      <i data-lucide="file-text"></i> Submit Intake Form
     </a>
   </div>
 </section>
@@ -571,4 +625,19 @@
   </div>
 </footer>
 
+</div>
+
+<script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.js"></script>
+<script>
+  (function () {
+    function bxInitIcons() {
+      if (window.lucide && lucide.createIcons) { lucide.createIcons(); }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', bxInitIcons);
+    } else {
+      bxInitIcons();
+    }
+  })();
+</script>
 {%- endblock -%}

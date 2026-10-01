@@ -1,88 +1,216 @@
 {%- extends "templates/web.html" -%}
 
 {%- block page_content -%}
-<div class="container" style="max-width:900px;">
-  <div class="text-center" style="margin-bottom:30px;">
-    <h2 style="color:#1a237e;"><i class="fa fa-sitemap"></i> Case Workflow</h2>
-    <p style="color:#666;">How a case moves through your chamber — from intake to closure.</p>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
+
+/* ── Bizaxl Design System: tokens ── */
+:root {
+  --bx-navy: #05133C;
+  --bx-navy-base: #091526;
+  --bx-mint: #14F1B1;
+  --bx-blue: #114EFF;
+  --bx-gray-100: #F4F4F5;
+  --bx-gray-400: #71717B;
+  --bx-gradient: linear-gradient(90deg, #14F1B1 0%, #114EFF 50%, #091526 100%);
+  --bx-radius-sm: 8px;
+  --bx-radius-md: 10px;
+  --bx-radius-lg: 12px;
+  --bx-radius-xl: 16px;
+  --bx-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.1);
+}
+
+/* ── Typography ── */
+.bx-page { font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+.bx-page input, .bx-page select, .bx-page textarea, .bx-page button { font-family: inherit; font-size: 14px; }
+.bx-page h1, .bx-page h2, .bx-page h3, .bx-page h4, .bx-page h5, .bx-page h6 { font-family: inherit; color: var(--bx-navy); }
+
+/* ── Headings ── */
+.bx-title { display: flex; align-items: center; justify-content: center; gap: 16px; font-size: 32px; font-weight: 700; line-height: 1.2; color: var(--bx-navy); margin: 0 0 8px; }
+.bx-title .lucide { width: 28px; height: 28px; color: var(--bx-blue); flex-shrink: 0; }
+.bx-subtitle { font-size: 16px; line-height: 1.5; color: var(--bx-gray-400); margin: 0 0 32px; text-align: center; }
+.bx-section-title { font-size: 24px; font-weight: 700; color: var(--bx-navy); margin: 0 0 8px; }
+.bx-section-sub { font-size: 16px; color: var(--bx-gray-400); margin: 0 0 32px; }
+
+/* ── Buttons ── */
+.bx-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; min-width: 140px; padding: 8px 20px; border-radius: 10px; font-weight: 700; font-size: 14px; line-height: 20px; border: 1px solid transparent; cursor: pointer; text-decoration: none; transition: all 0.2s; }
+.bx-btn .lucide { width: 16px; height: 16px; flex-shrink: 0; }
+.bx-btn:hover { text-decoration: none; }
+.bx-btn-primary { background: #14F1B1; color: #05133C; border-color: #14F1B1; }
+.bx-btn-primary:hover { filter: brightness(0.95); box-shadow: 0 4px 12px rgba(20, 241, 177, 0.35); }
+.bx-btn-secondary { background: #05133C; color: #FFFFFF; border-color: #05133C; min-width: 166px; }
+.bx-btn-secondary:hover { background: #091526; border-color: #091526; }
+.bx-btn-tertiary { background: #FFFFFF; color: #05133C; border: 1px solid rgba(5, 19, 60, 0.5); min-width: 160px; }
+.bx-btn-tertiary:hover { background: #F4F4F5; }
+
+/* ── Badges ── */
+.bx-badge { display: inline-block; background: #F4F4F5; color: #05133C; padding: 2px 12px; border-radius: 999px; font-weight: 500; font-size: 12px; line-height: 20px; white-space: nowrap; }
+.bx-badge--active { background: #14F1B1; color: #05133C; }
+.bx-badge--accent { background: #FFFFFF; color: #114EFF; border: 1px solid #114EFF; }
+.bx-badge--navy { background: #05133C; color: #FFFFFF; }
+.bx-badge--muted { background: #F4F4F5; color: #71717B; }
+.bx-badge--success { background: #00C950; color: #FFFFFF; }
+
+/* ── Cards ── */
+.bx-card { background: #FFFFFF; border: 1px solid #F4F4F5; border-radius: 12px; box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.1); overflow: hidden; }
+.bx-card + .bx-card { margin-top: 20px; }
+.bx-card-head { background: #05133C; color: #FFFFFF; padding: 14px 24px; font-size: 18px; font-weight: 600; display: flex; align-items: center; gap: 8px; border-bottom: 2px solid #14F1B1; }
+.bx-card-head--blue { background: #114EFF; }
+.bx-card-head .lucide { width: 20px; height: 20px; flex-shrink: 0; }
+.bx-card-head h4, .bx-card-title { font-size: 18px; font-weight: 600; color: inherit; margin: 0; }
+.bx-card-body { padding: 24px; }
+
+/* ── Feature / list items ── */
+.bx-list { list-style: none; padding: 0; margin: 0; }
+.bx-list li { display: flex; align-items: flex-start; gap: 8px; padding: 8px 0; font-size: 16px; line-height: 26px; color: #737373; }
+.bx-list li .lucide { width: 16px; height: 16px; margin-top: 5px; flex-shrink: 0; color: #114EFF; }
+.bx-list--feature li .lucide { color: #00C950; }
+.bx-list strong { color: var(--bx-navy); }
+
+/* ── Forms ── */
+.bx-page .form-group { margin-bottom: 16px; }
+.bx-page .form-group label { font-size: 14px; font-weight: 600; color: #05133C; margin-bottom: 6px; }
+.bx-page .form-control { border: 1px solid #F4F4F5; border-radius: 8px; padding: 10px 14px; font-size: 14px; color: #000000; background: #FFFFFF; box-shadow: none; transition: border-color 0.15s, box-shadow 0.15s; }
+.bx-page .form-control:focus { border-color: #114EFF; box-shadow: 0 0 0 3px rgba(17, 78, 255, 0.15); outline: 0; }
+.bx-page .form-control::placeholder { color: #A1A1A1; }
+
+/* ── Dynamic content (search results) ── */
+.bx-page .table > thead > tr > th { border-bottom: 2px solid #14F1B1; color: #05133C; font-weight: 600; font-size: 14px; }
+.bx-page .table > tbody > tr > td { font-size: 14px; color: #000000; vertical-align: middle; }
+.bx-page .list-group-item { border-color: #F4F4F5; }
+.bx-page .list-group-item-heading { color: #05133C; font-size: 15px; font-weight: 600; }
+.bx-page .list-group-item-text { font-size: 14px; color: #71717B; }
+.bx-page .badge { background: #F4F4F5; color: #05133C; border-radius: 999px; font-weight: 500; font-size: 12px; padding: 2px 10px; }
+.bx-page .label { border-radius: 999px; font-weight: 500; font-size: 12px; }
+.bx-page .label-success { background: #00C950; }
+
+/* ── Glassmorphism ── */
+.bx-glass { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); border: 1px solid #F4F4F5; border-radius: 16px; }
+
+/* ── Responsive heading scale ── */
+@media (max-width: 768px) {
+  .bx-title { font-size: 24px; }
+}
+
+/* ── Page-specific ── */
+.bx-container { max-width: 900px; }
+.bx-header { text-align: center; margin-bottom: 30px; }
+
+/* Lifecycle steps */
+.wf-steps { display: flex; gap: 0; align-items: stretch; flex-wrap: wrap; justify-content: center; }
+.wf-step { flex: 1; min-width: 120px; text-align: center; padding: 0 6px; }
+.wf-step-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--bx-navy);
+  border: 3px solid var(--bx-mint);
+  color: var(--bx-mint);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 10px;
+}
+.wf-step-icon .lucide { width: 24px; height: 24px; }
+.wf-step-title { font-weight: 700; color: var(--bx-navy); font-size: 14px; }
+.wf-step-desc { color: var(--bx-gray-400); font-size: 12px; margin-top: 4px; line-height: 1.4; }
+.wf-step-chip { margin-top: 6px; }
+.wf-arrow { display: flex; align-items: center; color: #A1A1A1; padding: 0 2px; }
+.wf-arrow .lucide { width: 20px; height: 20px; }
+
+/* Chip rows (status flow / document workflow) */
+.wf-chips { text-align: center; }
+.wf-chips .bx-badge { margin: 0 4px 6px; padding: 6px 14px; font-size: 13px; font-weight: 600; }
+.wf-chips .chip-arrow { display: inline-flex; vertical-align: middle; color: #A1A1A1; margin: 0 8px; }
+.wf-chips .chip-arrow .lucide { width: 16px; height: 16px; }
+.wf-note { margin-top: 10px; color: var(--bx-gray-400); font-size: 12px; }
+.wf-features li { border-bottom: 1px solid var(--bx-gray-100); padding: 8px 0; font-size: 14px; line-height: 22px; }
+.wf-features li:last-child { border-bottom: none; }
+</style>
+
+<div class="bx-page">
+<div class="container bx-container">
+  <div class="bx-header">
+    <h2 class="bx-title"><i data-lucide="git-branch"></i> Case Workflow</h2>
+    <p class="bx-subtitle">How a case moves through your chamber — from intake to closure.</p>
   </div>
 
   <!-- Main Workflow Steps -->
-  <div class="panel panel-default" style="border-radius:10px;overflow:hidden;">
-    <div class="panel-heading" style="background:linear-gradient(135deg,#1a237e,#283593);color:white;padding:20px;">
-      <h4 class="panel-title" style="margin:0;"><i class="fa fa-sitemap" style="margin-right:8px;"></i>Case Lifecycle</h4>
+  <div class="bx-card">
+    <div class="bx-card-head">
+      <i data-lucide="git-branch"></i> Case Lifecycle
     </div>
-    <div class="panel-body" style="padding:24px;">
-      <div style="display:flex;gap:0;align-items:stretch;flex-wrap:wrap;justify-content:center;">
+    <div class="bx-card-body">
+      <div class="wf-steps">
 
         <!-- Step 1 -->
-        <div style="flex:1;min-width:120px;text-align:center;padding:0 6px;">
-          <div style="width:56px;height:56px;border-radius:50%;background:#e3f2fd;border:3px solid #1565c0;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:22px;color:#1565c0;">
-            <i class="fa fa-file-text-o"></i>
+        <div class="wf-step">
+          <div class="wf-step-icon">
+            <i data-lucide="file-text"></i>
           </div>
-          <div style="font-weight:700;color:#1a237e;font-size:14px;">1. Intake</div>
-          <div style="color:#546e7a;font-size:11px;margin-top:4px;line-height:1.4;">Client submits case<br>via portal or desk</div>
-          <div style="margin-top:6px;"><span style="background:#e3f2fd;color:#1565c0;padding:2px 6px;border-radius:4px;font-size:10px;">Creates: Legal Party + Legal Matter</span></div>
+          <div class="wf-step-title">1. Intake</div>
+          <div class="wf-step-desc">Client submits case<br>via portal or desk</div>
+          <div class="wf-step-chip"><span class="bx-badge bx-badge--accent">Creates: Legal Party + Legal Matter</span></div>
         </div>
 
-        <div style="display:flex;align-items:center;color:#c5cae9;font-size:18px;padding:0 2px;"><i class="fa fa-chevron-right"></i></div>
+        <div class="wf-arrow"><i data-lucide="chevron-right"></i></div>
 
         <!-- Step 2 -->
-        <div style="flex:1;min-width:120px;text-align:center;padding:0 6px;">
-          <div style="width:56px;height:56px;border-radius:50%;background:#fff8e1;border:3px solid #f9a825;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:22px;color:#f9a825;">
-            <i class="fa fa-briefcase"></i>
+        <div class="wf-step">
+          <div class="wf-step-icon">
+            <i data-lucide="briefcase"></i>
           </div>
-          <div style="font-weight:700;color:#1a237e;font-size:14px;">2. Registered</div>
-          <div style="color:#546e7a;font-size:11px;margin-top:4px;line-height:1.4;">Matter created<br>timeline entry added</div>
-          <div style="margin-top:6px;"><span style="background:#fff8e1;color:#f9a825;padding:2px 6px;border-radius:4px;font-size:10px;">Auto: routing, limitation</span></div>
+          <div class="wf-step-title">2. Registered</div>
+          <div class="wf-step-desc">Matter created<br>timeline entry added</div>
+          <div class="wf-step-chip"><span class="bx-badge bx-badge--navy">Auto: routing, limitation</span></div>
         </div>
 
-        <div style="display:flex;align-items:center;color:#c5cae9;font-size:18px;padding:0 2px;"><i class="fa fa-chevron-right"></i></div>
+        <div class="wf-arrow"><i data-lucide="chevron-right"></i></div>
 
         <!-- Step 3 -->
-        <div style="flex:1;min-width:120px;text-align:center;padding:0 6px;">
-          <div style="width:56px;height:56px;border-radius:50%;background:#e8f5e9;border:3px solid #2e7d32;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:22px;color:#2e7d32;">
-            <i class="fa fa-check-circle"></i>
+        <div class="wf-step">
+          <div class="wf-step-icon">
+            <i data-lucide="circle-check"></i>
           </div>
-          <div style="font-weight:700;color:#1a237e;font-size:14px;">3. Active</div>
-          <div style="color:#546e7a;font-size:11px;margin-top:4px;line-height:1.4;">Team reviews &amp;<br>activates the matter</div>
-          <div style="margin-top:6px;"><span style="background:#e8f5e9;color:#2e7d32;padding:2px 6px;border-radius:4px;font-size:10px;">Sets: court, judge, type</span></div>
+          <div class="wf-step-title">3. Active</div>
+          <div class="wf-step-desc">Team reviews &amp;<br>activates the matter</div>
+          <div class="wf-step-chip"><span class="bx-badge bx-badge--active">Sets: court, judge, type</span></div>
         </div>
 
-        <div style="display:flex;align-items:center;color:#c5cae9;font-size:18px;padding:0 2px;"><i class="fa fa-chevron-right"></i></div>
+        <div class="wf-arrow"><i data-lucide="chevron-right"></i></div>
 
         <!-- Step 4 -->
-        <div style="flex:1;min-width:120px;text-align:center;padding:0 6px;">
-          <div style="width:56px;height:56px;border-radius:50%;background:#f3e5f5;border:3px solid #7b1fa2;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:22px;color:#7b1fa2;">
-            <i class="fa fa-gavel"></i>
+        <div class="wf-step">
+          <div class="wf-step-icon">
+            <i data-lucide="gavel"></i>
           </div>
-          <div style="font-weight:700;color:#1a237e;font-size:14px;">4. Hearings & Docs</div>
-          <div style="color:#546e7a;font-size:11px;margin-top:4px;line-height:1.4;">Track hearings,<br>generate documents</div>
-          <div style="margin-top:6px;"><span style="background:#f3e5f5;color:#7b1fa2;padding:2px 6px;border-radius:4px;font-size:10px;">Draft → Review → Final</span></div>
+          <div class="wf-step-title">4. Hearings &amp; Docs</div>
+          <div class="wf-step-desc">Track hearings,<br>generate documents</div>
+          <div class="wf-step-chip"><span class="bx-badge bx-badge--accent">Draft → Review → Final</span></div>
         </div>
 
-        <div style="display:flex;align-items:center;color:#c5cae9;font-size:18px;padding:0 2px;"><i class="fa fa-chevron-right"></i></div>
+        <div class="wf-arrow"><i data-lucide="chevron-right"></i></div>
 
         <!-- Step 5 -->
-        <div style="flex:1;min-width:120px;text-align:center;padding:0 6px;">
-          <div style="width:56px;height:56px;border-radius:50%;background:#e0f2f1;border:3px solid #00897b;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:22px;color:#00897b;">
-            <i class="fa fa-refresh"></i>
+        <div class="wf-step">
+          <div class="wf-step-icon">
+            <i data-lucide="refresh-cw"></i>
           </div>
-          <div style="font-weight:700;color:#1a237e;font-size:14px;">5. eCourts Sync</div>
-          <div style="color:#546e7a;font-size:11px;margin-top:4px;line-height:1.4;">Auto-sync status<br>orders &amp; cause lists</div>
-          <div style="margin-top:6px;"><span style="background:#e0f2f1;color:#00897b;padding:2px 6px;border-radius:4px;font-size:10px;">Hourly CNR polling</span></div>
+          <div class="wf-step-title">5. eCourts Sync</div>
+          <div class="wf-step-desc">Auto-sync status<br>orders &amp; cause lists</div>
+          <div class="wf-step-chip"><span class="bx-badge bx-badge--navy">Hourly CNR polling</span></div>
         </div>
 
-        <div style="display:flex;align-items:center;color:#c5cae9;font-size:18px;padding:0 2px;"><i class="fa fa-chevron-right"></i></div>
+        <div class="wf-arrow"><i data-lucide="chevron-right"></i></div>
 
         <!-- Step 6 -->
-        <div style="flex:1;min-width:120px;text-align:center;padding:0 6px;">
-          <div style="width:56px;height:56px;border-radius:50%;background:#eceff1;border:3px solid #546e7a;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:22px;color:#546e7a;">
-            <i class="fa fa-archive"></i>
+        <div class="wf-step">
+          <div class="wf-step-icon">
+            <i data-lucide="archive"></i>
           </div>
-          <div style="font-weight:700;color:#1a237e;font-size:14px;">6. Close</div>
-          <div style="color:#546e7a;font-size:11px;margin-top:4px;line-height:1.4;">Matter disposed<br>archived or withdrawn</div>
-          <div style="margin-top:6px;"><span style="background:#eceff1;color:#546e7a;padding:2px 6px;border-radius:4px;font-size:10px;">Final timeline entry</span></div>
+          <div class="wf-step-title">6. Close</div>
+          <div class="wf-step-desc">Matter disposed<br>archived or withdrawn</div>
+          <div class="wf-step-chip"><span class="bx-badge bx-badge--muted">Final timeline entry</span></div>
         </div>
 
       </div>
@@ -90,67 +218,82 @@
   </div>
 
   <!-- Status Flow -->
-  <div class="panel panel-default" style="border-radius:10px;margin-top:20px;">
-    <div class="panel-heading" style="background:#283593;color:white;padding:12px 20px;">
-      <h4 class="panel-title" style="margin:0;"><i class="fa fa-arrows-h" style="margin-right:8px;"></i>Matter Status Flow</h4>
+  <div class="bx-card">
+    <div class="bx-card-head">
+      <i data-lucide="move-horizontal"></i> Matter Status Flow
     </div>
-    <div class="panel-body" style="text-align:center;">
-      <span style="background:#e3f2fd;color:#1565c0;padding:6px 14px;border-radius:6px;font-size:13px;font-weight:600;">Intake Pending</span>
-      <i class="fa fa-long-arrow-right" style="color:#90a4ae;margin:0 8px;"></i>
-      <span style="background:#e8f5e9;color:#2e7d32;padding:6px 14px;border-radius:6px;font-size:13px;font-weight:600;">Active</span>
-      <i class="fa fa-long-arrow-right" style="color:#90a4ae;margin:0 8px;"></i>
-      <span style="background:#fff3e0;color:#e65100;padding:6px 14px;border-radius:6px;font-size:13px;font-weight:600;">On Hold</span>
-      <i class="fa fa-long-arrow-right" style="color:#90a4ae;margin:0 8px;"></i>
-      <span style="background:#eceff1;color:#455a64;padding:6px 14px;border-radius:6px;font-size:13px;font-weight:600;">Disposed</span>
-      <span style="background:#eceff1;color:#455a64;padding:6px 14px;border-radius:6px;font-size:13px;font-weight:600;margin-left:6px;">Withdrawn</span>
-      <span style="background:#eceff1;color:#455a64;padding:6px 14px;border-radius:6px;font-size:13px;font-weight:600;margin-left:6px;">Closed</span>
+    <div class="bx-card-body wf-chips">
+      <span class="bx-badge bx-badge--accent">Intake Pending</span>
+      <span class="chip-arrow"><i data-lucide="arrow-right"></i></span>
+      <span class="bx-badge bx-badge--active">Active</span>
+      <span class="chip-arrow"><i data-lucide="arrow-right"></i></span>
+      <span class="bx-badge bx-badge--navy">On Hold</span>
+      <span class="chip-arrow"><i data-lucide="arrow-right"></i></span>
+      <span class="bx-badge bx-badge--muted">Disposed</span>
+      <span class="bx-badge bx-badge--muted">Withdrawn</span>
+      <span class="bx-badge bx-badge--muted">Closed</span>
     </div>
   </div>
 
   <!-- Document Workflow -->
-  <div class="panel panel-default" style="border-radius:10px;margin-top:20px;">
-    <div class="panel-heading" style="background:#4527a0;color:white;padding:12px 20px;">
-      <h4 class="panel-title" style="margin:0;"><i class="fa fa-file-text" style="margin-right:8px;"></i>Document Approval Workflow</h4>
+  <div class="bx-card">
+    <div class="bx-card-head">
+      <i data-lucide="file-text"></i> Document Approval Workflow
     </div>
-    <div class="panel-body" style="text-align:center;">
-      <span style="background:#f5f5f5;color:#90a4ae;padding:6px 14px;border-radius:6px;font-size:13px;font-weight:600;border:1px solid #e0e0e0;">Draft</span>
-      <i class="fa fa-long-arrow-right" style="color:#90a4ae;margin:0 8px;"></i>
-      <span style="background:#e3f2fd;color:#1565c0;padding:6px 14px;border-radius:6px;font-size:13px;font-weight:600;border:1px solid #bbdefb;">Internal Review</span>
-      <i class="fa fa-long-arrow-right" style="color:#90a4ae;margin:0 8px;"></i>
-      <span style="background:#fff8e1;color:#f9a825;padding:6px 14px;border-radius:6px;font-size:13px;font-weight:600;border:1px solid #fff9c4;">Client Review</span>
-      <i class="fa fa-long-arrow-right" style="color:#90a4ae;margin:0 8px;"></i>
-      <span style="background:#e8f5e9;color:#2e7d32;padding:6px 14px;border-radius:6px;font-size:13px;font-weight:600;border:1px solid #c8e6c9;">Finalized</span>
-      <i class="fa fa-long-arrow-right" style="color:#90a4ae;margin:0 8px;"></i>
-      <span style="background:#eceff1;color:#455a64;padding:6px 14px;border-radius:6px;font-size:13px;font-weight:600;border:1px solid #cfd8dc;">Executed</span>
-      <div style="margin-top:10px;color:#90a4ae;font-size:11px;">Sensitive templates (DV, 498A, adoption) require mandatory lawyer review before advancing past Internal Review.</div>
+    <div class="bx-card-body wf-chips">
+      <span class="bx-badge bx-badge--muted">Draft</span>
+      <span class="chip-arrow"><i data-lucide="arrow-right"></i></span>
+      <span class="bx-badge bx-badge--accent">Internal Review</span>
+      <span class="chip-arrow"><i data-lucide="arrow-right"></i></span>
+      <span class="bx-badge bx-badge--navy">Client Review</span>
+      <span class="chip-arrow"><i data-lucide="arrow-right"></i></span>
+      <span class="bx-badge bx-badge--active">Finalized</span>
+      <span class="chip-arrow"><i data-lucide="arrow-right"></i></span>
+      <span class="bx-badge bx-badge--success">Executed</span>
+      <div class="wf-note">Sensitive templates (DV, 498A, adoption) require mandatory lawyer review before advancing past Internal Review.</div>
     </div>
   </div>
 
   <!-- Key Features -->
-  <div class="panel panel-default" style="border-radius:10px;margin-top:20px;margin-bottom:40px;">
-    <div class="panel-heading" style="background:#00695c;color:white;padding:12px 20px;">
-      <h4 class="panel-title" style="margin:0;"><i class="fa fa-cogs" style="margin-right:8px;"></i>Key Features</h4>
+  <div class="bx-card" style="margin-bottom: 40px;">
+    <div class="bx-card-head">
+      <i data-lucide="settings"></i> Key Features
     </div>
-    <div class="panel-body">
+    <div class="bx-card-body">
       <div class="row">
         <div class="col-sm-6">
-          <ul style="list-style:none;padding:0;">
-            <li style="padding:8px 0;border-bottom:1px solid #f0f0f0;"><i class="fa fa-clock-o" style="color:#ef5350;width:20px;"></i> <strong>Auto Timeline</strong> — every event synced to matter timeline</li>
-            <li style="padding:8px 0;border-bottom:1px solid #f0f0f0;"><i class="fa fa-plug" style="color:#42a5f5;width:20px;"></i> <strong>eCourts Integration</strong> — hourly CNR polling, order sheets</li>
-            <li style="padding:8px 0;border-bottom:1px solid #f0f0f0;"><i class="fa fa-magic" style="color:#ab47bc;width:20px;"></i> <strong>AI Drafting</strong> — extract fields, suggest clauses, generate docs</li>
-            <li style="padding:8px 0;"><i class="fa fa-bell" style="color:#ff9800;width:20px;"></i> <strong>Hearing Reminders</strong> — daily email + calendar invite</li>
+          <ul class="bx-list bx-list--feature wf-features">
+            <li><i data-lucide="clock"></i> <span><strong>Auto Timeline</strong> — every event synced to matter timeline</span></li>
+            <li><i data-lucide="plug"></i> <span><strong>eCourts Integration</strong> — hourly CNR polling, order sheets</span></li>
+            <li><i data-lucide="sparkles"></i> <span><strong>AI Drafting</strong> — extract fields, suggest clauses, generate docs</span></li>
+            <li><i data-lucide="bell"></i> <span><strong>Hearing Reminders</strong> — daily email + calendar invite</span></li>
           </ul>
         </div>
         <div class="col-sm-6">
-          <ul style="list-style:none;padding:0;">
-            <li style="padding:8px 0;border-bottom:1px solid #f0f0f0;"><i class="fa fa-shield" style="color:#66bb6a;width:20px;"></i> <strong>Matter-Level Permissions</strong> — advocates see only assigned matters</li>
-            <li style="padding:8px 0;border-bottom:1px solid #f0f0f0;"><i class="fa fa-globe" style="color:#26a69a;width:20px;"></i> <strong>Portal Sync</strong> — IP India, NCLT, RERA auto-polling</li>
-            <li style="padding:8px 0;border-bottom:1px solid #f0f0f0;"><i class="fa fa-file-o" style="color:#5c6bc0;width:20px;"></i> <strong>Template Engine</strong> — Jinja merge tags, clause library</li>
-            <li style="padding:8px 0;"><i class="fa fa-pencil" style="color:#8d6e63;width:20px;"></i> <strong>E-Signature</strong> — DocuSign, eMudhra, SignDesk</li>
+          <ul class="bx-list bx-list--feature wf-features">
+            <li><i data-lucide="shield"></i> <span><strong>Matter-Level Permissions</strong> — advocates see only assigned matters</span></li>
+            <li><i data-lucide="globe"></i> <span><strong>Portal Sync</strong> — IP India, NCLT, RERA auto-polling</span></li>
+            <li><i data-lucide="file"></i> <span><strong>Template Engine</strong> — Jinja merge tags, clause library</span></li>
+            <li><i data-lucide="pencil"></i> <span><strong>E-Signature</strong> — DocuSign, eMudhra, SignDesk</span></li>
           </ul>
         </div>
       </div>
     </div>
   </div>
 </div>
+</div>
+
+<script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.js"></script>
+<script>
+  (function () {
+    function bxInitIcons() {
+      if (window.lucide && lucide.createIcons) { lucide.createIcons(); }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', bxInitIcons);
+    } else {
+      bxInitIcons();
+    }
+  })();
+</script>
 {%- endblock -%}

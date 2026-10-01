@@ -1,31 +1,134 @@
 {%- extends "templates/web.html" -%}
 
 {%- block page_content -%}
-<div class="container" style="max-width: 800px;">
-  <div class="text-center" style="margin-bottom: 30px;">
-    <h2 style="color: #1a237e;"><i class="fa fa-file-text-o"></i> Case Intake Form</h2>
-    <p style="color: #666;">Submit your case details. Our team will review and get back to you within 24 hours.</p>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
+
+/* ── Bizaxl Design System: tokens ── */
+:root {
+  --bx-navy: #05133C;
+  --bx-navy-base: #091526;
+  --bx-mint: #14F1B1;
+  --bx-blue: #114EFF;
+  --bx-gray-100: #F4F4F5;
+  --bx-gray-400: #71717B;
+  --bx-gradient: linear-gradient(90deg, #14F1B1 0%, #114EFF 50%, #091526 100%);
+  --bx-radius-sm: 8px;
+  --bx-radius-md: 10px;
+  --bx-radius-lg: 12px;
+  --bx-radius-xl: 16px;
+  --bx-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.1);
+}
+
+/* ── Typography ── */
+.bx-page { font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+.bx-page input, .bx-page select, .bx-page textarea, .bx-page button { font-family: inherit; font-size: 14px; }
+.bx-page h1, .bx-page h2, .bx-page h3, .bx-page h4, .bx-page h5, .bx-page h6 { font-family: inherit; color: var(--bx-navy); }
+
+/* ── Headings ── */
+.bx-title { display: flex; align-items: center; justify-content: center; gap: 16px; font-size: 32px; font-weight: 700; line-height: 1.2; color: var(--bx-navy); margin: 0 0 8px; }
+.bx-title .lucide { width: 28px; height: 28px; color: var(--bx-blue); flex-shrink: 0; }
+.bx-subtitle { font-size: 16px; line-height: 1.5; color: var(--bx-gray-400); margin: 0 0 32px; text-align: center; }
+.bx-section-title { font-size: 24px; font-weight: 700; color: var(--bx-navy); margin: 0 0 8px; }
+.bx-section-sub { font-size: 16px; color: var(--bx-gray-400); margin: 0 0 32px; }
+
+/* ── Buttons ── */
+.bx-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; min-width: 140px; padding: 8px 20px; border-radius: 10px; font-weight: 700; font-size: 14px; line-height: 20px; border: 1px solid transparent; cursor: pointer; text-decoration: none; transition: all 0.2s; }
+.bx-btn .lucide { width: 16px; height: 16px; flex-shrink: 0; }
+.bx-btn:hover { text-decoration: none; }
+.bx-btn-primary { background: #14F1B1; color: #05133C; border-color: #14F1B1; }
+.bx-btn-primary:hover { filter: brightness(0.95); box-shadow: 0 4px 12px rgba(20, 241, 177, 0.35); }
+.bx-btn-secondary { background: #05133C; color: #FFFFFF; border-color: #05133C; min-width: 166px; }
+.bx-btn-secondary:hover { background: #091526; border-color: #091526; }
+.bx-btn-tertiary { background: #FFFFFF; color: #05133C; border: 1px solid rgba(5, 19, 60, 0.5); min-width: 160px; }
+.bx-btn-tertiary:hover { background: #F4F4F5; }
+
+/* ── Badges ── */
+.bx-badge { display: inline-block; background: #F4F4F5; color: #05133C; padding: 2px 12px; border-radius: 999px; font-weight: 500; font-size: 12px; line-height: 20px; white-space: nowrap; }
+.bx-badge--active { background: #14F1B1; color: #05133C; }
+.bx-badge--accent { background: #FFFFFF; color: #114EFF; border: 1px solid #114EFF; }
+.bx-badge--navy { background: #05133C; color: #FFFFFF; }
+.bx-badge--muted { background: #F4F4F5; color: #71717B; }
+.bx-badge--success { background: #00C950; color: #FFFFFF; }
+
+/* ── Cards ── */
+.bx-card { background: #FFFFFF; border: 1px solid #F4F4F5; border-radius: 12px; box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.1); overflow: hidden; }
+.bx-card + .bx-card { margin-top: 20px; }
+.bx-card-head { background: #05133C; color: #FFFFFF; padding: 14px 24px; font-size: 18px; font-weight: 600; display: flex; align-items: center; gap: 8px; border-bottom: 2px solid #14F1B1; }
+.bx-card-head--blue { background: #114EFF; }
+.bx-card-head .lucide { width: 20px; height: 20px; flex-shrink: 0; }
+.bx-card-head h4, .bx-card-title { font-size: 18px; font-weight: 600; color: inherit; margin: 0; }
+.bx-card-body { padding: 24px; }
+
+/* ── Feature / list items ── */
+.bx-list { list-style: none; padding: 0; margin: 0; }
+.bx-list li { display: flex; align-items: flex-start; gap: 8px; padding: 8px 0; font-size: 16px; line-height: 26px; color: #737373; }
+.bx-list li .lucide { width: 16px; height: 16px; margin-top: 5px; flex-shrink: 0; color: #114EFF; }
+.bx-list--feature li .lucide { color: #00C950; }
+
+/* ── Forms ── */
+.bx-page .form-group { margin-bottom: 16px; }
+.bx-page .form-group label { font-size: 14px; font-weight: 600; color: #05133C; margin-bottom: 6px; }
+.bx-page .form-control { border: 1px solid #F4F4F5; border-radius: 8px; padding: 10px 14px; font-size: 14px; color: #000000; background: #FFFFFF; box-shadow: none; transition: border-color 0.15s, box-shadow 0.15s; }
+.bx-page .form-control:focus { border-color: #114EFF; box-shadow: 0 0 0 3px rgba(17, 78, 255, 0.15); outline: 0; }
+.bx-page .form-control::placeholder { color: #A1A1A1; }
+
+/* ── Dynamic content (search results) ── */
+.bx-page .table > thead > tr > th { border-bottom: 2px solid #14F1B1; color: #05133C; font-weight: 600; font-size: 14px; }
+.bx-page .table > tbody > tr > td { font-size: 14px; color: #000000; vertical-align: middle; }
+.bx-page .list-group-item { border-color: #F4F4F5; }
+.bx-page .list-group-item-heading { color: #05133C; font-size: 15px; font-weight: 600; }
+.bx-page .list-group-item-text { font-size: 14px; color: #71717B; }
+.bx-page .badge { background: #F4F4F5; color: #05133C; border-radius: 999px; font-weight: 500; font-size: 12px; padding: 2px 10px; }
+.bx-page .label { border-radius: 999px; font-weight: 500; font-size: 12px; }
+.bx-page .label-success { background: #00C950; }
+
+/* ── Glassmorphism ── */
+.bx-glass { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); border: 1px solid #F4F4F5; border-radius: 16px; }
+
+/* ── Responsive heading scale ── */
+@media (max-width: 768px) {
+  .bx-title { font-size: 24px; }
+}
+
+/* ── Page-specific ── */
+.bx-container { max-width: 800px; }
+.bx-header { text-align: center; margin-bottom: 30px; }
+.bx-submit { text-align: center; margin: 30px 0 40px; }
+.bx-fineprint { color: var(--bx-gray-400); margin-top: 10px; font-size: 12px; }
+.bx-required { color: #DC2626; }
+.bx-success { text-align: center; margin: 40px 0; }
+.bx-success .lucide { width: 64px; height: 64px; color: #00C950; }
+.bx-success h3 { font-size: 24px; font-weight: 700; color: var(--bx-navy); margin: 12px 0 8px; }
+.bx-success p { font-size: 14px; color: var(--bx-gray-400); margin-bottom: 20px; }
+</style>
+
+<div class="bx-page">
+<div class="container bx-container">
+  <div class="bx-header">
+    <h2 class="bx-title"><i data-lucide="file-text"></i> Case Intake Form</h2>
+    <p class="bx-subtitle">Submit your case details. Our team will review and get back to you within 24 hours.</p>
   </div>
 
   <form id="intake-form" method="POST" action="/api/method/chamber.www.intake.submit_intake">
     <input type="hidden" name="csrf_token" value="{{ frappe.session.csrf_token }}">
 
     <!-- Client Information -->
-    <div class="panel panel-default">
-      <div class="panel-heading" style="background: #1a237e; color: white;">
-        <h4 class="panel-title"><i class="fa fa-user"></i> Client Information</h4>
+    <div class="bx-card">
+      <div class="bx-card-head">
+        <i data-lucide="user"></i> Client Information
       </div>
-      <div class="panel-body">
+      <div class="bx-card-body">
         <div class="row">
           <div class="col-sm-6">
             <div class="form-group">
-              <label>Full Name <span style="color: red;">*</span></label>
+              <label>Full Name <span class="bx-required">*</span></label>
               <input type="text" class="form-control" name="client_name" required placeholder="e.g. Rajesh Kumar Singh">
             </div>
           </div>
           <div class="col-sm-6">
             <div class="form-group">
-              <label>Contact Number <span style="color: red;">*</span></label>
+              <label>Contact Number <span class="bx-required">*</span></label>
               <input type="tel" class="form-control" name="contact_number" required placeholder="+91-XXXXXXXXXX">
             </div>
           </div>
@@ -48,15 +151,15 @@
     </div>
 
     <!-- Case Details -->
-    <div class="panel panel-default" style="margin-top: 20px;">
-      <div class="panel-heading" style="background: #e65100; color: white;">
-        <h4 class="panel-title"><i class="fa fa-gavel"></i> Case Details</h4>
+    <div class="bx-card">
+      <div class="bx-card-head bx-card-head--blue">
+        <i data-lucide="gavel"></i> Case Details
       </div>
-      <div class="panel-body">
+      <div class="bx-card-body">
         <div class="row">
           <div class="col-sm-6">
             <div class="form-group">
-              <label>Legal Vertical <span style="color: red;">*</span></label>
+              <label>Legal Vertical <span class="bx-required">*</span></label>
               <select class="form-control" name="vertical" required>
                 <option value="">Select vertical...</option>
                 {% for v in verticals %}
@@ -84,13 +187,13 @@
         </div>
 
         <div class="form-group">
-          <label>Case Title / Brief Description <span style="color: red;">*</span></label>
+          <label>Case Title / Brief Description <span class="bx-required">*</span></label>
           <input type="text" class="form-control" name="matter_title" required
                  placeholder="e.g. Cheque Bounce case against XYZ Corp">
         </div>
 
         <div class="form-group">
-          <label>Detailed Description <span style="color: red;">*</span></label>
+          <label>Detailed Description <span class="bx-required">*</span></label>
           <textarea class="form-control" name="description" rows="5" required
                     placeholder="Describe your case in detail. Include dates, parties involved, and key facts..."></textarea>
         </div>
@@ -133,24 +236,39 @@
     </div>
 
     <!-- Submit -->
-    <div class="text-center" style="margin-top: 30px; margin-bottom: 40px;">
-      <button type="submit" class="btn btn-primary btn-lg" id="submit-btn">
+    <div class="bx-submit">
+      <button type="submit" class="bx-btn bx-btn-primary" id="submit-btn" style="min-width: 220px;">
         <i class="fa fa-paper-plane"></i> Submit Intake Form
       </button>
-      <p style="color: #999; margin-top: 10px; font-size: 0.9em;">
+      <p class="bx-fineprint">
         By submitting, you agree to our terms of engagement. Your data is kept strictly confidential.
       </p>
     </div>
   </form>
 
   <!-- Success Message (hidden by default) -->
-  <div id="success-msg" style="display: none;" class="text-center" style="margin: 40px 0;">
-    <div style="font-size: 64px; color: #2e7d32;"><i class="fa fa-check-circle"></i></div>
-    <h3 style="color: #2e7d32;">Intake Form Submitted!</h3>
-    <p style="color: #666;">Thank you. Our legal team will review your case and contact you within 24 hours.</p>
-    <a href="/" class="btn btn-default">Back to Home</a>
+  <div id="success-msg" class="bx-success" style="display: none;">
+    <i data-lucide="circle-check"></i>
+    <h3>Intake Form Submitted!</h3>
+    <p>Thank you. Our legal team will review your case and contact you within 24 hours.</p>
+    <a href="/" class="bx-btn bx-btn-tertiary">Back to Home</a>
   </div>
 </div>
+</div>
+
+<script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.js"></script>
+<script>
+  (function () {
+    function bxInitIcons() {
+      if (window.lucide && lucide.createIcons) { lucide.createIcons(); }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', bxInitIcons);
+    } else {
+      bxInitIcons();
+    }
+  })();
+</script>
 
 <script>
 frappe.ready(function() {
