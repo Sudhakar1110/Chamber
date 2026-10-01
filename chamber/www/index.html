@@ -280,7 +280,7 @@ body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wra
           </div>
           <div class="lp-row-side">
             <span class="{{ 'lp-pill lp-pill--mint' if m.status == 'Active' else ('lp-pill lp-pill--blue' if m.status == 'Intake Pending' else 'lp-pill') }}">{{ m.status or "-" }}</span>
-            <span class="lp-row-date">{{ m.filing_date or (m.modified or "")[:10] }}</span>
+            <span class="lp-row-date">{{ m.filing_date or (m.modified | string)[:10] }}</span>
           </div>
         </div>
         {% else %}
