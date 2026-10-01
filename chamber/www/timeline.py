@@ -8,6 +8,7 @@ def get_context(context):
     context.is_manager = "System Manager" in frappe.get_roles()
     context.is_guest = frappe.session.user == "Guest"
     context.matters = []
+    context.courts = []
     context.preselect = ""
     if context.is_guest:
         return context
@@ -20,6 +21,15 @@ def get_context(context):
         )
     except Exception:
         context.matters = []
+    try:
+        context.courts = frappe.get_all(
+            "Court",
+            fields=["name", "court_name"],
+            order_by="court_name asc",
+            limit_page_length=300,
+        )
+    except Exception:
+        context.courts = []
     preselect = (frappe.form_dict.get("matter") or "").strip()
     if preselect and any(m.name == preselect for m in context.matters):
         context.preselect = preselect

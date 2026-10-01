@@ -146,6 +146,12 @@ body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wra
 .lp-signin h4 { font-size: 17px; color: var(--bx-navy); margin: 14px 0 6px; }
 .lp-signin p { font-size: 14px; color: var(--bx-gray-400); margin: 0 0 18px; }
 
+
+.se-cfg-h { font-size: 14px; font-weight: 700; color: var(--bx-navy); margin: 18px 0 8px; }
+.se-cfg-h:first-child { margin-top: 4px; }
+#se-cfg-fields .form-group { min-width: 240px; }
+#se-cfg-fields input[type="checkbox"] { margin-right: 6px; }
+.se-note { font-size: 13px; color: var(--bx-gray-400); margin-top: 6px; }
 @media (max-width: 992px) {
   .lp { flex-direction: column; }
   .lp-side { width: 100%; max-height: 46vh; }
@@ -228,7 +234,7 @@ body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wra
     <div class="lp-head">
       <div>
         <h1 class="lp-h1"><i aria-hidden="true" data-lucide="settings"></i> Settings</h1>
-        <p class="lp-sub">Integration health checks, live eCourts lookup and portal connector dry-runs.</p>
+        <p class="lp-sub">Chamber configuration, integration health checks, live eCourts lookup, portal dry-runs and portal-only access — all without desk.</p>
       </div>
     </div>
 
@@ -249,6 +255,8 @@ body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wra
     {% else %}
     <div class="lp-tabs" id="se-tabs">
       <button type="button" class="lp-tab is-active" data-tab="conn">Connections</button>
+      <button type="button" class="lp-tab" data-tab="cfg">Configuration</button>
+      <button type="button" class="lp-tab" data-tab="po">Portal users</button>
       <button type="button" class="lp-tab" data-tab="ec">eCourts</button>
       <button type="button" class="lp-tab" data-tab="dry">Portal dry-run</button>
     </div>
@@ -268,6 +276,33 @@ body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wra
       <div class="lp-empty" id="se-conn-empty">
         <div class="lp-empty-ico"><i aria-hidden="true" data-lucide="plug"></i></div>
         <p>Run the test to see integration status</p>
+      </div>
+    </div>
+
+    <div class="lp-panel lp-section" id="se-tab-cfg" style="display: none;">
+      <h3 class="lp-panel-title"><i aria-hidden="true" data-lucide="sliders-horizontal"></i> Chamber Settings</h3>
+      <p class="lp-note">The same configuration that lives in Desk &gt; Chamber Settings. Leave password fields blank to keep the stored value.</p>
+      <div id="se-cfg-fields" class="lp-filters" style="flex-wrap: wrap;"></div>
+      <div class="lp-actions" style="margin-top: 14px;">
+        <button class="lp-btn lp-btn--mint" id="se-cfg-save" type="button"><i aria-hidden="true" data-lucide="save"></i> Save configuration</button>
+      </div>
+    </div>
+
+    <div class="lp-panel lp-section" id="se-tab-po" style="display: none;">
+      <h3 class="lp-panel-title"><i aria-hidden="true" data-lucide="monitor-off"></i> Portal-only access</h3>
+      <p class="lp-note">Hide the desk from every chamber role (Chamber Manager, Advocate, Filing Clerk). Staff keep full portal access and never see /app again. System Managers — and anyone holding another desk role — keep desk access. Affected users are asked to sign in again.</p>
+      <div class="dc-actions" style="margin-top: 12px;">
+        <button class="lp-btn lp-btn--mint" id="se-po-btn" type="button"><i aria-hidden="true" data-lucide="shield-check"></i> Loading...</button>
+      </div>
+      <div class="lp-table-wrap" style="margin-top: 16px;">
+        <table class="lp-table">
+          <thead><tr><th>User</th><th>Full name</th><th>Type</th><th>Enabled</th></tr></thead>
+          <tbody id="se-po-body"></tbody>
+        </table>
+      </div>
+      <div class="lp-empty" id="se-po-empty" style="display: none;">
+        <div class="lp-empty-ico"><i aria-hidden="true" data-lucide="users"></i></div>
+        <p>No users found</p>
       </div>
     </div>
 
@@ -393,14 +428,21 @@ body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wra
     if (window.bxIsGuest || !window.bxIsManager) { return; }
     function $(id) { return document.getElementById(id); }
     function esc(s) { return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+    function errMsg(r) {
+      if (r && r.responseJSON && r.responseJSON.exception) { return String(r.responseJSON.exception); }
+      if (r && r.message) { return String(r.message); }
+      return "";
+    }
 
+    var TABS = ["conn", "cfg", "po", "ec", "dry"];
     Array.prototype.forEach.call(document.querySelectorAll("#se-tabs .lp-tab"), function (tab) {
       tab.addEventListener("click", function () {
         Array.prototype.forEach.call(document.querySelectorAll("#se-tabs .lp-tab"), function (t) { t.classList.remove("is-active"); });
         tab.classList.add("is-active");
-        ["conn", "ec", "dry"].forEach(function (k) {
-          $("se-tab-" + k).style.display = (tab.getAttribute("data-tab") === k) ? "block" : "none";
-        });
+        var k = tab.getAttribute("data-tab");
+        TABS.forEach(function (x) { $("se-tab-" + x).style.display = (x === k) ? "block" : "none"; });
+        if (k === "cfg") { ensureConfig(); }
+        if (k === "po") { ensureUsers(); }
       });
     });
 
@@ -463,6 +505,221 @@ body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wra
         }
       });
     });
+
+    // ------------------------------------------------ Chamber Settings configuration
+    var CFG = [
+      { title: "eCourts sync", fields: [
+        { name: "enable_ecourts_sync", label: "Enable eCourts sync", type: "check" },
+        { name: "ecourts_api_url", label: "API URL", type: "text" },
+        { name: "ecourts_app_code", label: "App code", type: "text" },
+        { name: "ecourts_ordersheet_url", label: "Order sheet URL", type: "text" },
+        { name: "ecourts_causelist_url", label: "Cause list URL", type: "text" },
+        { name: "ecourts_judgments_url", label: "Judgments URL", type: "text" }
+      ]},
+      { title: "Portal sync (IP India / NCLT / RERA)", fields: [
+        { name: "enable_portal_sync", label: "Enable portal sync", type: "check" },
+        { name: "portal_endpoint_ip_india", label: "IP India endpoint", type: "text" },
+        { name: "portal_endpoint_nclt_nclat", label: "NCLT / NCLAT endpoint", type: "text" },
+        { name: "portal_endpoint_state_rera", label: "State RERA endpoint", type: "text" }
+      ]},
+      { title: "Permissions, webhooks & reminders", fields: [
+        { name: "enforce_matter_level_permissions", label: "Enforce matter-level permissions", type: "check" },
+        { name: "webhook_secret", label: "Webhook secret", type: "password" },
+        { name: "enable_hearing_reminders", label: "Enable hearing reminders", type: "check" },
+        { name: "default_reminder_days", label: "Remind days before", type: "int" },
+        { name: "reminder_recipient_role", label: "Reminder recipient role", type: "link", doctype: "Role" }
+      ]},
+      { title: "E-signature", fields: [
+        { name: "enable_esign", label: "Enable e-signature", type: "check" },
+        { name: "esign_provider", label: "Provider", type: "select", options: ["", "DocuSign", "Dropbox Sign", "SignDesk", "eMudhra", "Generic REST", "Manual"] },
+        { name: "esign_api_url", label: "API URL", type: "text" },
+        { name: "esign_api_key", label: "API key", type: "password" },
+        { name: "esign_callback_url", label: "Callback URL", type: "text" },
+        { name: "esign_callback_secret", label: "Callback secret", type: "password" }
+      ]},
+      { title: "AI drafting", fields: [
+        { name: "enable_ai", label: "Enable AI assistance", type: "check" },
+        { name: "ai_provider", label: "Provider", type: "select", options: ["", "OpenAI", "OpenAI Compatible", "Azure OpenAI", "Anthropic"] },
+        { name: "ai_api_url", label: "API URL", type: "text" },
+        { name: "ai_api_key", label: "API key", type: "password" },
+        { name: "ai_model", label: "Model", type: "text" },
+        { name: "ai_max_tokens", label: "Max tokens", type: "int" },
+        { name: "require_lawyer_review_sensitive", label: "Require lawyer review on sensitive docs", type: "check" }
+      ]}
+    ];
+    var cfgLoaded = false;
+
+    function cfgFieldHtml(f) {
+      var id = "se-f-" + f.name;
+      var wrap = function (inner) {
+        return '<div class="form-group grow"><label for="' + id + '">' + esc(f.label) + "</label>" + inner + "</div>";
+      };
+      if (f.type === "check") {
+        return '<div class="form-group"><label for="' + id + '"><input type="checkbox" id="' + id + '"> ' + esc(f.label) + "</label></div>";
+      }
+      if (f.type === "select") {
+        var opts = (f.options || []).map(function (o) {
+          return '<option value="' + esc(o) + '">' + esc(o === "" ? "— select —" : o) + "</option>";
+        }).join("");
+        return wrap('<select id="' + id + '" class="form-control">' + opts + "</select>");
+      }
+      if (f.type === "textarea") {
+        return wrap('<textarea id="' + id + '" class="form-control" rows="2"></textarea>');
+      }
+      var t = f.type === "int" ? "number" : (f.type === "password" ? "password" : "text");
+      var ph = f.type === "password" ? ' placeholder="Leave blank to keep current"' : "";
+      return wrap('<input type="' + t + '" id="' + id + '" class="form-control"' + ph + ">");
+    }
+
+    function cfgFill(data) {
+      CFG.forEach(function (sec) {
+        sec.fields.forEach(function (f) {
+          var el = $("se-f-" + f.name);
+          if (!el) { return; }
+          var v = data[f.name];
+          if (f.type === "check") { el.checked = (v === 1 || v === "1" || v === true); return; }
+          if (v === undefined || v === null) { v = ""; }
+          if (f.type === "password") { el.value = ""; return; }
+          el.value = String(v);
+          if (f.type === "select" && v && el.value !== String(v)) {
+            var opt = document.createElement("option");
+            opt.value = String(v);
+            opt.textContent = String(v);
+            el.appendChild(opt);
+            el.value = String(v);
+          }
+        });
+      });
+    }
+
+    function ensureConfig() {
+      if (cfgLoaded) { return; }
+      frappe.call({
+        method: "chamber.api.portal.get_settings",
+        callback: function (r) {
+          var data = r.message || {};
+          var html = CFG.map(function (sec) {
+            return '<div class="se-cfg-h" style="flex: 1 1 100%;">' + esc(sec.title) + "</div>" +
+              sec.fields.map(cfgFieldHtml).join("");
+          }).join("");
+          $("se-cfg-fields").innerHTML = html;
+          cfgLoaded = true;
+          // link options for reminder role, then fill
+          frappe.call({
+            method: "frappe.client.get_list",
+            args: { doctype: "Role", fields: ["name"], limit_page_length: 500, order_by: "name asc" },
+            callback: function (rr) {
+              var sel = $("se-f-reminder_recipient_role");
+              if (sel) {
+                var rows = (rr && rr.message) || [];
+                sel.innerHTML = '<option value="">— select —</option>' + rows.map(function (row) {
+                  return '<option value="' + esc(row.name) + '">' + esc(row.name) + "</option>";
+                }).join("");
+              }
+              cfgFill(data);
+            },
+            error: function () { cfgFill(data); }
+          });
+        },
+        error: function () { frappe.msgprint("Could not load Chamber Settings."); }
+      });
+    }
+
+    $("se-cfg-save").addEventListener("click", function () {
+      var btn = this;
+      var vals = {};
+      CFG.forEach(function (sec) {
+        sec.fields.forEach(function (f) {
+          var el = $("se-f-" + f.name);
+          if (!el) { return; }
+          if (f.type === "check") { vals[f.name] = el.checked ? 1 : 0; return; }
+          if (f.type === "password") {
+            if (el.value) { vals[f.name] = el.value; }
+            return;
+          }
+          vals[f.name] = el.value;
+        });
+      });
+      btn.classList.add("lp-btn--busy");
+      frappe.call({
+        method: "chamber.api.portal.save_settings",
+        args: { values: vals },
+        callback: function (r) {
+          btn.classList.remove("lp-btn--busy");
+          cfgFill(r.message || {});
+          frappe.show_alert({ message: "Configuration saved", indicator: "green" });
+        },
+        error: function (r) {
+          btn.classList.remove("lp-btn--busy");
+          frappe.msgprint(errMsg(r) || "Could not save the configuration.");
+        }
+      });
+    });
+
+    // ------------------------------------------------ portal-only users
+    var usersLoaded = false;
+    var portalOnly = false;
+
+    function renderUsers(data) {
+      var users = data.users || [];
+      portalOnly = !!data.portal_only;
+      $("se-po-btn").innerHTML = portalOnly
+        ? '<i aria-hidden="true" data-lucide="monitor"></i> Restore desk access for chamber roles'
+        : '<i aria-hidden="true" data-lucide="monitor-off"></i> Enable portal-only mode (hide desk)';
+      $("se-po-empty").style.display = users.length ? "none" : "block";
+      $("se-po-body").innerHTML = users.map(function (u) {
+        return "<tr><td><strong>" + esc(u.name) + "</strong></td><td>" + esc(u.full_name || "—") + "</td>" +
+          '<td><span class="lp-pill ' + (u.user_type === "System User" ? "lp-pill--blue" : "lp-pill--mint") + '">' + esc(u.user_type || "—") + "</span></td>" +
+          '<td><span class="lp-pill ' + (u.enabled ? "lp-pill--mint" : "lp-pill--red") + '">' + (u.enabled ? "Yes" : "No") + "</span></td></tr>";
+      }).join("");
+      if (window.bxIcons) { bxIcons(); }
+    }
+
+    function ensureUsers() {
+      if (usersLoaded) { return; }
+      frappe.call({
+        method: "chamber.api.portal.list_users",
+        callback: function (r) {
+          usersLoaded = true;
+          renderUsers(r.message || {});
+        },
+        error: function () { frappe.msgprint("Could not load users."); }
+      });
+    }
+
+    $("se-po-btn").addEventListener("click", function () {
+      var btn = this;
+      var target = !portalOnly;
+      btn.classList.add("lp-btn--busy");
+      frappe.call({
+        method: "chamber.api.portal.set_portal_only",
+        args: { enabled: target ? 1 : 0 },
+        callback: function (r) {
+          btn.classList.remove("lp-btn--busy");
+          var changed = (r.message && r.message.count) || 0;
+          frappe.show_alert({
+            message: target
+              ? "Portal-only mode ON — desk hidden from chamber roles; " + changed + " user(s) must sign in again."
+              : "Desk access restored for chamber roles; " + changed + " user(s) updated.",
+            indicator: "green"
+          });
+          ensureUsersRefresh();
+        },
+        error: function (r) {
+          btn.classList.remove("lp-btn--busy");
+          frappe.msgprint(errMsg(r) || "Could not change the access mode.");
+        }
+      });
+    });
+
+    function ensureUsersRefresh() {
+      usersLoaded = false;
+      frappe.call({
+        method: "chamber.api.portal.list_users",
+        callback: function (r) { usersLoaded = true; renderUsers(r.message || {}); },
+        error: function () {}
+      });
+    }
   })();
 </script>
 

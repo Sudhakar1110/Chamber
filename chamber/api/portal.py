@@ -181,3 +181,134 @@ def run_action(doctype, name, method, args=None):
 	else:
 		response = doc.run_method(method)
 	return response
+
+
+# ---------------------------------------------------------------- Chamber Settings
+SETTINGS_FIELDS = [
+	"enable_ecourts_sync", "ecourts_api_url", "ecourts_app_code",
+	"ecourts_ordersheet_url", "ecourts_causelist_url", "ecourts_judgments_url",
+	"enable_portal_sync", "portal_endpoint_ip_india", "portal_endpoint_nclt_nclat",
+	"portal_endpoint_state_rera", "enforce_matter_level_permissions",
+	"webhook_secret", "enable_hearing_reminders", "default_reminder_days",
+	"reminder_recipient_role", "enable_esign", "esign_provider", "esign_api_url",
+	"esign_api_key", "esign_callback_url", "esign_callback_secret", "enable_ai",
+	"ai_provider", "ai_api_url", "ai_api_key", "ai_model", "ai_max_tokens",
+	"require_lawyer_review_sensitive",
+]
+SETTINGS_PASSWORD_FIELDS = {
+	"webhook_secret", "esign_api_key", "esign_callback_secret", "ai_api_key",
+}
+CHAMBER_ROLES = ("Chamber Manager", "Advocate", "Filing Clerk")
+
+
+def _require_manager():
+	if "System Manager" not in frappe.get_roles():
+		frappe.throw("Not permitted", frappe.PermissionError)
+
+
+@frappe.whitelist()
+def get_settings():
+	"""Chamber Settings values for the portal configuration form.
+
+	Password fields are never returned; they are reported as "" and are
+	left untouched on save when blank.
+	"""
+	_require_manager()
+	doc = frappe.get_doc("Chamber Settings")
+	data = {}
+	for f in SETTINGS_FIELDS:
+		data[f] = "" if f in SETTINGS_PASSWORD_FIELDS else doc.get(f)
+	return data
+
+
+@frappe.whitelist()
+def save_settings(values):
+	"""Persist Chamber Settings from the portal (System Manager only).
+
+	Blank password values keep whatever is already stored.
+	"""
+	import json
+
+	if isinstance(values, str):
+		try:
+			values = json.loads(values)
+		except ValueError:
+			values = None
+	_require_manager()
+	if not isinstance(values, dict):
+		frappe.throw("Invalid settings payload")
+	doc = frappe.get_doc("Chamber Settings")
+	meta = frappe.get_meta("Chamber Settings")
+	for f in SETTINGS_FIELDS:
+		if f not in values:
+			continue
+		v = values[f]
+		if f in SETTINGS_PASSWORD_FIELDS and (v is None or str(v).strip() == ""):
+			continue
+		df = meta.get_field(f)
+		if df and (v is None or str(v).strip() == ""):
+			# store empty numerics/links as NULL instead of "" (DB-safe)
+			if df.fieldtype in ("Int", "Check", "Float", "Link"):
+				v = 0 if df.fieldtype == "Check" else None
+		doc.set(f, v)
+	doc.flags.ignore_permissions = True
+	doc.save()
+	return {f: ("" if f in SETTINGS_PASSWORD_FIELDS else doc.get(f)) for f in SETTINGS_FIELDS}
+
+
+# ---------------------------------------------------------------- portal-only mode
+@frappe.whitelist()
+def list_users():
+	"""Portal users plus the current desk/portal mode of the chamber roles."""
+	_require_manager()
+	rows = frappe.get_all(
+		"User",
+		fields=["name", "full_name", "user_type", "enabled"],
+		order_by="creation asc",
+		limit_page_length=300,
+	)
+	roles = {}
+	for role in CHAMBER_ROLES:
+		roles[role] = bool(frappe.db.get_value("Role", role, "desk_access"))
+	return {
+		"users": [dict(r) for r in rows],
+		"roles": roles,
+		"portal_only": not any(roles.values()),
+	}
+
+
+@frappe.whitelist()
+def set_portal_only(enabled):
+	"""Toggle portal-only mode for the chamber.
+
+	Flips Role.desk_access on the chamber roles, then recomputes every
+	enabled user's user_type exactly the way Frappe's User.validate does
+	(has_desk_access -> System User / Website User). Portal-only users
+	are forced to sign in again and never see the desk again; System
+	Managers (or anyone with another desk role) keep full desk access.
+	"""
+	from frappe.sessions import clear_sessions
+
+	_require_manager()
+	enable = str(enabled).strip() in ("1", "true", "True", "yes")
+	want = 0 if enable else 1
+	for role in CHAMBER_ROLES:
+		if not frappe.db.exists("Role", role):
+			continue
+		role_doc = frappe.get_doc("Role", role)
+		if int(role_doc.desk_access or 0) != want:
+			role_doc.desk_access = want
+			role_doc.flags.ignore_permissions = True
+			role_doc.save()
+
+	changed = []
+	for row in frappe.get_all("User", filters={"enabled": 1}, fields=["name"]):
+		if row.name in ("Administrator", "Guest"):
+			continue
+		user = frappe.get_doc("User", row.name)
+		new_type = "System User" if user.has_desk_access() else "Website User"
+		if new_type != user.user_type:
+			frappe.db.set_value("User", user.name, "user_type", new_type)
+			clear_sessions(user=user.name, force=True)
+			changed.append(user.name)
+	return {"enabled": enable, "changed_users": changed, "count": len(changed)}

@@ -148,6 +148,11 @@ body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wra
 
 
 .ms-clause { max-width: 520px; font-size: 13px; color: var(--bx-gray-400); }
+.ms-acts { white-space: nowrap; }
+.ms-acts .lp-btn { padding: 4px 9px; font-size: 12px; }
+#mse-fields .form-group { min-width: 220px; }
+#mse-fields .form-group label { display: block; }
+#mse-fields input[type="checkbox"] { margin-right: 6px; }
 @media (max-width: 992px) {
   .lp { flex-direction: column; }
   .lp-side { width: 100%; max-height: 46vh; }
@@ -230,7 +235,7 @@ body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wra
     <div class="lp-head">
       <div>
         <h1 class="lp-h1"><i aria-hidden="true" data-lucide="library"></i> Masters</h1>
-        <p class="lp-sub">Matter types, courts, clause library and document templates — reference data for drafting.</p>
+        <p class="lp-sub">Matter types, courts, clause library and document templates — create and edit reference data right here in the portal.</p>
       </div>
     </div>
 
@@ -251,6 +256,16 @@ body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wra
       </div>
     </div>
 
+    <div class="lp-panel lp-section" id="ms-editor" style="display: none;">
+      <h3 class="lp-panel-title" id="mse-title">Edit</h3>
+      <div id="mse-fields" class="lp-filters" style="flex-wrap: wrap; margin-top: 10px;"></div>
+      <div class="lp-actions" style="margin-top: 14px;">
+        <button class="lp-btn lp-btn--mint" id="mse-save" type="button"><i aria-hidden="true" data-lucide="save"></i> Save</button>
+        <button class="lp-btn lp-btn--ghost" id="mse-cancel" type="button">Cancel</button>
+        <button class="lp-btn lp-btn--ghost" id="mse-del" type="button" style="display: none;"><i aria-hidden="true" data-lucide="trash-2"></i> Delete</button>
+      </div>
+    </div>
+
     <div class="lp-tabs" id="ms-tabs">
       <button type="button" class="lp-tab is-active" data-tab="mt">Matter Types</button>
       <button type="button" class="lp-tab" data-tab="ct">Courts</button>
@@ -259,13 +274,20 @@ body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wra
     </div>
 
     <div class="lp-panel lp-section" id="ms-tab-mt">
+      <div class="lp-actions" style="margin-bottom: 10px;">
+        <button class="lp-btn lp-btn--mint ms-new" data-dt="Matter Type" data-key="mt" type="button"><i aria-hidden="true" data-lucide="plus"></i> New matter type</button>
+      </div>
       <div class="lp-table-wrap">
         <table class="lp-table" id="ms-tbl-mt">
-          <thead><tr><th>Matter type</th><th>Vertical</th><th>Code</th><th>Enabled</th></tr></thead>
+          <thead><tr><th>Matter type</th><th>Vertical</th><th>Code</th><th>Enabled</th><th>Actions</th></tr></thead>
           <tbody>
             {% for mt in matter_types | default([]) %}
             <tr><td><strong>{{ mt.matter_type }}</strong></td><td>{{ mt.vertical or "—" }}</td><td>{{ mt.code or "—" }}</td>
-              <td><span class="lp-pill {{ 'lp-pill--mint' if mt.enabled else 'lp-pill' }}">{{ "Yes" if mt.enabled else "No" }}</span></td></tr>
+              <td><span class="lp-pill {{ 'lp-pill--mint' if mt.enabled else 'lp-pill' }}">{{ "Yes" if mt.enabled else "No" }}</span></td>
+              <td class="ms-acts">
+                <button class="lp-btn lp-btn--ghost ms-edit" data-dt="Matter Type" data-name="{{ mt.name }}" type="button">Edit</button>
+                <button class="lp-btn lp-btn--ghost ms-del" data-dt="Matter Type" data-name="{{ mt.name }}" type="button">Delete</button>
+              </td></tr>
             {% endfor %}
           </tbody>
         </table>
@@ -276,14 +298,21 @@ body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wra
     </div>
 
     <div class="lp-panel lp-section" id="ms-tab-ct" style="display: none;">
+      <div class="lp-actions" style="margin-bottom: 10px;">
+        <button class="lp-btn lp-btn--mint ms-new" data-dt="Court" data-key="ct" type="button"><i aria-hidden="true" data-lucide="plus"></i> New court</button>
+      </div>
       <div class="lp-table-wrap">
         <table class="lp-table" id="ms-tbl-ct">
-          <thead><tr><th>Court</th><th>Tier</th><th>State</th><th>Jurisdiction</th><th>eCourts</th></tr></thead>
+          <thead><tr><th>Court</th><th>Tier</th><th>State</th><th>Jurisdiction</th><th>eCourts</th><th>Actions</th></tr></thead>
           <tbody>
             {% for c in courts | default([]) %}
             <tr><td><strong>{{ c.court_name }}</strong></td><td>{{ c.court_tier or "—" }}</td><td>{{ c.state or "—" }}</td>
               <td>{{ c.jurisdiction or "—" }}</td>
-              <td><span class="lp-pill {{ 'lp-pill--mint' if c.ecourts_enabled else 'lp-pill' }}">{{ "Yes" if c.ecourts_enabled else "No" }}</span></td></tr>
+              <td><span class="lp-pill {{ 'lp-pill--mint' if c.ecourts_enabled else 'lp-pill' }}">{{ "Yes" if c.ecourts_enabled else "No" }}</span></td>
+              <td class="ms-acts">
+                <button class="lp-btn lp-btn--ghost ms-edit" data-dt="Court" data-name="{{ c.name }}" type="button">Edit</button>
+                <button class="lp-btn lp-btn--ghost ms-del" data-dt="Court" data-name="{{ c.name }}" type="button">Delete</button>
+              </td></tr>
             {% endfor %}
           </tbody>
         </table>
@@ -294,14 +323,21 @@ body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wra
     </div>
 
     <div class="lp-panel lp-section" id="ms-tab-cl" style="display: none;">
+      <div class="lp-actions" style="margin-bottom: 10px;">
+        <button class="lp-btn lp-btn--mint ms-new" data-dt="Clause Library" data-key="cl" type="button"><i aria-hidden="true" data-lucide="plus"></i> New clause</button>
+      </div>
       <div class="lp-table-wrap">
         <table class="lp-table" id="ms-tbl-cl">
-          <thead><tr><th>Clause</th><th>Drafting type</th><th>Tags</th><th>Text</th></tr></thead>
+          <thead><tr><th>Clause</th><th>Drafting type</th><th>Tags</th><th>Text</th><th>Actions</th></tr></thead>
           <tbody>
             {% for cl in clauses | default([]) %}
             <tr><td><strong>{{ cl.clause_title }}</strong></td><td>{{ cl.applicable_drafting_type or "—" }}</td>
               <td>{% for t in (cl.tags or "").split(",") if t.strip() %}<span class="lp-mchip">{{ t.strip() }}</span>{% endfor %}</td>
-              <td class="ms-clause">{{ cl.clause_text[:220] }}{% if (cl.clause_text or "") | length > 220 %}&hellip;{% endif %}</td></tr>
+              <td class="ms-clause">{{ cl.clause_text[:220] }}{% if (cl.clause_text or "") | length > 220 %}&hellip;{% endif %}</td>
+              <td class="ms-acts">
+                <button class="lp-btn lp-btn--ghost ms-edit" data-dt="Clause Library" data-name="{{ cl.name }}" type="button">Edit</button>
+                <button class="lp-btn lp-btn--ghost ms-del" data-dt="Clause Library" data-name="{{ cl.name }}" type="button">Delete</button>
+              </td></tr>
             {% endfor %}
           </tbody>
         </table>
@@ -312,15 +348,22 @@ body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wra
     </div>
 
     <div class="lp-panel lp-section" id="ms-tab-tpl" style="display: none;">
+      <div class="lp-actions" style="margin-bottom: 10px;">
+        <button class="lp-btn lp-btn--mint ms-new" data-dt="Document Template" data-key="tpl" type="button"><i aria-hidden="true" data-lucide="plus"></i> New template</button>
+      </div>
       <div class="lp-table-wrap">
         <table class="lp-table" id="ms-tbl-tpl">
-          <thead><tr><th>Template</th><th>Vertical</th><th>Drafting type</th><th>Status</th><th>Version</th></tr></thead>
+          <thead><tr><th>Template</th><th>Vertical</th><th>Drafting type</th><th>Status</th><th>Version</th><th>Actions</th></tr></thead>
           <tbody>
             {% for t in templates | default([]) %}
             <tr><td><strong>{{ t.template_name }}</strong>{% if t.description %}<div class="lp-row-sub">{{ t.description }}</div>{% endif %}</td>
               <td>{{ t.vertical or "—" }}</td><td>{{ t.drafting_type or "—" }}</td>
               <td><span class="lp-pill {{ 'lp-pill--mint' if t.status == 'Published' else 'lp-pill--blue' }}">{{ t.status or "Draft" }}</span></td>
-              <td>{{ t.version or 1 }}</td></tr>
+              <td>{{ t.version or 1 }}</td>
+              <td class="ms-acts">
+                <button class="lp-btn lp-btn--ghost ms-edit" data-dt="Document Template" data-name="{{ t.name }}" type="button">Edit</button>
+                <button class="lp-btn lp-btn--ghost ms-del" data-dt="Document Template" data-name="{{ t.name }}" type="button">Delete</button>
+              </td></tr>
             {% endfor %}
           </tbody>
         </table>
@@ -424,6 +467,55 @@ body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wra
 <script>
   (function () {
     if (window.bxIsGuest) { return; }
+    function $(id) { return document.getElementById(id); }
+    function esc(s) { return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+    function errMsg(r) {
+      if (r && r.responseJSON && r.responseJSON.exception) { return String(r.responseJSON.exception); }
+      if (r && r.message) { return String(r.message); }
+      return "";
+    }
+
+    var MASTERS = {
+      "Matter Type": { fields: [
+        { name: "matter_type", label: "Matter type", type: "text", reqd: 1 },
+        { name: "vertical", label: "Vertical", type: "link", doctype: "Legal Vertical" },
+        { name: "code", label: "Code", type: "text" },
+        { name: "description", label: "Description", type: "textarea" },
+        { name: "parent_type", label: "Parent type", type: "link", doctype: "Matter Type", label_field: "matter_type" },
+        { name: "is_sub_type", label: "Sub-type", type: "check" },
+        { name: "milestone_sequence", label: "Milestone sequence", type: "text" },
+        { name: "enabled", label: "Enabled", type: "check" }
+      ]},
+      "Court": { fields: [
+        { name: "court_name", label: "Court name", type: "text", reqd: 1 },
+        { name: "court_tier", label: "Court tier", type: "select", options: ["", "Supreme Court", "High Court", "Commercial Court", "District Court", "Family Court", "Magistrate Court", "MACT Tribunal", "Rent Control Court", "Labour Court", "Consumer Forum", "NCLT", "Other"] },
+        { name: "state", label: "State", type: "text" },
+        { name: "jurisdiction", label: "Jurisdiction", type: "text" },
+        { name: "bench_number", label: "Bench number", type: "text" },
+        { name: "judge_name", label: "Judge", type: "text" },
+        { name: "ecourts_enabled", label: "eCourts enabled", type: "check" },
+        { name: "remarks", label: "Remarks", type: "textarea" }
+      ]},
+      "Clause Library": { fields: [
+        { name: "clause_title", label: "Clause title", type: "text", reqd: 1 },
+        { name: "applicable_drafting_type", label: "Drafting type", type: "select", options: ["", "Litigation", "Transactional", "Legislative & Policy", "All"] },
+        { name: "tags", label: "Tags (comma separated)", type: "text" },
+        { name: "clause_text", label: "Clause text", type: "textarea", reqd: 1 }
+      ]},
+      "Document Template": { fields: [
+        { name: "template_name", label: "Template name", type: "text", reqd: 1 },
+        { name: "vertical", label: "Vertical", type: "link", doctype: "Legal Vertical" },
+        { name: "matter_type", label: "Matter type", type: "link", doctype: "Matter Type", label_field: "matter_type" },
+        { name: "drafting_type", label: "Drafting type", type: "select", options: ["", "Litigation", "Transactional", "Legislative & Policy"] },
+        { name: "status", label: "Status", type: "select", options: ["Draft", "Published", "Archived"] },
+        { name: "version", label: "Version", type: "int" },
+        { name: "sensitive", label: "Sensitive", type: "check" },
+        { name: "description", label: "Description", type: "textarea" },
+        { name: "usage_instructions", label: "Usage instructions", type: "textarea" },
+        { name: "template_body", label: "Template body", type: "textarea" }
+      ]}
+    };
+
     var map = { mt: "ms-tbl-mt", ct: "ms-tbl-ct", cl: "ms-tbl-cl", tpl: "ms-tbl-tpl" };
     var active = "mt";
     Array.prototype.forEach.call(document.querySelectorAll("#ms-tabs .lp-tab"), function (tab) {
@@ -446,6 +538,200 @@ body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wra
       });
     }
     document.getElementById("ms-search").addEventListener("input", filter);
+
+    function fieldHtml(f) {
+      var id = "mse-" + f.name;
+      var req = f.reqd ? " *" : "";
+      var wrap = function (inner) {
+        return '<div class="form-group grow"><label for="' + id + '">' + esc(f.label) + req + "</label>" + inner + "</div>";
+      };
+      if (f.type === "textarea") {
+        return wrap('<textarea id="' + id + '" class="form-control" rows="3"></textarea>');
+      }
+      if (f.type === "check") {
+        return '<div class="form-group"><label for="' + id + '"><input type="checkbox" id="' + id + '"> ' + esc(f.label) + "</label></div>";
+      }
+      if (f.type === "select") {
+        var opts = (f.options || []).map(function (o) {
+          return '<option value="' + esc(o) + '">' + esc(o === "" ? "— select —" : o) + "</option>";
+        }).join("");
+        return wrap('<select id="' + id + '" class="form-control">' + opts + "</select>");
+      }
+      var t = f.type === "int" ? "number" : "text";
+      return wrap('<input type="' + t + '" id="' + id + '" class="form-control">');
+    }
+
+    function loadLinkOptions(f, done) {
+      frappe.call({
+        method: "frappe.client.get_list",
+        args: {
+          doctype: f.doctype,
+          fields: ["name", f.label_field || "name"],
+          limit_page_length: 500,
+          order_by: "name asc"
+        },
+        callback: function (r) {
+          var rows = (r && r.message) || [];
+          var sel = document.getElementById("mse-" + f.name);
+          if (sel) {
+            sel.innerHTML = '<option value="">— select —</option>' + rows.map(function (row) {
+              var label = (f.label_field && row[f.label_field]) || row.name;
+              return '<option value="' + esc(row.name) + '">' + esc(label) + "</option>";
+            }).join("");
+          }
+          done();
+        },
+        error: function () { done(); }
+      });
+    }
+
+    function fillValues(dt, doc) {
+      MASTERS[dt].fields.forEach(function (f) {
+        var el = document.getElementById("mse-" + f.name);
+        if (!el) { return; }
+        var v = doc[f.name];
+        if (f.type === "check") { el.checked = !!v; return; }
+        if (v === undefined || v === null) { v = ""; }
+        el.value = String(v);
+        if (f.type === "select" && v && el.value !== String(v)) {
+          var opt = document.createElement("option");
+          opt.value = String(v);
+          opt.textContent = String(v);
+          el.appendChild(opt);
+          el.value = String(v);
+        }
+      });
+    }
+
+    function openEditor(dt, name) {
+      var cfg = MASTERS[dt];
+      if (!cfg) { return; }
+      var ed = $("ms-editor");
+      ed.setAttribute("data-dt", dt);
+      ed.setAttribute("data-name", name || "");
+      $("mse-title").textContent = (name ? "Edit " : "New ") + dt;
+      $("mse-del").style.display = name ? "inline-flex" : "none";
+      $("mse-fields").innerHTML = cfg.fields.map(fieldHtml).join("");
+      ed.style.display = "block";
+      if (window.bxIcons) { bxIcons(); }
+
+      var links = cfg.fields.filter(function (f) { return f.type === "link"; });
+      var i = 0;
+      (function next() {
+        if (i >= links.length) {
+          if (name) {
+            frappe.call({
+              method: "frappe.client.get",
+              args: { doctype: dt, name: name },
+              callback: function (r) { fillValues(dt, (r && r.message) || {}); },
+              error: function () { frappe.msgprint("Could not load " + dt + " record."); }
+            });
+          } else {
+            fillValues(dt, {});
+          }
+          return;
+        }
+        loadLinkOptions(links[i++], next);
+      })();
+    }
+
+    function closeEditor() {
+      $("ms-editor").style.display = "none";
+      $("ms-editor").setAttribute("data-name", "");
+    }
+    $("mse-cancel").addEventListener("click", closeEditor);
+
+    function collect(dt) {
+      var vals = {};
+      var missing = [];
+      MASTERS[dt].fields.forEach(function (f) {
+        var el = document.getElementById("mse-" + f.name);
+        if (!el) { return; }
+        if (f.type === "check") { vals[f.name] = el.checked ? 1 : 0; return; }
+        if (f.reqd && !String(el.value).trim()) { missing.push(f.label); }
+        if ((f.type === "link" || f.type === "int") && !String(el.value).trim()) {
+          vals[f.name] = null;
+          return;
+        }
+        vals[f.name] = el.value;
+      });
+      return { vals: vals, missing: missing };
+    }
+
+    $("mse-save").addEventListener("click", function () {
+      var dt = $("ms-editor").getAttribute("data-dt");
+      var name = $("ms-editor").getAttribute("data-name");
+      var res = collect(dt);
+      if (res.missing.length) {
+        frappe.msgprint("Please fill the mandatory fields: " + res.missing.join(", "));
+        return;
+      }
+      var btn = this;
+      btn.classList.add("lp-btn--busy");
+      var ok = function () { window.location.reload(); };
+      var fail = function (r) {
+        btn.classList.remove("lp-btn--busy");
+        frappe.msgprint(errMsg(r) || "Save failed. Check your permissions for this record.");
+      };
+      if (name) {
+        frappe.call({
+          method: "frappe.client.set_value",
+          args: { doctype: dt, name: name, fieldname: res.vals },
+          callback: ok,
+          error: fail
+        });
+      } else {
+        var doc = res.vals;
+        doc.doctype = dt;
+        frappe.call({
+          method: "frappe.client.insert",
+          args: { doc: doc },
+          callback: ok,
+          error: fail
+        });
+      }
+    });
+
+    $("mse-del").addEventListener("click", function () {
+      var dt = $("ms-editor").getAttribute("data-dt");
+      var name = $("ms-editor").getAttribute("data-name");
+      if (!name) { return; }
+      if (!window.confirm('Delete "' + name + '" from ' + dt + "? This cannot be undone.")) { return; }
+      var btn = this;
+      btn.classList.add("lp-btn--busy");
+      frappe.call({
+        method: "frappe.client.delete",
+        args: { doctype: dt, name: name },
+        callback: function () { window.location.reload(); },
+        error: function (r) {
+          btn.classList.remove("lp-btn--busy");
+          frappe.msgprint(errMsg(r) || "Delete failed — the record may still be referenced elsewhere.");
+        }
+      });
+    });
+
+    document.addEventListener("click", function (e) {
+      var el = e.target && e.target.closest ? e.target.closest(".ms-new, .ms-edit, .ms-del") : null;
+      if (!el) { return; }
+      var dt = el.getAttribute("data-dt");
+      var name = el.getAttribute("data-name") || "";
+      if (el.classList.contains("ms-new")) { openEditor(dt, null); }
+      else if (el.classList.contains("ms-edit")) { openEditor(dt, name); }
+      else if (el.classList.contains("ms-del")) {
+        if (!name) { return; }
+        if (!window.confirm('Delete "' + name + '" from ' + dt + "? This cannot be undone.")) { return; }
+        el.classList.add("lp-btn--busy");
+        frappe.call({
+          method: "frappe.client.delete",
+          args: { doctype: dt, name: name },
+          callback: function () { window.location.reload(); },
+          error: function (r) {
+            el.classList.remove("lp-btn--busy");
+            frappe.msgprint(errMsg(r) || "Delete failed — the record may still be referenced elsewhere.");
+          }
+        });
+      }
+    });
   })();
 </script>
 

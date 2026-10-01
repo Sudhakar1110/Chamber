@@ -264,6 +264,7 @@ body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wra
         </div>
         <button class="lp-btn lp-btn--mint" id="tl-load" type="button"><i aria-hidden="true" data-lucide="refresh-cw"></i> Load timeline</button>
         <button class="lp-btn lp-btn--ghost" id="tl-add-btn" type="button"><i aria-hidden="true" data-lucide="plus"></i> Add entry</button>
+        <button class="lp-btn lp-btn--ghost" id="tl-hearing-btn" type="button"><i aria-hidden="true" data-lucide="calendar-plus"></i> Add hearing</button>
       </div>
       {% if not (matters | default([])) | length %}
       <p class="lp-note" style="margin-top: 12px;">No matters found. Create a matter from Client Intake first.</p>
@@ -286,6 +287,37 @@ body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wra
       <div class="lp-actions">
         <button class="lp-btn lp-btn--mint" id="ae-save" type="button"><i aria-hidden="true" data-lucide="save"></i> Save entry</button>
         <button class="lp-btn lp-btn--ghost" id="ae-cancel" type="button">Cancel</button>
+      </div>
+    </div>
+
+    <div class="lp-panel lp-section" id="tl-hearing" style="display: none;">
+      <h3 class="lp-panel-title"><i aria-hidden="true" data-lucide="calendar-plus"></i> Add hearing</h3>
+      <p class="lp-note">Creates a Hearing on this matter — it flows onto the timeline, deadline bands and the matter's next hearing date automatically.</p>
+      <div class="lp-filters" style="margin-top: 12px;">
+        <div class="form-group"><label for="nh-date">Hearing date *</label><input type="date" id="nh-date" class="form-control"></div>
+        <div class="form-group grow"><label for="nh-purpose">Purpose</label><input type="text" id="nh-purpose" class="form-control" placeholder="e.g. Final hearing / arguments"></div>
+        <div class="form-group"><label for="nh-next">Next hearing date</label><input type="date" id="nh-next" class="form-control"></div>
+      </div>
+      <div class="lp-filters" style="margin-top: 12px;">
+        <div class="form-group grow">
+          <label for="nh-court">Court</label>
+          <select id="nh-court" class="form-control">
+            <option value="">— select —</option>
+            {% for c in courts | default([]) %}
+            <option value="{{ c.name }}">{{ c.court_name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="nh-source">Source</label>
+          <select id="nh-source" class="form-control"><option>Manual</option><option>eCourts</option><option>Cause List</option></select>
+        </div>
+        <div class="form-group grow"><label for="nh-judge">Judge</label><input type="text" id="nh-judge" class="form-control"></div>
+      </div>
+      <div class="form-group" style="margin-top: 12px;"><label for="nh-notes">Notes</label><textarea id="nh-notes" class="form-control" rows="2"></textarea></div>
+      <div class="lp-actions">
+        <button class="lp-btn lp-btn--mint" id="nh-save" type="button"><i aria-hidden="true" data-lucide="save"></i> Save hearing</button>
+        <button class="lp-btn lp-btn--ghost" id="nh-cancel" type="button">Cancel</button>
       </div>
     </div>
 
@@ -521,6 +553,50 @@ body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wra
           load();
         },
         error: function () { frappe.msgprint("Could not save the entry."); }
+      });
+    });
+
+    $("tl-hearing-btn").addEventListener("click", function () {
+      var f = $("tl-hearing");
+      f.style.display = f.style.display === "none" ? "block" : "none";
+      $("tl-add-form").style.display = "none";
+      if (!$("nh-date").value) { $("nh-date").value = new Date().toISOString().slice(0, 10); }
+    });
+    $("nh-cancel").addEventListener("click", function () { $("tl-hearing").style.display = "none"; });
+    $("nh-save").addEventListener("click", function () {
+      var matter = $("tl-matter").value;
+      var date = $("nh-date").value;
+      if (!matter) { frappe.msgprint("Select a matter first."); return; }
+      if (!date) { frappe.msgprint("Hearing date is required."); return; }
+      var btn = this;
+      btn.classList.add("lp-btn--busy");
+      var doc = {
+        doctype: "Hearing",
+        legal_matter: matter,
+        hearing_date: date,
+        purpose: $("nh-purpose").value.trim(),
+        source: $("nh-source").value,
+        court: $("nh-court").value,
+        judge: $("nh-judge").value.trim(),
+        notes: $("nh-notes").value.trim()
+      };
+      var next = $("nh-next").value;
+      if (next) { doc.next_hearing_date = next; }
+      frappe.call({
+        method: "frappe.client.insert",
+        args: { doc: doc },
+        callback: function () {
+          btn.classList.remove("lp-btn--busy");
+          ["nh-purpose", "nh-judge", "nh-notes"].forEach(function (id) { $(id).value = ""; });
+          $("nh-next").value = "";
+          $("tl-hearing").style.display = "none";
+          frappe.show_alert({ message: "Hearing added", indicator: "green" });
+          load();
+        },
+        error: function (r) {
+          btn.classList.remove("lp-btn--busy");
+          frappe.msgprint((r && r.responseJSON && r.responseJSON.exception) || "Could not save the hearing.");
+        }
       });
     });
 
