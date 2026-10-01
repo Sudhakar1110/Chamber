@@ -7,6 +7,7 @@
 {%- block head_include -%}
 {{ super() }}
 <link rel="stylesheet" href="/assets/frappe/css/fonts/fontawesome/font-awesome.min.css">
+
 {%- endblock -%}
 
 {%- block page_content -%}
@@ -157,6 +158,22 @@ body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wra
   .lp-h1 { font-size: 26px; }
   .lp-kv-key { flex-basis: 120px; }
 }
+/* Search overlay */
+/* bell link */
+.lp-bell { display: inline-flex; align-items: center; justify-content: center; color: var(--bx-navy); }
+.lp-bell:hover { color: #0E9F7E; text-decoration: none; }
+.lp-bell .lucide { width: 17px; height: 17px; }
+.lp-modal { position: fixed; inset: 0; background: rgba(5, 19, 60, 0.55); z-index: 1000; display: flex; align-items: flex-start; justify-content: center; padding: 12vh 20px 20px; }
+.lp-modal[hidden] { display: none; }
+.lp-modal-box { width: 100%; max-width: 560px; background: #fff; border-radius: 14px; box-shadow: 0 20px 60px rgba(5, 19, 60, 0.3); overflow: hidden; }
+.lp-modal-box input { width: 100%; border: 0; border-bottom: 1px solid var(--bx-gray-100); padding: 16px 18px; font-size: 15px; outline: none; font-family: inherit; }
+.lp-modal-res { max-height: 46vh; overflow-y: auto; }
+.lp-modal-res a { display: block; padding: 12px 18px; border-bottom: 1px solid var(--bx-gray-100); text-decoration: none; color: var(--bx-navy); }
+.lp-modal-res a:hover { background: #F4F4F5; text-decoration: none; }
+.lp-modal-res .r-t { font-size: 14px; font-weight: 700; }
+.lp-modal-res .r-s { font-size: 12px; color: var(--bx-gray-400); margin-top: 2px; }
+.lp-modal-hint { padding: 10px 18px; font-size: 12px; color: var(--bx-gray-400); }
+
 </style>
 
 {% set bx_user = frappe.session.user or "Guest" %}
@@ -169,7 +186,7 @@ body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wra
         <div class="lp-brand-name">Chamber</div>
         <div class="lp-brand-sub">Lawyer Portal</div>
       </div>
-      <i aria-hidden="true" data-lucide="bell"></i>
+      <a href="/notifications" class="lp-bell" aria-label="Notifications" title="Notifications"><i aria-hidden="true" data-lucide="bell"></i></a>
     </div>
 
     <a href="/case-status" class="lp-searchbox" aria-label="Search cases">
@@ -182,6 +199,13 @@ body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wra
       <a href="/" class="lp-nav-item"><i aria-hidden="true" data-lucide="layout-dashboard"></i>Dashboard</a>
       <a href="/intake" class="lp-nav-item"><i aria-hidden="true" data-lucide="user-plus"></i>Client Intake</a>
       <a href="/case-status" class="lp-nav-item is-active" aria-current="page"><i aria-hidden="true" data-lucide="search"></i>Case Status<span class="lp-dot"></span></a>
+      <a href="/deadlines" class="lp-nav-item"><i aria-hidden="true" data-lucide="alarm-clock"></i>Deadlines</a>
+      <a href="/timeline" class="lp-nav-item"><i aria-hidden="true" data-lucide="milestone"></i>Matter Timeline</a>
+      <a href="/documents" class="lp-nav-item"><i aria-hidden="true" data-lucide="file-text"></i>Documents</a>
+      <a href="/reports" class="lp-nav-item"><i aria-hidden="true" data-lucide="bar-chart-3"></i>Reports</a>
+      <a href="/masters" class="lp-nav-item"><i aria-hidden="true" data-lucide="library"></i>Masters</a>
+      <a href="/notifications" class="lp-nav-item"><i aria-hidden="true" data-lucide="bell"></i>Notifications</a>
+      {% if is_manager %}      <a href="/settings" class="lp-nav-item"><i aria-hidden="true" data-lucide="settings"></i>Settings</a>{% endif %}
       <a href="/workflow" class="lp-nav-item"><i aria-hidden="true" data-lucide="git-branch"></i>Workflow</a>
       <a href="/about" class="lp-nav-item"><i aria-hidden="true" data-lucide="info"></i>About</a>
     </nav>
@@ -240,7 +264,26 @@ body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wra
         <div class="lp-kv"><span class="lp-kv-key">Filing Date</span><span class="lp-kv-val" id="matter-filing-date"></span></div>
         <div class="lp-kv"><span class="lp-kv-key">Priority</span><span class="lp-kv-val" id="matter-priority"></span></div>
         <div class="lp-kv"><span class="lp-kv-key">Description</span><span class="lp-kv-val" id="matter-description"></span></div>
+        <div class="lp-kv"><span class="lp-kv-key">Portal</span><span class="lp-kv-val" id="matter-portal"></span></div>
+        <div class="lp-kv"><span class="lp-kv-key">Portal Status</span><span class="lp-kv-val" id="matter-portal-status"></span></div>
+        <div class="lp-kv"><span class="lp-kv-key">Last Sync</span><span class="lp-kv-val" id="matter-last-sync"></span></div>
+        <div class="lp-kv"><span class="lp-kv-key">eCourts Coverage</span><span class="lp-kv-val" id="matter-coverage"></span></div>
       </div>
+
+      <!-- Portal sync (staff only) -->
+      {% if not is_guest %}
+      <div class="lp-panel lp-section" id="sync-panel" style="display: none;">
+        <h3 class="lp-panel-title"><i aria-hidden="true" data-lucide="refresh-cw"></i> Portal Sync</h3>
+        <p class="lp-panel-desc">Pull the latest status from eCourts for this matter.</p>
+        <div class="lp-actions" style="margin-top: 0;">
+          <button type="button" class="lp-btn lp-btn--mint" id="sync-ec"><i aria-hidden="true" data-lucide="cloud-download"></i> Sync eCourts</button>
+          <button type="button" class="lp-btn lp-btn--ghost" id="sync-ext"><i aria-hidden="true" data-lucide="refresh-cw"></i> Extended sync</button>
+          <button type="button" class="lp-btn lp-btn--ghost" id="sync-cov"><i aria-hidden="true" data-lucide="search-check"></i> Check coverage</button>
+          <a class="lp-btn lp-btn--ghost" id="timeline-link" href="/timeline"><i aria-hidden="true" data-lucide="milestone"></i> Open full timeline</a>
+        </div>
+        <div class="lp-note" id="sync-out" style="margin-top: 12px;"></div>
+      </div>
+      {% endif %}
 
       <!-- Upcoming Hearings -->
       <div class="lp-panel lp-section" id="hearings-panel" style="display: none;">
@@ -270,6 +313,14 @@ body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wra
   </main>
 </div>
 
+<div class="lp-modal" id="bx-search-modal" hidden>
+  <div class="lp-modal-box">
+    <input type="text" id="bx-search-input" placeholder="Search matters by name, case number or CNR..." autocomplete="off">
+    <div class="lp-modal-res" id="bx-search-results"></div>
+    <div class="lp-modal-hint">Enter to search &middot; Esc to close</div>
+  </div>
+</div>
+
 <script src="/assets/chamber/js/lucide.js"></script>
 <script>
   (function () {
@@ -291,7 +342,7 @@ body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wra
         e.preventDefault();
         var inp = document.getElementById("search-input");
         if (inp) { inp.focus(); inp.select(); }
-        else { window.location.href = "/case-status"; }
+        else if (window.bxOpenSearch) { window.bxOpenSearch(); } else { window.location.href = "/case-status"; }
       }
     });
     var lo = document.querySelector(".lp-logout-btn");
@@ -311,7 +362,10 @@ body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wra
 frappe.ready(function() {
   $('#status-form').on('submit', function(e) {
     e.preventDefault();
-    var query = $('#search-input').val().trim();
+    runSearch($('#search-input').val().trim());
+  });
+
+  function runSearch(query) {
     if (!query) return;
 
     $('#results, #no-results').hide();
@@ -334,7 +388,66 @@ frappe.ready(function() {
         $('#no-results').show();
       }
     });
-  });
+  }
+
+  function refreshAfterSync() {
+    var q = $('#search-input').val().trim();
+    if (q) { runSearch(q); }
+  }
+
+  function syncOut(msg, isErr) {
+    $('#sync-out').css('color', isErr ? '#B91C1C' : '').text(msg);
+  }
+
+  function doSync(method, btn) {
+    if (!window.__bxMatter) { return; }
+    var $btn = $(btn);
+    $btn.addClass('lp-btn--busy');
+    frappe.call({
+      method: method,
+      args: { legal_matter: window.__bxMatter },
+      callback: function(r) {
+        $btn.removeClass('lp-btn--busy');
+        var msg = (r.message && (r.message.message || r.message.status)) ? (r.message.message || JSON.stringify(r.message)) : 'Sync completed.';
+        syncOut(msg, false);
+        refreshAfterSync();
+      },
+      error: function(e) {
+        $btn.removeClass('lp-btn--busy');
+        syncOut('Sync failed: ' + ((e && e.message) || 'check Chamber Settings / eCourts App Code'), true);
+      }
+    });
+  }
+
+  var $syncEc = $('#sync-ec');
+  if ($syncEc.length) {
+    $syncEc.on('click', function () { doSync('chamber.api.ecourts.sync', this); });
+    $('#sync-ext').on('click', function () { doSync('chamber.api.ecourts.sync_extended', this); });
+    $('#sync-cov').on('click', function () {
+      if (!window.__bxMatter) { return; }
+      var $btn = $(this);
+      $btn.addClass('lp-btn--busy');
+      frappe.call({
+        method: 'chamber.api.ecourts.check_coverage',
+        args: { legal_matter: window.__bxMatter },
+        callback: function (r) {
+          $btn.removeClass('lp-btn--busy');
+          var cov = r.message;
+          if (cov && typeof cov === 'object') {
+            var val = cov.coverage || cov;
+            syncOut('Coverage: ' + (typeof val === 'string' ? val : JSON.stringify(val)), false);
+          } else {
+            syncOut('Coverage: ' + (cov || 'not available'), false);
+          }
+          refreshAfterSync();
+        },
+        error: function (e) {
+          $btn.removeClass('lp-btn--busy');
+          syncOut('Coverage check failed: ' + ((e && e.message) || 'try again'), true);
+        }
+      });
+    });
+  }
 });
 
 function renderMatter(data) {
@@ -358,6 +471,20 @@ function renderMatter(data) {
   $('#matter-filing-date').text(m.filing_date || '-');
   $('#matter-priority').html('<span style="color:' + (priorityColors[m.priority] || '#333') + '; font-weight:bold;">' + (m.priority || '-') + '</span>');
   $('#matter-description').text(m.description || '-');
+
+  // Portal sync fields
+  $('#matter-portal').text(m.portal || '-');
+  $('#matter-portal-status').text(m.portal_status ? (m.portal_status + (m.portal_status_date ? ' (' + m.portal_status_date + ')' : '')) : '-')
+    .attr('title', m.portal_status_notes || '');
+  $('#matter-last-sync').text(m.last_sync ? (m.last_sync + (m.last_sync_status ? ' — ' + m.last_sync_status : '')) : '-');
+  $('#matter-coverage').text(m.ecourts_coverage || '-');
+
+  if ($('#sync-panel').length && m.name) {
+    window.__bxMatter = m.name;
+    $('#timeline-link').attr('href', '/timeline?matter=' + encodeURIComponent(m.name));
+    $('#sync-out').text('');
+    $('#sync-panel').show();
+  }
 
   // Hearings
   if (data.hearings && data.hearings.length > 0) {
@@ -397,4 +524,46 @@ frappe.ready(function () {
   });
 });
 </script>
+
+<script>
+  (function () {
+    var modal = document.getElementById("bx-search-modal");
+    if (!modal) { return; }
+    var input = document.getElementById("bx-search-input");
+    var results = document.getElementById("bx-search-results");
+    var timer = null;
+    window.bxOpenSearch = function () {
+      modal.hidden = false;
+      input.value = "";
+      results.innerHTML = "";
+      input.focus();
+    };
+    function close() { modal.hidden = true; }
+    function esc(s) { return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+    modal.addEventListener("click", function (e) { if (e.target === modal) { close(); } });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !modal.hidden) { close(); } });
+    function run() {
+      var q = input.value.trim();
+      if (!q) { results.innerHTML = ""; return; }
+      frappe.call({
+        method: "chamber.api.portal.global_search",
+        args: { query: q },
+        callback: function (r) {
+          var rows = (r && r.message) || [];
+          if (!rows.length) { results.innerHTML = '<div class="lp-modal-hint">No matters found.</div>'; return; }
+          results.innerHTML = rows.map(function (m) {
+            return '<a href="/timeline?matter=' + encodeURIComponent(m.name) + '">' +
+              '<div class="r-t">' + esc(m.matter_title || m.name) + '</div>' +
+              '<div class="r-s">' + esc(m.name) + (m.case_number ? " &middot; " + esc(m.case_number) : "") + (m.cnr_number ? " &middot; " + esc(m.cnr_number) : "") + " &middot; " + esc(m.status || "") + '</div></a>';
+          }).join("");
+        },
+        error: function () { results.innerHTML = '<div class="lp-modal-hint">Search failed. Try again.</div>'; }
+      });
+    }
+    input.addEventListener("input", function () { clearTimeout(timer); timer = setTimeout(run, 300); });
+    input.addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); run(); } });
+  })();
+</script>
+
+<script>window.bxIcons = function () { if (window.lucide && lucide.createIcons) { lucide.createIcons(); } };</script>
 {%- endblock -%}

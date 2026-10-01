@@ -5,12 +5,33 @@ import frappe
 def get_context(context):
     context.no_cache = 1
     context.title = "Case Intake Form"
+    context.is_manager = "System Manager" in frappe.get_roles()
+    context.is_guest = frappe.session.user == "Guest"
+    context.submissions = []
     context.verticals = frappe.get_all(
         "Legal Vertical",
         fields=["name", "vertical_name"],
         filters={"enabled": 1},
         order_by="priority asc",
     )
+    if not context.is_guest:
+        try:
+            context.submissions = frappe.get_all(
+                "Intake Submission",
+                fields=["name", "legal_matter", "intake_form_template", "vertical", "submission_date", "status"],
+                order_by="modified desc",
+                limit_page_length=50,
+            )
+            for s in context.submissions:
+                s.responses_list = frappe.get_all(
+                    "Intake Response",
+                    filters={"parenttype": "Intake Submission", "parent": s.name},
+                    fields=["fieldname", "label", "value"],
+                    order_by="idx asc",
+                    limit_page_length=100,
+                )
+        except Exception:
+            context.submissions = []
 
 
 @frappe.whitelist(allow_guest=True)

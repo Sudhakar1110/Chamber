@@ -7,6 +7,7 @@
 {%- block head_include -%}
 {{ super() }}
 <link rel="stylesheet" href="/assets/frappe/css/fonts/fontawesome/font-awesome.min.css">
+
 {%- endblock -%}
 
 {%- block page_content -%}
@@ -67,7 +68,7 @@ body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wra
 .lp-head-actions { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
 
 /* Stat cards */
-.lp-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 24px; }
+.lp-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 20px; margin-bottom: 24px; }
 .lp-stat { background: #fff; border: 1px solid var(--bx-gray-100); border-radius: 12px; padding: 20px; box-shadow: 0 1px 2px rgba(5, 19, 60, 0.04); }
 .lp-stat-top { display: flex; align-items: center; gap: 16px; margin-bottom: 12px; }
 .lp-ico { width: 40px; height: 40px; border-radius: 10px; background: rgba(20, 241, 177, 0.16); color: var(--bx-navy); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
@@ -77,6 +78,22 @@ body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wra
 .lp-stat-label { font-size: 12px; font-weight: 600; letter-spacing: 0.6px; text-transform: uppercase; color: var(--bx-gray-400); }
 .lp-stat-num { font-size: 32px; font-weight: 700; line-height: 1.1; color: var(--bx-navy); }
 .lp-stat-note { font-size: 12px; color: var(--bx-gray-400); margin-top: 6px; }
+
+/* Charts */
+.lp-charts { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; margin-bottom: 24px; }
+.lp-chart { background: #fff; border: 1px solid var(--bx-gray-100); border-radius: 12px; padding: 20px 22px; box-shadow: 0 1px 2px rgba(5, 19, 60, 0.04); }
+.lp-chart-title { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 700; color: var(--bx-navy); margin: 0 0 14px; }
+.lp-chart-title .lucide { width: 16px; height: 16px; color: var(--bx-blue); }
+.lp-bars { display: flex; flex-direction: column; gap: 9px; }
+.lp-bar-row { display: grid; grid-template-columns: 1fr auto; gap: 4px 10px; font-size: 12px; color: var(--bx-navy); }
+.lp-bar-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lp-bar-val { color: var(--bx-gray-400); font-weight: 600; }
+.lp-bar-track { grid-column: 1 / -1; height: 7px; border-radius: 999px; background: var(--bx-gray-100); overflow: hidden; }
+.lp-bar-fill { height: 100%; border-radius: 999px; background: var(--bx-blue); }
+.lp-bar-fill--mint { background: var(--bx-mint); }
+.lp-cols { display: flex; align-items: flex-end; gap: 4px; height: 110px; }
+.lp-col { flex: 1; min-width: 5px; background: var(--bx-mint); border-radius: 4px 4px 0 0; min-height: 3px; }
+.lp-col-x { display: flex; justify-content: space-between; font-size: 10px; color: var(--bx-gray-400); margin-top: 6px; }
 
 /* Panels */
 .lp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
@@ -109,6 +126,7 @@ body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wra
 .lp-pill--mint { background: var(--bx-mint); color: var(--bx-navy); }
 .lp-pill--blue { background: rgba(17, 78, 255, 0.1); color: var(--bx-blue); }
 .lp-pill--navy { background: var(--bx-navy); color: #fff; }
+.lp-pill--red { background: rgba(220, 38, 38, 0.12); color: #DC2626; }
 .lp-due { color: #DC2626; font-weight: 600; }
 
 /* Buttons */
@@ -145,6 +163,22 @@ body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wra
   .lp-stats, .lp-grid { grid-template-columns: 1fr; }
   .lp-h1 { font-size: 26px; }
 }
+/* Search overlay */
+/* bell link */
+.lp-bell { display: inline-flex; align-items: center; justify-content: center; color: var(--bx-navy); }
+.lp-bell:hover { color: #0E9F7E; text-decoration: none; }
+.lp-bell .lucide { width: 17px; height: 17px; }
+.lp-modal { position: fixed; inset: 0; background: rgba(5, 19, 60, 0.55); z-index: 1000; display: flex; align-items: flex-start; justify-content: center; padding: 12vh 20px 20px; }
+.lp-modal[hidden] { display: none; }
+.lp-modal-box { width: 100%; max-width: 560px; background: #fff; border-radius: 14px; box-shadow: 0 20px 60px rgba(5, 19, 60, 0.3); overflow: hidden; }
+.lp-modal-box input { width: 100%; border: 0; border-bottom: 1px solid var(--bx-gray-100); padding: 16px 18px; font-size: 15px; outline: none; font-family: inherit; }
+.lp-modal-res { max-height: 46vh; overflow-y: auto; }
+.lp-modal-res a { display: block; padding: 12px 18px; border-bottom: 1px solid var(--bx-gray-100); text-decoration: none; color: var(--bx-navy); }
+.lp-modal-res a:hover { background: #F4F4F5; text-decoration: none; }
+.lp-modal-res .r-t { font-size: 14px; font-weight: 700; }
+.lp-modal-res .r-s { font-size: 12px; color: var(--bx-gray-400); margin-top: 2px; }
+.lp-modal-hint { padding: 10px 18px; font-size: 12px; color: var(--bx-gray-400); }
+
 </style>
 
 {% set bx_user = frappe.session.user or "Guest" %}
@@ -157,7 +191,7 @@ body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wra
         <div class="lp-brand-name">Chamber</div>
         <div class="lp-brand-sub">Lawyer Portal</div>
       </div>
-      <i aria-hidden="true" data-lucide="bell"></i>
+      <a href="/notifications" class="lp-bell" aria-label="Notifications" title="Notifications"><i aria-hidden="true" data-lucide="bell"></i></a>
     </div>
 
     <a href="/case-status" class="lp-searchbox" aria-label="Search cases">
@@ -167,9 +201,16 @@ body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wra
     </a>
 
     <nav class="lp-nav">
-      <a href="/" class="lp-nav-item is-active" aria-current="page"><i aria-hidden="true" data-lucide="layout-dashboard"></i>Dashboard<span class="lp-dot"></span></a>
+      <a href="/" class="lp-nav-item is-active" aria-current="page"><i aria-hidden="true" data-lucide="layout-dashboard"></i>Dashboard</a>
       <a href="/intake" class="lp-nav-item"><i aria-hidden="true" data-lucide="user-plus"></i>Client Intake</a>
-      <a href="/case-status" class="lp-nav-item"><i aria-hidden="true" data-lucide="search"></i>Case Status</a>
+      <a href="/case-status" class="lp-nav-item"><i aria-hidden="true" data-lucide="search"></i>Case Status<span class="lp-dot"></span></a>
+      <a href="/deadlines" class="lp-nav-item"><i aria-hidden="true" data-lucide="alarm-clock"></i>Deadlines</a>
+      <a href="/timeline" class="lp-nav-item"><i aria-hidden="true" data-lucide="milestone"></i>Matter Timeline</a>
+      <a href="/documents" class="lp-nav-item"><i aria-hidden="true" data-lucide="file-text"></i>Documents</a>
+      <a href="/reports" class="lp-nav-item"><i aria-hidden="true" data-lucide="bar-chart-3"></i>Reports</a>
+      <a href="/masters" class="lp-nav-item"><i aria-hidden="true" data-lucide="library"></i>Masters</a>
+      <a href="/notifications" class="lp-nav-item"><i aria-hidden="true" data-lucide="bell"></i>Notifications</a>
+      {% if is_manager %}      <a href="/settings" class="lp-nav-item"><i aria-hidden="true" data-lucide="settings"></i>Settings</a>{% endif %}
       <a href="/workflow" class="lp-nav-item"><i aria-hidden="true" data-lucide="git-branch"></i>Workflow</a>
       <a href="/about" class="lp-nav-item"><i aria-hidden="true" data-lucide="info"></i>About</a>
     </nav>
@@ -208,24 +249,104 @@ body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wra
       </div>
       <div class="lp-stat">
         <div class="lp-stat-top">
-          <div class="lp-ico lp-ico--blue"><i aria-hidden="true" data-lucide="gavel"></i></div>
+          <div class="lp-ico lp-ico--blue"><i aria-hidden="true" data-lucide="scale"></i></div>
+          <div class="lp-stat-label">Total matters</div>
+        </div>
+        <div class="lp-stat-num">{{ total_matters | default(0) }}</div>
+      </div>
+      <div class="lp-stat">
+        <div class="lp-stat-top">
+          <div class="lp-ico"><i aria-hidden="true" data-lucide="gavel"></i></div>
           <div class="lp-stat-label">Today's hearings</div>
         </div>
         <div class="lp-stat-num">{{ (today_hearings | default([])) | length }}</div>
       </div>
       <div class="lp-stat">
         <div class="lp-stat-top">
-          <div class="lp-ico"><i aria-hidden="true" data-lucide="file-text"></i></div>
+          <div class="lp-ico lp-ico--blue"><i aria-hidden="true" data-lucide="file-text"></i></div>
           <div class="lp-stat-label">Docs to review</div>
         </div>
         <div class="lp-stat-num">{{ docs_to_review | default(0) }}</div>
       </div>
       <div class="lp-stat">
         <div class="lp-stat-top">
-          <div class="lp-ico lp-ico--blue"><i aria-hidden="true" data-lucide="inbox"></i></div>
+          <div class="lp-ico"><i aria-hidden="true" data-lucide="inbox"></i></div>
           <div class="lp-stat-label">Intake pending</div>
         </div>
         <div class="lp-stat-num">{{ pending_intake | default(0) }}</div>
+      </div>
+      <div class="lp-stat">
+        <div class="lp-stat-top">
+          <div class="lp-ico lp-ico--blue"><i aria-hidden="true" data-lucide="banknote"></i></div>
+          <div class="lp-stat-label">Court fees paid</div>
+        </div>
+        <div class="lp-stat-num">{{ court_fees_paid | default(0) }}</div>
+      </div>
+      <div class="lp-stat">
+        <div class="lp-stat-top">
+          <div class="lp-ico"><i aria-hidden="true" data-lucide="pen-line"></i></div>
+          <div class="lp-stat-label">Pending signatures</div>
+        </div>
+        <div class="lp-stat-num">{{ pending_signatures | default(0) }}</div>
+      </div>
+      <div class="lp-stat">
+        <div class="lp-stat-top">
+          <div class="lp-ico lp-ico--blue"><i aria-hidden="true" data-lucide="shield"></i></div>
+          <div class="lp-stat-label">Active caveats</div>
+        </div>
+        <div class="lp-stat-num">{{ caveats_active | default(0) }}</div>
+      </div>
+      <div class="lp-stat">
+        <div class="lp-stat-top">
+          <div class="lp-ico"><i aria-hidden="true" data-lucide="clock"></i></div>
+          <div class="lp-stat-label">Overdue deadlines</div>
+        </div>
+        <div class="lp-stat-num">{{ overdue_deadlines | default(0) }}</div>
+      </div>
+    </div>
+
+    <!-- Charts -->
+    <div class="lp-charts">
+      <div class="lp-chart">
+        <h3 class="lp-chart-title"><i aria-hidden="true" data-lucide="bar-chart-3"></i> Matters by Vertical</h3>
+        <div class="lp-bars">
+          {% for v in by_vertical | default([]) %}
+          <div class="lp-bar-row">
+            <span class="lp-bar-label">{{ v.label }}</span>
+            <span class="lp-bar-val">{{ v.value }}</span>
+            <div class="lp-bar-track"><div class="lp-bar-fill" style="width: {{ v.pct }}%;"></div></div>
+          </div>
+          {% else %}
+          <p class="lp-row-sub" style="margin: 0;">No matter data yet.</p>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="lp-chart">
+        <h3 class="lp-chart-title"><i aria-hidden="true" data-lucide="chart-column"></i> Matters by Status</h3>
+        <div class="lp-bars">
+          {% for v in by_status | default([]) %}
+          <div class="lp-bar-row">
+            <span class="lp-bar-label">{{ v.label }}</span>
+            <span class="lp-bar-val">{{ v.value }}</span>
+            <div class="lp-bar-track"><div class="lp-bar-fill lp-bar-fill--mint" style="width: {{ v.pct }}%;"></div></div>
+          </div>
+          {% else %}
+          <p class="lp-row-sub" style="margin: 0;">No matter data yet.</p>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="lp-chart">
+        <h3 class="lp-chart-title"><i aria-hidden="true" data-lucide="line-chart"></i> Hearings — Next 30 Days</h3>
+        <div class="lp-cols">
+          {% for h in hearings30 | default([]) %}
+          <div class="lp-col" style="height: {{ [h.pct, 6] | max }}%;" title="{{ h.label }}: {{ h.value }}"></div>
+          {% else %}
+          <p class="lp-row-sub" style="margin: 0;">No hearings scheduled.</p>
+          {% endfor %}
+        </div>
+        {% if hearings30 %}
+        <div class="lp-col-x"><span>{{ hearings30[0].label }}</span><span>{{ hearings30[-1].label }}</span></div>
+        {% endif %}
       </div>
     </div>
 
@@ -309,7 +430,41 @@ body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wra
         {% endfor %}
       </div>
     </div>
+
+    <!-- Upcoming Deadlines -->
+    <div class="lp-panel lp-section">
+      <h3 class="lp-panel-title"><i aria-hidden="true" data-lucide="alarm-clock"></i> Upcoming Deadlines</h3>
+      {% for d in deadlines | default([]) %}
+      <div class="lp-row">
+        <div class="lp-ico{% if loop.index0 % 2 %} lp-ico--blue{% endif %}"><i aria-hidden="true" data-lucide="clock"></i></div>
+        <div class="lp-row-body">
+          <div class="lp-row-title">{{ d.label }}</div>
+          <div class="lp-row-sub">{{ d.matter }}{% if d.matter_title %} &middot; {{ d.matter_title }}{% endif %}</div>
+        </div>
+        <div class="lp-row-side">
+          <span class="{{ 'lp-pill lp-pill--red' if d.band_status == 'expired' else ('lp-pill lp-pill--mint' if d.band_status == 'ok' else ('lp-pill lp-pill--blue' if d.band_status in ('warning', 'critical') else 'lp-pill')) }}">{{ d.deadline_type }}</span>
+          <span class="lp-row-date">{{ d.date }}{% if d.days_left is defined %} &middot; {{ d.days_left }}d left{% endif %}</span>
+        </div>
+      </div>
+      {% else %}
+      <div class="lp-empty">
+        <div class="lp-empty-ico"><i aria-hidden="true" data-lucide="alarm-clock"></i></div>
+        <p>No deadlines in the next 90 days</p>
+      </div>
+      {% endfor %}
+      <div style="margin-top: 16px;">
+        <a href="/deadlines" class="lp-btn lp-btn--ghost"><i aria-hidden="true" data-lucide="arrow-right"></i> Open Deadline Tracker</a>
+      </div>
+    </div>
   </main>
+</div>
+
+<div class="lp-modal" id="bx-search-modal" hidden>
+  <div class="lp-modal-box">
+    <input type="text" id="bx-search-input" placeholder="Search matters by name, case number or CNR..." autocomplete="off">
+    <div class="lp-modal-res" id="bx-search-results"></div>
+    <div class="lp-modal-hint">Enter to search &middot; Esc to close</div>
+  </div>
 </div>
 
 <script src="/assets/chamber/js/lucide.js"></script>
@@ -333,7 +488,7 @@ body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wra
         e.preventDefault();
         var inp = document.getElementById("search-input");
         if (inp) { inp.focus(); inp.select(); }
-        else { window.location.href = "/case-status"; }
+        else if (window.bxOpenSearch) { window.bxOpenSearch(); } else { window.location.href = "/case-status"; }
       }
     });
     var lo = document.querySelector(".lp-logout-btn");
@@ -348,4 +503,46 @@ body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wra
     }
   })();
 </script>
+
+<script>
+  (function () {
+    var modal = document.getElementById("bx-search-modal");
+    if (!modal) { return; }
+    var input = document.getElementById("bx-search-input");
+    var results = document.getElementById("bx-search-results");
+    var timer = null;
+    window.bxOpenSearch = function () {
+      modal.hidden = false;
+      input.value = "";
+      results.innerHTML = "";
+      input.focus();
+    };
+    function close() { modal.hidden = true; }
+    function esc(s) { return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+    modal.addEventListener("click", function (e) { if (e.target === modal) { close(); } });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !modal.hidden) { close(); } });
+    function run() {
+      var q = input.value.trim();
+      if (!q) { results.innerHTML = ""; return; }
+      frappe.call({
+        method: "chamber.api.portal.global_search",
+        args: { query: q },
+        callback: function (r) {
+          var rows = (r && r.message) || [];
+          if (!rows.length) { results.innerHTML = '<div class="lp-modal-hint">No matters found.</div>'; return; }
+          results.innerHTML = rows.map(function (m) {
+            return '<a href="/timeline?matter=' + encodeURIComponent(m.name) + '">' +
+              '<div class="r-t">' + esc(m.matter_title || m.name) + '</div>' +
+              '<div class="r-s">' + esc(m.name) + (m.case_number ? " &middot; " + esc(m.case_number) : "") + (m.cnr_number ? " &middot; " + esc(m.cnr_number) : "") + " &middot; " + esc(m.status || "") + '</div></a>';
+          }).join("");
+        },
+        error: function () { results.innerHTML = '<div class="lp-modal-hint">Search failed. Try again.</div>'; }
+      });
+    }
+    input.addEventListener("input", function () { clearTimeout(timer); timer = setTimeout(run, 300); });
+    input.addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); run(); } });
+  })();
+</script>
+
+<script>window.bxIcons = function () { if (window.lucide && lucide.createIcons) { lucide.createIcons(); } };</script>
 {%- endblock -%}

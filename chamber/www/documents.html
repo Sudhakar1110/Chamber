@@ -1,0 +1,747 @@
+{%- extends "templates/web.html" -%}
+
+{% block favicon %}
+<link rel="shortcut icon" href="/assets/chamber/images/ba-logo.jpeg" type="image/jpeg">
+{% endblock %}
+
+{%- block head_include -%}
+{{ super() }}
+<link rel="stylesheet" href="/assets/frappe/css/fonts/fontawesome/font-awesome.min.css">
+
+{%- endblock -%}
+
+{%- block page_content -%}
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
+
+:root {
+  --bx-navy: #05133C;
+  --bx-navy-base: #091526;
+  --bx-mint: #14F1B1;
+  --bx-blue: #114EFF;
+  --bx-gray-100: #F4F4F5;
+  --bx-gray-400: #71717B;
+  --bx-gradient: linear-gradient(90deg, #14F1B1 0%, #114EFF 50%, #091526 100%);
+}
+
+/* ── Hide default Frappe website chrome on portal pages ── */
+body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wrapper, .page-footer { display: none !important; }
+
+/* ── App shell ── */
+.lp { position: fixed; top: 0; right: 0; bottom: 0; left: 0; display: flex; background: #FAFAFB; font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: var(--bx-navy); }
+
+/* Sidebar */
+.lp-side { width: 268px; flex-shrink: 0; background: var(--bx-navy); display: flex; flex-direction: column; padding: 22px 16px 18px; overflow-y: auto; }
+.lp-brand { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; padding: 0 6px; }
+.lp-logo { width: 38px; height: 38px; border-radius: 11px; background: var(--bx-navy); overflow: hidden; display: flex; align-items: center; justify-content: center; flex-shrink: 0; padding: 0; }
+.lp-logo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.lp-brand-txt { flex: 1; min-width: 0; }
+.lp-brand-name { color: #fff; font-size: 15px; font-weight: 700; line-height: 1.2; }
+.lp-brand-sub { color: rgba(255, 255, 255, 0.5); font-size: 12px; margin-top: 2px; }
+.lp-brand .lucide { width: 18px; height: 18px; color: rgba(255, 255, 255, 0.7); flex-shrink: 0; }
+.lp-searchbox { display: flex; align-items: center; gap: 10px; height: 42px; padding: 0 12px; border-radius: 10px; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.1); color: rgba(255, 255, 255, 0.45); font-size: 14px; margin-bottom: 22px; text-decoration: none; transition: background 0.15s, color 0.15s; }
+.lp-searchbox:hover { background: rgba(255, 255, 255, 0.12); color: rgba(255, 255, 255, 0.75); text-decoration: none; }
+.lp-searchbox .lucide { width: 16px; height: 16px; }
+.lp-searchbox .lp-search-ico { width: 18px; height: 18px; border-radius: 5px; object-fit: cover; flex-shrink: 0; }
+.lp-kbd { margin-left: auto; background: rgba(255, 255, 255, 0.1); border-radius: 6px; padding: 2px 7px; font-size: 11px; color: rgba(255, 255, 255, 0.55); }
+.lp-nav { display: flex; flex-direction: column; gap: 4px; }
+.lp-nav-item { display: flex; align-items: center; gap: 16px; padding: 11px 14px; border-radius: 10px; color: rgba(255, 255, 255, 0.72); font-size: 14px; font-weight: 500; text-decoration: none; transition: background 0.15s, color 0.15s; }
+.lp-nav-item:hover { background: rgba(255, 255, 255, 0.07); color: #fff; text-decoration: none; }
+.lp-nav-item.is-active, .lp-nav-item.is-active:hover { background: var(--bx-mint); color: var(--bx-navy); font-weight: 700; }
+.lp-nav-item .lucide { width: 20px; height: 20px; flex-shrink: 0; }
+.lp-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(5, 19, 60, 0.65); margin-left: auto; }
+.lp-user { display: flex; align-items: center; gap: 12px; padding: 14px 8px 2px; margin-top: auto; border-top: 1px solid rgba(255, 255, 255, 0.1); }
+.lp-avatar { width: 34px; height: 34px; border-radius: 50%; background: var(--bx-mint); color: var(--bx-navy); font-weight: 700; font-size: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.lp-user-txt { flex: 1; min-width: 0; }
+.lp-user-name { color: #fff; font-size: 14px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lp-user-role { color: rgba(255, 255, 255, 0.5); font-size: 12px; }
+.lp-user .lucide { width: 16px; height: 16px; color: rgba(255, 255, 255, 0.5); flex-shrink: 0; }
+.lp-user-act { font-size: 12px; font-weight: 700; color: var(--bx-mint); background: none; border: 0; padding: 0; cursor: pointer; text-decoration: none; white-space: nowrap; font-family: inherit; }
+.lp-user-act:hover { text-decoration: underline; }
+
+/* Main */
+.lp-main { flex: 1; min-width: 0; overflow-y: auto; padding: 40px 44px 56px; }
+.lp-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; flex-wrap: wrap; margin-bottom: 28px; }
+.lp-h1 { font-size: 36px; font-weight: 700; letter-spacing: -0.5px; color: var(--bx-navy); margin: 0 0 6px; display: flex; align-items: center; gap: 12px; line-height: 1.15; }
+.lp-h1 .lucide { width: 30px; height: 30px; color: var(--bx-blue); flex-shrink: 0; }
+.lp-sub { font-size: 16px; color: var(--bx-gray-400); margin: 0; }
+.lp-head-actions { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+
+/* Panels */
+.lp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+.lp-panel { background: #fff; border: 1px solid var(--bx-gray-100); border-radius: 12px; padding: 22px 24px; box-shadow: 0 1px 2px rgba(5, 19, 60, 0.04); }
+.lp-panel + .lp-panel, .lp-section + .lp-section { margin-top: 20px; }
+.lp-grid .lp-panel + .lp-panel { margin-top: 0; }
+.lp-panel-title { display: flex; align-items: center; gap: 10px; font-size: 17px; font-weight: 700; color: var(--bx-navy); margin: 0 0 14px; }
+.lp-panel-title .lucide { width: 20px; height: 20px; color: var(--bx-blue); flex-shrink: 0; }
+.lp-panel-desc { font-size: 14px; color: var(--bx-gray-400); margin: -6px 0 16px; }
+.lp-section { margin-bottom: 24px; }
+
+/* List rows */
+.lp-row { display: flex; align-items: center; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--bx-gray-100); }
+.lp-row:last-child { border-bottom: none; }
+.lp-row:first-child { padding-top: 2px; }
+.lp-row-body { flex: 1; min-width: 0; }
+.lp-row-title { font-size: 15px; font-weight: 700; color: var(--bx-navy); }
+.lp-row-sub { font-size: 13px; color: var(--bx-gray-400); margin-top: 3px; line-height: 1.5; }
+.lp-row-side { flex-shrink: 0; }
+
+/* Pills */
+.lp-pill { display: inline-block; padding: 3px 12px; border-radius: 999px; font-size: 12px; font-weight: 600; background: var(--bx-gray-100); color: var(--bx-navy); white-space: nowrap; }
+.lp-pill--mint { background: var(--bx-mint); color: var(--bx-navy); }
+.lp-pill--blue { background: rgba(17, 78, 255, 0.1); color: var(--bx-blue); }
+
+/* Buttons */
+.lp-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; padding: 8px 18px; border-radius: 10px; font-size: 14px; font-weight: 700; border: 1px solid transparent; cursor: pointer; text-decoration: none; transition: all 0.2s; }
+.lp-btn .lucide { width: 16px; height: 16px; flex-shrink: 0; }
+.lp-btn--mint { background: var(--bx-mint); color: var(--bx-navy); }
+.lp-btn--mint:hover { filter: brightness(0.95); text-decoration: none; }
+.lp-btn--navy { background: var(--bx-navy); color: #fff; }
+.lp-btn--navy:hover { background: var(--bx-navy-base); color: #fff; text-decoration: none; }
+
+/* Icons */
+.lp-ico { width: 40px; height: 40px; border-radius: 10px; background: rgba(20, 241, 177, 0.16); color: var(--bx-navy); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.lp-ico .lucide { width: 20px; height: 20px; }
+.lp-ico--blue { background: rgba(17, 78, 255, 0.1); color: var(--bx-blue); }
+.lp-ico--navy { background: var(--bx-navy); color: var(--bx-mint); }
+
+
+/* Page kit */
+.lp-filters { display: flex; flex-wrap: wrap; gap: 14px; align-items: flex-end; }
+.lp-filters .form-group { margin: 0; min-width: 160px; }
+.lp-filters .form-group.grow { flex: 1; min-width: 220px; }
+.lp-btn--busy { opacity: 0.6; pointer-events: none; }
+.lp-table-wrap { overflow-x: auto; }
+.lp-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.lp-table th { text-align: left; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--bx-gray-400); padding: 8px 10px; border-bottom: 2px solid var(--bx-mint); white-space: nowrap; }
+.lp-table td { padding: 10px; border-bottom: 1px solid var(--bx-gray-100); color: #000; vertical-align: top; }
+.lp-table tr.clickable { cursor: pointer; }
+.lp-table tr.clickable:hover td { background: #F8FAFF; }
+.lp-table tr.is-selected td { background: rgba(20, 241, 177, 0.1); }
+.lp-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
+.lp-tab { padding: 8px 16px; border-radius: 999px; font-size: 13px; font-weight: 700; background: #fff; border: 1px solid var(--bx-gray-100); color: var(--bx-navy); cursor: pointer; font-family: inherit; }
+.lp-tab.is-active { background: var(--bx-navy); color: #fff; border-color: var(--bx-navy); }
+.lp-chiprow { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+.lp-chip { display: inline-block; padding: 5px 13px; border-radius: 999px; background: var(--bx-gray-100); font-size: 12px; font-weight: 700; color: var(--bx-navy); }
+.lp-kv { display: grid; grid-template-columns: 170px 1fr; gap: 7px 14px; font-size: 14px; margin: 0; }
+.lp-kv dt { color: var(--bx-gray-400); font-weight: 600; }
+.lp-kv dd { margin: 0; color: var(--bx-navy); word-break: break-word; }
+.lp-band { border: 1px solid var(--bx-gray-100); border-radius: 10px; padding: 12px 14px; margin-bottom: 10px; }
+.lp-band-h { display: flex; justify-content: space-between; gap: 10px; font-size: 14px; font-weight: 700; }
+.lp-band-n { font-size: 12px; color: var(--bx-gray-400); margin-top: 4px; }
+.lp-band--expired { border-color: rgba(220, 38, 38, 0.4); background: rgba(220, 38, 38, 0.05); }
+.lp-band--critical { border-color: rgba(220, 38, 38, 0.25); background: rgba(220, 38, 38, 0.03); }
+.lp-band--warning { border-color: rgba(17, 78, 255, 0.3); background: rgba(17, 78, 255, 0.04); }
+.lp-band--ok { border-color: rgba(20, 241, 177, 0.5); background: rgba(20, 241, 177, 0.07); }
+.lp-pre { background: #0B1220; color: #D7E3F4; border-radius: 10px; padding: 16px 18px; font-size: 13px; white-space: pre-wrap; word-break: break-word; max-height: 420px; overflow-y: auto; font-family: ui-monospace, Consolas, monospace; }
+.lp-note { font-size: 13px; color: var(--bx-gray-400); }
+.lp-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+.lp-msg { border-radius: 10px; padding: 12px 16px; font-size: 14px; margin-bottom: 16px; }
+.lp-msg--ok { background: rgba(20, 241, 177, 0.14); color: var(--bx-navy); }
+.lp-msg--err { background: rgba(220, 38, 38, 0.1); color: #B91C1C; }
+.lp-grid3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 24px; }
+.lp-mchip { display: inline-block; padding: 5px 12px; border-radius: 999px; background: var(--bx-gray-100); font-size: 12px; font-weight: 600; color: var(--bx-navy); margin: 0 6px 6px 0; }
+.lp-signin { text-align: center; padding: 48px 16px; }
+.lp-signin .lucide { width: 34px; height: 34px; color: var(--bx-gray-400); }
+.lp-signin h4 { font-size: 17px; color: var(--bx-navy); margin: 14px 0 6px; }
+.lp-signin p { font-size: 14px; color: var(--bx-gray-400); margin: 0 0 18px; }
+
+
+.dc-result { margin-top: 16px; border-top: 1px dashed var(--bx-gray-100); padding-top: 16px; }
+.dc-link { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; color: var(--bx-navy); text-decoration: underline; }
+.dc-link .lucide { width: 15px; height: 15px; }
+.dc-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+@media (max-width: 992px) {
+  .lp { flex-direction: column; }
+  .lp-side { width: 100%; max-height: 46vh; }
+  .lp-main { padding: 26px 20px 40px; }
+  .lp-grid { grid-template-columns: 1fr; }
+  .lp-h1 { font-size: 26px; }
+}
+/* Search overlay */
+/* bell link */
+.lp-bell { display: inline-flex; align-items: center; justify-content: center; color: var(--bx-navy); }
+.lp-bell:hover { color: #0E9F7E; text-decoration: none; }
+.lp-bell .lucide { width: 17px; height: 17px; }
+.lp-modal { position: fixed; inset: 0; background: rgba(5, 19, 60, 0.55); z-index: 1000; display: flex; align-items: flex-start; justify-content: center; padding: 12vh 20px 20px; }
+.lp-modal[hidden] { display: none; }
+.lp-modal-box { width: 100%; max-width: 560px; background: #fff; border-radius: 14px; box-shadow: 0 20px 60px rgba(5, 19, 60, 0.3); overflow: hidden; }
+.lp-modal-box input { width: 100%; border: 0; border-bottom: 1px solid var(--bx-gray-100); padding: 16px 18px; font-size: 15px; outline: none; font-family: inherit; }
+.lp-modal-res { max-height: 46vh; overflow-y: auto; }
+.lp-modal-res a { display: block; padding: 12px 18px; border-bottom: 1px solid var(--bx-gray-100); text-decoration: none; color: var(--bx-navy); }
+.lp-modal-res a:hover { background: #F4F4F5; text-decoration: none; }
+.lp-modal-res .r-t { font-size: 14px; font-weight: 700; }
+.lp-modal-res .r-s { font-size: 12px; color: var(--bx-gray-400); margin-top: 2px; }
+.lp-modal-hint { padding: 10px 18px; font-size: 12px; color: var(--bx-gray-400); }
+
+
+
+</style>
+
+{% set bx_user = frappe.session.user or "Guest" %}
+<div class="lp">
+  <!-- ── Sidebar ── -->
+  <aside class="lp-side">
+    <div class="lp-brand">
+      <div class="lp-logo"><img src="/assets/chamber/images/ba-logo.jpeg" alt="Chamber"></div>
+      <div class="lp-brand-txt">
+        <div class="lp-brand-name">Chamber</div>
+        <div class="lp-brand-sub">Lawyer Portal</div>
+      </div>
+      <a href="/notifications" class="lp-bell" aria-label="Notifications" title="Notifications"><i aria-hidden="true" data-lucide="bell"></i></a>
+    </div>
+
+    <a href="/case-status" class="lp-searchbox" aria-label="Search cases">
+      <img class="lp-search-ico" src="/assets/chamber/images/ba-logo.jpeg" alt="">
+      <span>Search cases...</span>
+      <span class="lp-kbd">Ctrl K</span>
+    </a>
+
+    <nav class="lp-nav">
+      <a href="/" class="lp-nav-item"><i aria-hidden="true" data-lucide="layout-dashboard"></i>Dashboard</a>
+      <a href="/intake" class="lp-nav-item"><i aria-hidden="true" data-lucide="user-plus"></i>Client Intake</a>
+      <a href="/case-status" class="lp-nav-item"><i aria-hidden="true" data-lucide="search"></i>Case Status<span class="lp-dot"></span></a>
+      <a href="/deadlines" class="lp-nav-item"><i aria-hidden="true" data-lucide="alarm-clock"></i>Deadlines</a>
+      <a href="/timeline" class="lp-nav-item"><i aria-hidden="true" data-lucide="milestone"></i>Matter Timeline</a>
+      <a href="/documents" class="lp-nav-item is-active" aria-current="page"><i aria-hidden="true" data-lucide="file-text"></i>Documents</a>
+      <a href="/reports" class="lp-nav-item"><i aria-hidden="true" data-lucide="bar-chart-3"></i>Reports</a>
+      <a href="/masters" class="lp-nav-item"><i aria-hidden="true" data-lucide="library"></i>Masters</a>
+      <a href="/notifications" class="lp-nav-item"><i aria-hidden="true" data-lucide="bell"></i>Notifications</a>
+      {% if is_manager %}      <a href="/settings" class="lp-nav-item"><i aria-hidden="true" data-lucide="settings"></i>Settings</a>{% endif %}
+      <a href="/workflow" class="lp-nav-item"><i aria-hidden="true" data-lucide="git-branch"></i>Workflow</a>
+      <a href="/about" class="lp-nav-item"><i aria-hidden="true" data-lucide="info"></i>About</a>
+    </nav>
+
+    <div class="lp-user">
+      <div class="lp-avatar">{{ bx_user[0] | upper }}</div>
+      <div class="lp-user-txt">
+        <div class="lp-user-name">{{ bx_user.split("@")[0] }}</div>
+        <div class="lp-user-role">{% if bx_user == "Guest" %}Not signed in{% else %}Firm staff{% endif %}</div>
+      </div>
+      {% if bx_user == "Guest" %}
+      <a href="/login" class="lp-user-act">Sign in</a>
+      {% else %}
+      <button type="button" class="lp-user-act lp-logout-btn">Log out</button>
+      {% endif %}
+    </div>
+  </aside>
+    <script>window.bxIsGuest = {{ 1 if bx_user == "Guest" else 0 }}; window.bxIsManager = {{ 1 if is_manager else 0 }};</script>
+
+  <!-- ── Main ── -->
+  <main class="lp-main">
+
+    <div class="lp-head">
+      <div>
+        <h1 class="lp-h1"><i aria-hidden="true" data-lucide="file-text"></i> Documents</h1>
+        <p class="lp-sub">Draft from templates, manage the document library, run AI tools and send for signature.</p>
+      </div>
+    </div>
+
+    {% if is_guest %}
+    <div class="lp-panel lp-section lp-signin">
+      <i aria-hidden="true" data-lucide="key"></i>
+      <h4>Sign in to work with documents</h4>
+      <p>Document drafting, AI tools and e-signature are available to signed-in members.</p>
+      <a href="/login" class="lp-btn lp-btn--mint">Sign in</a>
+    </div>
+    {% else %}
+    <div class="lp-panel lp-section">
+      <div class="lp-filters">
+        <div class="form-group grow">
+          <label for="dc-matter">Matter</label>
+          <select id="dc-matter" class="form-control">
+            {% for m in matters | default([]) %}
+            <option value="{{ m.name }}" {% if m.name == preselect %}selected{% endif %}>{{ m.matter_title or m.name }} — {{ m.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <button class="lp-btn lp-btn--ghost" id="dc-refresh" type="button"><i aria-hidden="true" data-lucide="refresh-cw"></i> Refresh</button>
+      </div>
+    </div>
+
+    <div class="lp-tabs" id="dc-tabs">
+      <button type="button" class="lp-tab is-active" data-tab="compose">Compose</button>
+      <button type="button" class="lp-tab" data-tab="library">Document library</button>
+      <button type="button" class="lp-tab" data-tab="ai">AI tools</button>
+      <button type="button" class="lp-tab" data-tab="esign">E-Signature</button>
+    </div>
+
+    <div class="lp-panel lp-section" id="tab-compose">
+      <h3 class="lp-panel-title"><i aria-hidden="true" data-lucide="square-pen"></i> Draft a document</h3>
+      <div class="lp-filters">
+        <div class="form-group grow">
+          <label for="dc-template">Template</label>
+          <select id="dc-template" class="form-control"><option value="">Select a matter first</option></select>
+        </div>
+        <div class="form-group grow">
+          <label for="dc-title">Title</label>
+          <input type="text" id="dc-title" class="form-control" placeholder="Document title (defaults to template name)">
+        </div>
+      </div>
+      <div class="form-group" style="margin-top: 12px;">
+        <label><input type="checkbox" id="dc-useai"> Draft with Neethi AI</label>
+        <textarea id="dc-ai-instructions" class="form-control" rows="2" style="margin-top: 8px;" placeholder="AI instructions, e.g. claim Rs. 5,00,000 under Sec. 138..."></textarea>
+      </div>
+      <div class="dc-actions">
+        <button class="lp-btn lp-btn--mint" id="dc-render" type="button"><i aria-hidden="true" data-lucide="play"></i> Render document</button>
+      </div>
+      <div class="dc-result" id="dc-compose-result" style="display: none;"></div>
+    </div>
+
+    <div class="lp-panel lp-section" id="tab-library" style="display: none;">
+      <h3 class="lp-panel-title"><i aria-hidden="true" data-lucide="files"></i> Document library</h3>
+      <div class="lp-table-wrap">
+        <table class="lp-table">
+          <thead><tr><th>Title</th><th>Template</th><th>Status</th><th>Workflow</th><th>Modified</th><th></th></tr></thead>
+          <tbody id="dc-docs-body"></tbody>
+        </table>
+      </div>
+      <div class="lp-empty" id="dc-docs-empty">
+        <div class="lp-empty-ico"><i aria-hidden="true" data-lucide="files"></i></div>
+        <p>No documents yet — render one from the Compose tab</p>
+      </div>
+      <div class="dc-result" id="dc-doc-view" style="display: none;"></div>
+    </div>
+
+    <div class="lp-panel lp-section" id="tab-ai" style="display: none;">
+      <h3 class="lp-panel-title"><i aria-hidden="true" data-lucide="sparkles"></i> Neethi AI</h3>
+      <div class="lp-grid3">
+        <div>
+          <div class="form-group"><label for="ai-ext-text">Document text to extract from</label><textarea id="ai-ext-text" class="form-control" rows="5" placeholder="Paste notice / agreement text..."></textarea></div>
+          <div class="form-group"><label for="ai-ext-hint">Field hint (optional)</label><input type="text" id="ai-ext-hint" class="form-control" placeholder="e.g. demand_notice_date"></div>
+          <div class="dc-actions">
+            <button class="lp-btn lp-btn--mint" id="ai-extract" type="button"><i aria-hidden="true" data-lucide="search-check"></i> Extract</button>
+            <button class="lp-btn lp-btn--ghost" id="ai-apply" type="button" style="display: none;"><i aria-hidden="true" data-lucide="save"></i> Apply to intake</button>
+          </div>
+          <pre class="lp-pre" id="ai-ext-out" style="margin-top: 12px; display: none;"></pre>
+        </div>
+        <div>
+          <div class="form-group"><label for="ai-sum-text">Text to summarize</label><textarea id="ai-sum-text" class="form-control" rows="5" placeholder="Paste order / judgment text..."></textarea></div>
+          <div class="form-group"><label for="ai-sum-focus">Focus (optional)</label><input type="text" id="ai-sum-focus" class="form-control" placeholder="e.g. next hearing obligations"></div>
+          <div class="dc-actions">
+            <button class="lp-btn lp-btn--mint" id="ai-summarize" type="button"><i aria-hidden="true" data-lucide="brain"></i> Summarize</button>
+          </div>
+          <div class="lp-pre" id="ai-sum-out" style="margin-top: 12px; display: none;"></div>
+        </div>
+      </div>
+      <p class="lp-note">AI features require Neethi AI to be enabled in Chamber Settings.</p>
+    </div>
+
+    <div class="lp-panel lp-section" id="tab-esign" style="display: none;">
+      <h3 class="lp-panel-title"><i aria-hidden="true" data-lucide="file-signature"></i> Send for signature</h3>
+      <div class="lp-filters">
+        <div class="form-group grow">
+          <label for="es-doc">Document</label>
+          <select id="es-doc" class="form-control"><option value="">No documents yet</option></select>
+        </div>
+        <div class="form-group"><label for="es-name">Signer name</label><input type="text" id="es-name" class="form-control"></div>
+        <div class="form-group"><label for="es-email">Signer email</label><input type="email" id="es-email" class="form-control"></div>
+        <div class="form-group">
+          <label for="es-provider">Provider</label>
+          <select id="es-provider" class="form-control">
+            <option value="">Default</option><option>DocuSign</option><option>Dropbox Sign</option><option>SignDesk</option><option>eMudhra</option><option>Generic REST</option><option>Manual</option>
+          </select>
+        </div>
+        <button class="lp-btn lp-btn--mint" id="es-send" type="button"><i aria-hidden="true" data-lucide="send"></i> Send</button>
+      </div>
+      <div class="dc-result" id="es-result" style="display: none;"></div>
+      <div class="lp-table-wrap" style="margin-top: 18px;">
+        <table class="lp-table">
+          <thead><tr><th>Signer</th><th>Provider</th><th>Status</th><th>Sent</th><th>Signed</th><th></th></tr></thead>
+          <tbody id="es-body"></tbody>
+        </table>
+      </div>
+      <div class="lp-note" id="es-empty" style="margin-top: 8px;">No signature requests yet.</div>
+    </div>
+    {% endif %}
+  
+  </main>
+</div>
+
+<div class="lp-modal" id="bx-search-modal" hidden>
+  <div class="lp-modal-box">
+    <input type="text" id="bx-search-input" placeholder="Search matters by name, case number or CNR..." autocomplete="off">
+    <div class="lp-modal-res" id="bx-search-results"></div>
+    <div class="lp-modal-hint">Enter to search &middot; Esc to close</div>
+  </div>
+</div>
+
+<script src="/assets/chamber/js/lucide.js"></script>
+<script>
+  (function () {
+    function bxInitIcons() {
+      if (window.lucide && lucide.createIcons) { lucide.createIcons(); }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', bxInitIcons);
+    } else {
+      bxInitIcons();
+    }
+  })();
+</script>
+
+<script>
+  (function () {
+    document.addEventListener("keydown", function (e) {
+      if ((e.ctrlKey || e.metaKey) && String(e.key).toLowerCase() === "k") {
+        e.preventDefault();
+        var inp = document.getElementById("search-input");
+        if (inp) { inp.focus(); inp.select(); }
+        else if (window.bxOpenSearch) { window.bxOpenSearch(); } else { window.location.href = "/case-status"; }
+      }
+    });
+    var lo = document.querySelector(".lp-logout-btn");
+    if (lo) {
+      lo.addEventListener("click", function () {
+        if (window.frappe && frappe.call) {
+          frappe.call({ method: "logout", callback: function () { window.location.href = "/login"; } });
+        } else {
+          window.location.href = "/login";
+        }
+      });
+    }
+  })();
+</script>
+
+<script>
+  (function () {
+    var modal = document.getElementById("bx-search-modal");
+    if (!modal) { return; }
+    var input = document.getElementById("bx-search-input");
+    var results = document.getElementById("bx-search-results");
+    var timer = null;
+    window.bxOpenSearch = function () {
+      modal.hidden = false;
+      input.value = "";
+      results.innerHTML = "";
+      input.focus();
+    };
+    function close() { modal.hidden = true; }
+    function esc(s) { return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+    modal.addEventListener("click", function (e) { if (e.target === modal) { close(); } });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !modal.hidden) { close(); } });
+    function run() {
+      var q = input.value.trim();
+      if (!q) { results.innerHTML = ""; return; }
+      frappe.call({
+        method: "chamber.api.portal.global_search",
+        args: { query: q },
+        callback: function (r) {
+          var rows = (r && r.message) || [];
+          if (!rows.length) { results.innerHTML = '<div class="lp-modal-hint">No matters found.</div>'; return; }
+          results.innerHTML = rows.map(function (m) {
+            return '<a href="/timeline?matter=' + encodeURIComponent(m.name) + '">' +
+              '<div class="r-t">' + esc(m.matter_title || m.name) + '</div>' +
+              '<div class="r-s">' + esc(m.name) + (m.case_number ? " &middot; " + esc(m.case_number) : "") + (m.cnr_number ? " &middot; " + esc(m.cnr_number) : "") + " &middot; " + esc(m.status || "") + '</div></a>';
+          }).join("");
+        },
+        error: function () { results.innerHTML = '<div class="lp-modal-hint">Search failed. Try again.</div>'; }
+      });
+    }
+    input.addEventListener("input", function () { clearTimeout(timer); timer = setTimeout(run, 300); });
+    input.addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); run(); } });
+  })();
+</script>
+
+<script>window.bxIcons = function () { if (window.lucide && lucide.createIcons) { lucide.createIcons(); } };</script>
+
+<script>
+  (function () {
+    if (window.bxIsGuest) { return; }
+    function $(id) { return document.getElementById(id); }
+    function esc(s) { return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+    function matter() { return $("dc-matter").value; }
+    var docs = [];
+
+    // ---- tabs ----
+    Array.prototype.forEach.call(document.querySelectorAll("#dc-tabs .lp-tab"), function (tab) {
+      tab.addEventListener("click", function () {
+        Array.prototype.forEach.call(document.querySelectorAll("#dc-tabs .lp-tab"), function (t) { t.classList.remove("is-active"); });
+        tab.classList.add("is-active");
+        ["compose", "library", "ai", "esign"].forEach(function (k) {
+          $("tab-" + k).style.display = (tab.getAttribute("data-tab") === k) ? "block" : "none";
+        });
+      });
+    });
+
+    function loadTemplates() {
+      var m = matter();
+      if (!m) { $("dc-template").innerHTML = '<option value="">Select a matter first</option>'; return; }
+      frappe.call({
+        method: "chamber.api.documents.get_available_templates",
+        args: { legal_matter: m },
+        callback: function (r) {
+          var rows = r.message || [];
+          $("dc-template").innerHTML = rows.length
+            ? rows.map(function (t) { return '<option value="' + esc(t.name) + '">' + esc(t.template_name || t.name) + '</option>'; }).join("")
+            : '<option value="">No templates available</option>';
+        }
+      });
+    }
+
+    function loadDocs() {
+      var m = matter();
+      if (!m) { return; }
+      frappe.call({
+        method: "frappe.client.get_list",
+        args: {
+          doctype: "Generated Document",
+          filters: { legal_matter: m },
+          fields: ["name", "title", "document_template", "status", "workflow_state", "modified"],
+          order_by: "modified desc",
+          limit_page_length: 50
+        },
+        callback: function (r) {
+          docs = r.message || [];
+          $("dc-docs-empty").style.display = docs.length ? "none" : "block";
+          $("dc-docs-body").innerHTML = docs.map(function (d) {
+            return '<tr><td><strong>' + esc(d.title || d.name) + '</strong><div class="lp-row-sub">' + esc(d.name) + '</div></td>' +
+              '<td>' + esc(d.document_template || "—") + '</td>' +
+              '<td><span class="lp-pill lp-pill--blue">' + esc(d.status || "Draft") + '</span></td>' +
+              '<td>' + esc(d.workflow_state || "—") + '</td>' +
+              '<td>' + esc(String(d.modified || "").slice(0, 10)) + '</td>' +
+              '<td style="text-align: right; white-space: nowrap;">' +
+              '<button class="lp-btn lp-btn--ghost dc-view" data-name="' + esc(d.name) + '" type="button" style="padding: 6px 12px;">View</button> ' +
+              '<button class="lp-btn lp-btn--mint dc-adv" data-name="' + esc(d.name) + '" type="button" style="padding: 6px 12px;">Advance</button></td></tr>';
+          }).join("");
+          var sel = $("es-doc");
+          sel.innerHTML = docs.length
+            ? docs.map(function (d) { return '<option value="' + esc(d.name) + '">' + esc(d.title || d.name) + '</option>'; }).join("")
+            : '<option value="">No documents yet</option>';
+          Array.prototype.forEach.call(document.querySelectorAll(".dc-view"), function (b) {
+            b.addEventListener("click", function () { viewDoc(b.getAttribute("data-name")); });
+          });
+          Array.prototype.forEach.call(document.querySelectorAll(".dc-adv"), function (b) {
+            b.addEventListener("click", function () { advance(b.getAttribute("data-name")); });
+          });
+          if (window.bxIcons) { bxIcons(); }
+        }
+      });
+    }
+
+    function viewDoc(name) {
+      frappe.call({
+        method: "chamber.api.documents.get_document",
+        args: { name: name },
+        callback: function (r) {
+          var d = r.message || {};
+          var v = $("dc-doc-view");
+          v.style.display = "block";
+          v.innerHTML = '<h3 class="lp-panel-title"><i aria-hidden="true" data-lucide="eye"></i> ' + esc(d.title || d.name) + '</h3>' +
+            '<pre class="lp-pre">' + esc(d.content || "(empty)") + '</pre>' +
+            '<div class="dc-actions">' +
+            '<button class="lp-btn lp-btn--ghost dc-sugg" data-name="' + esc(d.name) + '" type="button"><i aria-hidden="true" data-lucide="quote"></i> Suggest clauses</button>' +
+            '<button class="lp-btn lp-btn--mint dc-adv2" data-name="' + esc(d.name) + '" type="button"><i aria-hidden="true" data-lucide="arrow-right"></i> Advance workflow</button>' +
+            '</div><pre class="lp-pre dc-sugg-out" style="display: none; margin-top: 12px;"></pre>';
+          v.querySelector(".dc-sugg").addEventListener("click", function () {
+            frappe.call({
+              method: "chamber.api.portal.run_action",
+              args: { doctype: "Generated Document", name: d.name, method: "suggest_clauses" },
+              callback: function (r2) {
+                var out = v.querySelector(".dc-sugg-out");
+                out.style.display = "block";
+                out.textContent = typeof r2.message === "string" ? r2.message : JSON.stringify(r2.message, null, 2);
+              },
+              error: function () { frappe.msgprint("Could not fetch clause suggestions."); }
+            });
+          });
+          v.querySelector(".dc-adv2").addEventListener("click", function () { advance(d.name); });
+          if (window.bxIcons) { bxIcons(); }
+          v.scrollIntoView({ behavior: "smooth", block: "start" });
+        },
+        error: function () { frappe.msgprint("Could not open the document."); }
+      });
+    }
+
+    function advance(name) {
+      frappe.call({
+        method: "chamber.api.portal.run_action",
+        args: { doctype: "Generated Document", name: name, method: "advance_workflow" },
+        callback: function (r) {
+          var st = (r.message && (r.message.workflow_state || r.message.status)) || "advanced";
+          frappe.show_alert({ message: "Workflow → " + st, indicator: "green" });
+          loadDocs();
+        },
+        error: function () { frappe.msgprint("Could not advance the workflow."); }
+      });
+    }
+
+    $("dc-render").addEventListener("click", function () {
+      var m = matter();
+      var tpl = $("dc-template").value;
+      if (!m || !tpl) { frappe.msgprint("Select a matter and a template."); return; }
+      var btn = this;
+      btn.classList.add("lp-btn--busy");
+      var args = {
+        legal_matter: m,
+        document_template: tpl,
+        title: $("dc-title").value.trim()
+      };
+      if ($("dc-useai").checked) {
+        args.use_ai = 1;
+        args.ai_instructions = $("dc-ai-instructions").value.trim();
+      }
+      frappe.call({
+        method: "chamber.api.documents.render_document",
+        args: args,
+        callback: function (r) {
+          btn.classList.remove("lp-btn--busy");
+          var d = r.message || {};
+          var url = d.file_url || d.attachment || "";
+          var res = $("dc-compose-result");
+          res.style.display = "block";
+          res.innerHTML = '<strong>' + esc(d.title || "Document rendered") + '</strong> <span class="lp-pill lp-pill--mint">' + esc(d.name || "") + '</span>' +
+            (url ? '<div style="margin-top: 8px;"><a class="dc-link" href="' + esc(url) + '" target="_blank" rel="noopener"><i aria-hidden="true" data-lucide="external-link"></i> Open document</a></div>' : '') +
+            '<div class="dc-actions">' +
+            '<button class="lp-btn lp-btn--ghost dc-view4" data-name="' + esc(d.name) + '" type="button"><i aria-hidden="true" data-lucide="eye"></i> View content</button>' +
+            '<button class="lp-btn lp-btn--ghost dc-pdf" data-name="' + esc(d.name) + '" type="button"><i aria-hidden="true" data-lucide="file-down"></i> Generate PDF</button>' +
+            '<button class="lp-btn lp-btn--ghost dc-review" data-name="' + esc(d.name) + '" type="button"><i aria-hidden="true" data-lucide="send"></i> Send for review</button>' +
+            '<button class="lp-btn lp-btn--mint dc-adv3" data-name="' + esc(d.name) + '" type="button"><i aria-hidden="true" data-lucide="arrow-right"></i> Advance workflow</button>' +
+            '</div><div class="lp-note dc-pdf-out" style="margin-top: 8px;"></div>';
+          res.querySelector(".dc-view4").addEventListener("click", function () { viewDoc(d.name); });
+          res.querySelector(".dc-pdf").addEventListener("click", function () {
+            frappe.call({
+              method: "chamber.api.documents.generate_pdf",
+              args: { name: d.name },
+              callback: function (r2) {
+                var m2 = r2.message;
+                var purl = typeof m2 === "string" ? m2 : (m2 && (m2.file_url || m2.attachment)) || "";
+                res.querySelector(".dc-pdf-out").innerHTML = purl
+                  ? '<a class="dc-link" href="' + esc(purl) + '" target="_blank" rel="noopener"><i aria-hidden="true" data-lucide="external-link"></i> Open PDF</a>'
+                  : "PDF generated.";
+                if (window.bxIcons) { bxIcons(); }
+              },
+              error: function () { frappe.msgprint("Could not generate the PDF."); }
+            });
+          });
+          res.querySelector(".dc-review").addEventListener("click", function () {
+            var rec = window.prompt("Reviewer email(s), comma separated:");
+            if (rec === null) { return; }
+            frappe.call({
+              method: "chamber.api.documents.send_for_review",
+              args: { name: d.name, recipients: rec },
+              callback: function () { frappe.show_alert({ message: "Sent for review", indicator: "green" }); },
+              error: function () { frappe.msgprint("Could not send for review."); }
+            });
+          });
+          res.querySelector(".dc-adv3").addEventListener("click", function () { advance(d.name); });
+          if (window.bxIcons) { bxIcons(); }
+          loadDocs();
+        },
+        error: function () {
+          btn.classList.remove("lp-btn--busy");
+          frappe.msgprint("Could not render the document.");
+        }
+      });
+    });
+
+    $("ai-extract").addEventListener("click", function () {
+      var m = matter();
+      if (!m) { frappe.msgprint("Select a matter first."); return; }
+      var text = $("ai-ext-text").value.trim();
+      if (!text) { frappe.msgprint("Paste some text to extract from."); return; }
+      frappe.call({
+        method: "chamber.api.ai.extract",
+        args: { legal_matter: m, text: text, field_hint: $("ai-ext-hint").value.trim() },
+        callback: function (r) {
+          $("ai-ext-out").style.display = "block";
+          $("ai-ext-out").textContent = typeof r.message === "string" ? r.message : JSON.stringify(r.message, null, 2);
+          $("ai-apply").style.display = "inline-flex";
+        },
+        error: function () { frappe.msgprint("Extraction failed — check that Neethi AI is enabled."); }
+      });
+    });
+    $("ai-apply").addEventListener("click", function () {
+      var m = matter();
+      var text = $("ai-ext-text").value.trim();
+      frappe.call({
+        method: "chamber.api.ai.apply_extraction",
+        args: { legal_matter: m, text: text, field_hint: $("ai-ext-hint").value.trim() },
+        callback: function (r) {
+          $("ai-ext-out").style.display = "block";
+          $("ai-ext-out").textContent = typeof r.message === "string" ? r.message : JSON.stringify(r.message, null, 2);
+          frappe.show_alert({ message: "Extraction applied to intake responses", indicator: "green" });
+        },
+        error: function () { frappe.msgprint("Could not apply the extraction."); }
+      });
+    });
+    $("ai-summarize").addEventListener("click", function () {
+      var m = matter();
+      if (!m) { frappe.msgprint("Select a matter first."); return; }
+      var text = $("ai-sum-text").value.trim();
+      if (!text) { frappe.msgprint("Paste some text to summarize."); return; }
+      frappe.call({
+        method: "chamber.api.ai.summarize",
+        args: { legal_matter: m, text: text, focus: $("ai-sum-focus").value.trim() },
+        callback: function (r) {
+          $("ai-sum-out").style.display = "block";
+          $("ai-sum-out").textContent = typeof r.message === "string" ? r.message : JSON.stringify(r.message, null, 2);
+        },
+        error: function () { frappe.msgprint("Summarization failed — check that Neethi AI is enabled."); }
+      });
+    });
+
+    function loadSigns() {
+      var m = matter();
+      if (!m) { return; }
+      frappe.call({
+        method: "frappe.client.get_list",
+        args: {
+          doctype: "Signature Request",
+          filters: { legal_matter: m },
+          fields: ["name", "signer_name", "signer_email", "provider", "status", "sent_date", "signed_date", "signing_url"],
+          order_by: "modified desc",
+          limit_page_length: 50
+        },
+        callback: function (r) {
+          var rows = r.message || [];
+          $("es-empty").style.display = rows.length ? "none" : "block";
+          $("es-body").innerHTML = rows.map(function (s) {
+            return '<tr><td><strong>' + esc(s.signer_name) + '</strong><div class="lp-row-sub">' + esc(s.signer_email) + '</div></td>' +
+              '<td>' + esc(s.provider || "—") + '</td>' +
+              '<td><span class="lp-pill ' + (s.status === "Signed" ? "lp-pill--mint" : (s.status === "Declined" || s.status === "Expired" || s.status === "Failed" ? "lp-pill--red" : "lp-pill--blue")) + '">' + esc(s.status) + '</span></td>' +
+              '<td>' + esc(s.sent_date ? String(s.sent_date).slice(0, 16) : "—") + '</td>' +
+              '<td>' + esc(s.signed_date ? String(s.signed_date).slice(0, 16) : "—") + '</td>' +
+              '<td>' + (s.signing_url ? '<a class="dc-link" href="' + esc(s.signing_url) + '" target="_blank" rel="noopener">Open</a>' : '') + '</td></tr>';
+          }).join("");
+        }
+      });
+    }
+
+    $("es-send").addEventListener("click", function () {
+      var m = matter();
+      var doc = $("es-doc").value;
+      var nm = $("es-name").value.trim();
+      var em = $("es-email").value.trim();
+      if (!m || !doc) { frappe.msgprint("Select a document to sign."); return; }
+      if (!nm || !em) { frappe.msgprint("Signer name and email are required."); return; }
+      frappe.call({
+        method: "chamber.api.esign.send_for_signature",
+        args: {
+          legal_matter: m,
+          generated_document: doc,
+          signer_name: nm,
+          signer_email: em,
+          provider: $("es-provider").value
+        },
+        callback: function (r) {
+          var d = r.message || {};
+          var res = $("es-result");
+          res.style.display = "block";
+          res.innerHTML = '<span class="lp-pill lp-pill--mint">' + esc(d.status || "Sent") + '</span> ' +
+            (d.signing_url ? '<a class="dc-link" href="' + esc(d.signing_url) + '" target="_blank" rel="noopener"><i aria-hidden="true" data-lucide="external-link"></i> Open signing link</a>' : esc(d.name || ""));
+          if (window.bxIcons) { bxIcons(); }
+          loadSigns();
+        },
+        error: function () { frappe.msgprint("Could not send for signature — check e-sign settings."); }
+      });
+    });
+
+    $("dc-refresh").addEventListener("click", function () { loadTemplates(); loadDocs(); loadSigns(); });
+    $("dc-matter").addEventListener("change", function () { loadTemplates(); loadDocs(); loadSigns(); });
+
+    if (matter()) { loadTemplates(); loadDocs(); loadSigns(); }
+  })();
+</script>
+
+{%- endblock -%}

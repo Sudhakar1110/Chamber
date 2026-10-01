@@ -46,9 +46,11 @@ def search_matter(query):
         "Legal Matter",
         filters={"name": matter_name},
         fields=[
-            "matter_title", "status", "priority", "case_number", "cnr_number",
+            "name", "matter_title", "status", "priority", "case_number", "cnr_number",
             "filing_date", "judge_name", "description", "vertical",
             "court", "sections_charged", "bail_status",
+            "portal", "portal_status", "portal_status_date", "portal_status_notes",
+            "last_sync", "last_sync_status", "ecourts_coverage",
         ],
         limit=1,
     )

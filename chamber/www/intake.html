@@ -7,6 +7,7 @@
 {%- block head_include -%}
 {{ super() }}
 <link rel="stylesheet" href="/assets/frappe/css/fonts/fontawesome/font-awesome.min.css">
+
 {%- endblock -%}
 
 {%- block page_content -%}
@@ -109,6 +110,15 @@ body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wra
 .lp-success .lucide { width: 56px; height: 56px; color: #00C950; }
 .lp-success h3 { font-size: 22px; font-weight: 700; color: var(--bx-navy); margin: 14px 0 8px; }
 .lp-success p { font-size: 14px; color: var(--bx-gray-400); margin-bottom: 22px; }
+.lp-table-wrap { overflow-x: auto; }
+.lp-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.lp-table th { text-align: left; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--bx-gray-400); padding: 8px 10px; border-bottom: 2px solid var(--bx-mint); white-space: nowrap; }
+.lp-table td { padding: 10px; border-bottom: 1px solid var(--bx-gray-100); color: #000; vertical-align: top; }
+.lp-pill { display: inline-block; padding: 3px 10px; border-radius: 999px; background: var(--bx-gray-100); font-size: 12px; font-weight: 600; color: var(--bx-navy); }
+.lp-pill--mint { background: rgba(20, 241, 177, 0.22); }
+.lp-pill--blue { background: rgba(17, 78, 255, 0.14); }
+.lp-pill--red { background: rgba(220, 38, 38, 0.14); color: #B91C1C; }
+.chamber-intake-form { display: block; }
 
 @media (max-width: 992px) {
   .lp { flex-direction: column; }
@@ -117,9 +127,26 @@ body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wra
   .lp-grid { grid-template-columns: 1fr; }
   .lp-h1 { font-size: 26px; }
 }
+/* Search overlay */
+/* bell link */
+.lp-bell { display: inline-flex; align-items: center; justify-content: center; color: var(--bx-navy); }
+.lp-bell:hover { color: #0E9F7E; text-decoration: none; }
+.lp-bell .lucide { width: 17px; height: 17px; }
+.lp-modal { position: fixed; inset: 0; background: rgba(5, 19, 60, 0.55); z-index: 1000; display: flex; align-items: flex-start; justify-content: center; padding: 12vh 20px 20px; }
+.lp-modal[hidden] { display: none; }
+.lp-modal-box { width: 100%; max-width: 560px; background: #fff; border-radius: 14px; box-shadow: 0 20px 60px rgba(5, 19, 60, 0.3); overflow: hidden; }
+.lp-modal-box input { width: 100%; border: 0; border-bottom: 1px solid var(--bx-gray-100); padding: 16px 18px; font-size: 15px; outline: none; font-family: inherit; }
+.lp-modal-res { max-height: 46vh; overflow-y: auto; }
+.lp-modal-res a { display: block; padding: 12px 18px; border-bottom: 1px solid var(--bx-gray-100); text-decoration: none; color: var(--bx-navy); }
+.lp-modal-res a:hover { background: #F4F4F5; text-decoration: none; }
+.lp-modal-res .r-t { font-size: 14px; font-weight: 700; }
+.lp-modal-res .r-s { font-size: 12px; color: var(--bx-gray-400); margin-top: 2px; }
+.lp-modal-hint { padding: 10px 18px; font-size: 12px; color: var(--bx-gray-400); }
+
 </style>
 
 {% set bx_user = frappe.session.user or "Guest" %}
+<script>window.bxIsGuest = {{ 1 if bx_user == "Guest" else 0 }}; window.bxIsManager = {{ 1 if is_manager else 0 }};</script>
 <div class="lp">
   <!-- ── Sidebar ── -->
   <aside class="lp-side">
@@ -129,7 +156,7 @@ body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wra
         <div class="lp-brand-name">Chamber</div>
         <div class="lp-brand-sub">Lawyer Portal</div>
       </div>
-      <i aria-hidden="true" data-lucide="bell"></i>
+      <a href="/notifications" class="lp-bell" aria-label="Notifications" title="Notifications"><i aria-hidden="true" data-lucide="bell"></i></a>
     </div>
 
     <a href="/case-status" class="lp-searchbox" aria-label="Search cases">
@@ -142,6 +169,13 @@ body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wra
       <a href="/" class="lp-nav-item"><i aria-hidden="true" data-lucide="layout-dashboard"></i>Dashboard</a>
       <a href="/intake" class="lp-nav-item is-active" aria-current="page"><i aria-hidden="true" data-lucide="user-plus"></i>Client Intake</a>
       <a href="/case-status" class="lp-nav-item"><i aria-hidden="true" data-lucide="search"></i>Case Status<span class="lp-dot"></span></a>
+      <a href="/deadlines" class="lp-nav-item"><i aria-hidden="true" data-lucide="alarm-clock"></i>Deadlines</a>
+      <a href="/timeline" class="lp-nav-item"><i aria-hidden="true" data-lucide="milestone"></i>Matter Timeline</a>
+      <a href="/documents" class="lp-nav-item"><i aria-hidden="true" data-lucide="file-text"></i>Documents</a>
+      <a href="/reports" class="lp-nav-item"><i aria-hidden="true" data-lucide="bar-chart-3"></i>Reports</a>
+      <a href="/masters" class="lp-nav-item"><i aria-hidden="true" data-lucide="library"></i>Masters</a>
+      <a href="/notifications" class="lp-nav-item"><i aria-hidden="true" data-lucide="bell"></i>Notifications</a>
+      {% if is_manager %}      <a href="/settings" class="lp-nav-item"><i aria-hidden="true" data-lucide="settings"></i>Settings</a>{% endif %}
       <a href="/workflow" class="lp-nav-item"><i aria-hidden="true" data-lucide="git-branch"></i>Workflow</a>
       <a href="/about" class="lp-nav-item"><i aria-hidden="true" data-lucide="info"></i>About</a>
     </nav>
@@ -285,26 +319,91 @@ body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wra
           </div>
         </div>
       </div>
-
-      <!-- Submit -->
-      <div class="lp-submit">
-        <button type="submit" class="lp-btn lp-btn--mint" id="submit-btn">
-          <i class="fa fa-paper-plane"></i> Submit Intake Form
-        </button>
-        <p class="lp-fineprint">
-          By submitting, you agree to our terms of engagement. Your data is kept strictly confidential.
-        </p>
-      </div>
     </form>
+
+    <!-- Template-driven matter details (staff only, loaded per vertical) -->
+    {% if not is_guest %}
+    <div class="lp-panel lp-section" id="tpl-panel" style="display: none;">
+      <h3 class="lp-panel-title"><i aria-hidden="true" data-lucide="clipboard-list"></i> Matter Details <span class="lp-required">*</span></h3>
+      <p class="lp-panel-desc">Structured intake fields configured for this vertical.</p>
+      <div class="form-group">
+        <label for="intake_template">Intake template</label>
+        <select class="form-control" id="intake_template">
+          <option value="">Select template...</option>
+        </select>
+      </div>
+      <p class="lp-fineprint" id="tpl-desc" style="margin-bottom: 12px;"></p>
+      <div id="intake-tpl-fields"></div>
+    </div>
+    {% endif %}
+
+    <!-- Submit -->
+    <div class="lp-submit">
+      <button type="submit" form="intake-form" class="lp-btn lp-btn--mint" id="submit-btn">
+        <i class="fa fa-paper-plane"></i> Submit Intake Form
+      </button>
+      <p class="lp-fineprint">
+        By submitting, you agree to our terms of engagement. Your data is kept strictly confidential.
+      </p>
+    </div>
 
     <!-- Success Message (hidden by default) -->
     <div id="success-msg" class="lp-panel lp-success" style="display: none;">
       <i aria-hidden="true" data-lucide="circle-check"></i>
       <h3>Intake Form Submitted!</h3>
       <p>Thank you. Our legal team will review your case and contact you within 24 hours.</p>
+      <p id="success-matter" style="display: none;"><a class="lp-btn lp-btn--ghost" id="success-matter-link" href="/">View matter timeline</a></p>
       <a href="/" class="lp-btn lp-btn--ghost">Back to Dashboard</a>
     </div>
+
+    {% if not is_guest %}
+    <!-- Recent intake submissions (staff) -->
+    <div class="lp-panel lp-section" style="margin-top: 24px;">
+      <h3 class="lp-panel-title"><i aria-hidden="true" data-lucide="clipboard-list"></i> Recent Intake Submissions</h3>
+      <div class="lp-table-wrap">
+        <table class="lp-table">
+          <thead><tr><th>Submission</th><th>Matter</th><th>Template</th><th>Date</th><th>Status</th><th></th></tr></thead>
+          <tbody>
+            {% for s in submissions | default([]) %}
+            <tr>
+              <td><strong>{{ s.name }}</strong></td>
+              <td>{{ s.legal_matter or "—" }}</td>
+              <td>{{ s.intake_form_template or "—" }}</td>
+              <td>{{ s.submission_date or "—" }}</td>
+              <td><span class="lp-pill {{ 'lp-pill--mint' if s.status == 'Submitted' else 'lp-pill--blue' }}">{{ s.status or "—" }}</span></td>
+              <td>
+                {% if s.responses_list %}
+                <details>
+                  <summary style="cursor: pointer; font-weight: 700;">Responses</summary>
+                  <table class="lp-table" style="margin-top: 8px;">
+                    <thead><tr><th>Field</th><th>Value</th></tr></thead>
+                    <tbody>
+                      {% for r in s.responses_list %}
+                      <tr><td>{{ r.label or r.fieldname }}</td><td>{{ r.value }}</td></tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </details>
+                {% endif %}
+              </td>
+            </tr>
+            {% else %}
+            <tr><td colspan="6" class="lp-note" style="text-align: center; padding: 24px;">No intake submissions yet</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    {% endif %}
   </main>
+</div>
+
+<div class="lp-modal" id="bx-search-modal" hidden>
+  <div class="lp-modal-box">
+    <input type="text" id="bx-search-input" placeholder="Search matters by name, case number or CNR..." autocomplete="off">
+    <div class="lp-modal-res" id="bx-search-results"></div>
+    <div class="lp-modal-hint">Enter to search &middot; Esc to close</div>
+  </div>
 </div>
 
 <script src="/assets/chamber/js/lucide.js"></script>
@@ -328,7 +427,7 @@ body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wra
         e.preventDefault();
         var inp = document.getElementById("search-input");
         if (inp) { inp.focus(); inp.select(); }
-        else { window.location.href = "/case-status"; }
+        else if (window.bxOpenSearch) { window.bxOpenSearch(); } else { window.location.href = "/case-status"; }
       }
     });
     var lo = document.querySelector(".lp-logout-btn");
@@ -344,12 +443,119 @@ body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wra
   })();
 </script>
 
+<script src="/assets/chamber/js/intake_form_renderer.js"></script>
 <script>
 frappe.ready(function() {
+  var tplState = { template: "", fields: [], api: null };
+
+  function loadTemplates() {
+    tplState = { template: "", fields: [], api: null };
+    $("#intake-tpl-fields").empty();
+    var v = $("#vertical").val();
+    if (!v || window.bxIsGuest) { $("#tpl-panel").hide(); return; }
+    frappe.call({
+      method: "chamber.api.intake.get_available_templates",
+      args: { vertical: v },
+      callback: function (r) {
+        var rows = r.message || [];
+        if (!rows.length) { $("#tpl-panel").hide(); return; }
+        var opts = '<option value="">Select template...</option>' + rows.map(function (t) {
+          return '<option value="' + String(t.name).replace(/"/g, "&quot;") + '">' + String(t.template_name || t.name).replace(/</g, "&lt;") + '</option>';
+        }).join("");
+        $("#intake_template").html(opts);
+        $("#tpl-panel").show();
+        if (window.bxIcons) { bxIcons(); }
+      }
+    });
+  }
+
+  function loadForm() {
+    var t = $("#intake_template").val();
+    tplState.template = "";
+    tplState.fields = [];
+    tplState.api = null;
+    $("#intake-tpl-fields").empty();
+    if (!t || window.bxIsGuest) { return; }
+    frappe.call({
+      method: "chamber.api.intake.get_form",
+      args: { template: t },
+      callback: function (r) {
+        var d = r.message || {};
+        tplState.template = t;
+        tplState.fields = d.fields || [];
+        $("#tpl-desc").text(d.description || d.template_name || "");
+        var values = {
+          client_name: $("#client_name").val(),
+          client_phone: $("#contact_number").val(),
+          client_email: $("#email").val(),
+          client_address: $("#city").val()
+        };
+        tplState.api = chamber.intake.render({
+          fields: d.fields,
+          container: $("#intake-tpl-fields"),
+          values: values,
+          vertical: $("#vertical").val(),
+          onSubmit: function () { $("#intake-form").submit(); }
+        });
+        $("#intake-tpl-fields .chamber-intake-actions").hide();
+        if (window.bxIcons) { bxIcons(); }
+      }
+    });
+  }
+
+  $("#vertical").on("change", loadTemplates);
+  $("#intake_template").on("change", loadForm);
+
+  function collectResponses() {
+    var values = tplState.api ? tplState.api.getValues() : {};
+    values.client_name = $("#client_name").val();
+    values.client_phone = $("#contact_number").val();
+    values.client_email = $("#email").val();
+    values.client_address = $("#city").val();
+    return values;
+  }
+
+  function missingRequired() {
+    var missing = [];
+    if (!tplState.api) { return missing; }
+    var values = collectResponses();
+    tplState.fields.forEach(function (f) {
+      if (!f.reqd) { return; }
+      if (["Section Break", "Column Break", "Heading"].indexOf(f.fieldtype) !== -1) { return; }
+      var v = values[f.fieldname];
+      if (v === undefined || v === null || String(v).trim() === "") { missing.push(f.label || f.fieldname); }
+    });
+    return missing;
+  }
+
+  function saveTemplate(matter, done) {
+    if (!tplState.template || !tplState.api) { done(true); return; }
+    frappe.call({
+      method: "chamber.api.intake.submit",
+      args: {
+        legal_matter: matter,
+        intake_form_template: tplState.template,
+        responses: collectResponses()
+      },
+      callback: function () { done(true); },
+      error: function () {
+        frappe.msgprint("Matter " + matter + " was created, but saving the template responses failed. Staff can complete them from the desk.");
+        done(false);
+      }
+    });
+  }
+
   $('#intake-form').on('submit', function(e) {
     e.preventDefault();
     var $btn = $('#submit-btn');
     $btn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Submitting...');
+
+    var miss = missingRequired();
+    if (miss.length) {
+      frappe.msgprint("Please fill the mandatory fields: " + miss.join(", "));
+      $btn.prop('disabled', false).html('<i class="fa fa-paper-plane"></i> Submit Intake Form');
+      return;
+    }
 
     frappe.call({
       method: 'chamber.www.intake.submit_intake',
@@ -358,8 +564,17 @@ frappe.ready(function() {
       }, {}),
       callback: function(r) {
         if (r.message && r.message.status === 'ok') {
-          $('#intake-form').hide();
-          $('#success-msg').show();
+          var matter = r.message.matter;
+          saveTemplate(matter, function () {
+            $('#intake-form').hide();
+            $('#tpl-panel').hide();
+            if (matter) {
+              $('#success-matter').show();
+              $('#success-matter-link').attr('href', '/timeline?matter=' + encodeURIComponent(matter));
+            }
+            $('#success-msg').show();
+            if (window.bxIcons) { bxIcons(); }
+          });
         } else {
           frappe.msgprint(r.message || 'Error submitting form');
           $btn.prop('disabled', false).html('<i class="fa fa-paper-plane"></i> Submit Intake Form');
@@ -373,4 +588,46 @@ frappe.ready(function() {
   });
 });
 </script>
+
+<script>
+  (function () {
+    var modal = document.getElementById("bx-search-modal");
+    if (!modal) { return; }
+    var input = document.getElementById("bx-search-input");
+    var results = document.getElementById("bx-search-results");
+    var timer = null;
+    window.bxOpenSearch = function () {
+      modal.hidden = false;
+      input.value = "";
+      results.innerHTML = "";
+      input.focus();
+    };
+    function close() { modal.hidden = true; }
+    function esc(s) { return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+    modal.addEventListener("click", function (e) { if (e.target === modal) { close(); } });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !modal.hidden) { close(); } });
+    function run() {
+      var q = input.value.trim();
+      if (!q) { results.innerHTML = ""; return; }
+      frappe.call({
+        method: "chamber.api.portal.global_search",
+        args: { query: q },
+        callback: function (r) {
+          var rows = (r && r.message) || [];
+          if (!rows.length) { results.innerHTML = '<div class="lp-modal-hint">No matters found.</div>'; return; }
+          results.innerHTML = rows.map(function (m) {
+            return '<a href="/timeline?matter=' + encodeURIComponent(m.name) + '">' +
+              '<div class="r-t">' + esc(m.matter_title || m.name) + '</div>' +
+              '<div class="r-s">' + esc(m.name) + (m.case_number ? " &middot; " + esc(m.case_number) : "") + (m.cnr_number ? " &middot; " + esc(m.cnr_number) : "") + " &middot; " + esc(m.status || "") + '</div></a>';
+          }).join("");
+        },
+        error: function () { results.innerHTML = '<div class="lp-modal-hint">Search failed. Try again.</div>'; }
+      });
+    }
+    input.addEventListener("input", function () { clearTimeout(timer); timer = setTimeout(run, 300); });
+    input.addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); run(); } });
+  })();
+</script>
+
+<script>window.bxIcons = function () { if (window.lucide && lucide.createIcons) { lucide.createIcons(); } };</script>
 {%- endblock -%}

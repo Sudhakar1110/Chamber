@@ -105,8 +105,46 @@ body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wra
 .lp-ico--blue { background: rgba(17, 78, 255, 0.1); color: var(--bx-blue); }
 .lp-ico--navy { background: var(--bx-navy); color: var(--bx-mint); }
 
-/* ── Page: about ── */
-.ab-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
+
+/* Page kit */
+.lp-filters { display: flex; flex-wrap: wrap; gap: 14px; align-items: flex-end; }
+.lp-filters .form-group { margin: 0; min-width: 160px; }
+.lp-filters .form-group.grow { flex: 1; min-width: 220px; }
+.lp-btn--busy { opacity: 0.6; pointer-events: none; }
+.lp-table-wrap { overflow-x: auto; }
+.lp-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.lp-table th { text-align: left; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--bx-gray-400); padding: 8px 10px; border-bottom: 2px solid var(--bx-mint); white-space: nowrap; }
+.lp-table td { padding: 10px; border-bottom: 1px solid var(--bx-gray-100); color: #000; vertical-align: top; }
+.lp-table tr.clickable { cursor: pointer; }
+.lp-table tr.clickable:hover td { background: #F8FAFF; }
+.lp-table tr.is-selected td { background: rgba(20, 241, 177, 0.1); }
+.lp-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
+.lp-tab { padding: 8px 16px; border-radius: 999px; font-size: 13px; font-weight: 700; background: #fff; border: 1px solid var(--bx-gray-100); color: var(--bx-navy); cursor: pointer; font-family: inherit; }
+.lp-tab.is-active { background: var(--bx-navy); color: #fff; border-color: var(--bx-navy); }
+.lp-chiprow { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+.lp-chip { display: inline-block; padding: 5px 13px; border-radius: 999px; background: var(--bx-gray-100); font-size: 12px; font-weight: 700; color: var(--bx-navy); }
+.lp-kv { display: grid; grid-template-columns: 170px 1fr; gap: 7px 14px; font-size: 14px; margin: 0; }
+.lp-kv dt { color: var(--bx-gray-400); font-weight: 600; }
+.lp-kv dd { margin: 0; color: var(--bx-navy); word-break: break-word; }
+.lp-band { border: 1px solid var(--bx-gray-100); border-radius: 10px; padding: 12px 14px; margin-bottom: 10px; }
+.lp-band-h { display: flex; justify-content: space-between; gap: 10px; font-size: 14px; font-weight: 700; }
+.lp-band-n { font-size: 12px; color: var(--bx-gray-400); margin-top: 4px; }
+.lp-band--expired { border-color: rgba(220, 38, 38, 0.4); background: rgba(220, 38, 38, 0.05); }
+.lp-band--critical { border-color: rgba(220, 38, 38, 0.25); background: rgba(220, 38, 38, 0.03); }
+.lp-band--warning { border-color: rgba(17, 78, 255, 0.3); background: rgba(17, 78, 255, 0.04); }
+.lp-band--ok { border-color: rgba(20, 241, 177, 0.5); background: rgba(20, 241, 177, 0.07); }
+.lp-pre { background: #0B1220; color: #D7E3F4; border-radius: 10px; padding: 16px 18px; font-size: 13px; white-space: pre-wrap; word-break: break-word; max-height: 420px; overflow-y: auto; font-family: ui-monospace, Consolas, monospace; }
+.lp-note { font-size: 13px; color: var(--bx-gray-400); }
+.lp-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+.lp-msg { border-radius: 10px; padding: 12px 16px; font-size: 14px; margin-bottom: 16px; }
+.lp-msg--ok { background: rgba(20, 241, 177, 0.14); color: var(--bx-navy); }
+.lp-msg--err { background: rgba(220, 38, 38, 0.1); color: #B91C1C; }
+.lp-grid3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 24px; }
+.lp-mchip { display: inline-block; padding: 5px 12px; border-radius: 999px; background: var(--bx-gray-100); font-size: 12px; font-weight: 600; color: var(--bx-navy); margin: 0 6px 6px 0; }
+.lp-signin { text-align: center; padding: 48px 16px; }
+.lp-signin .lucide { width: 34px; height: 34px; color: var(--bx-gray-400); }
+.lp-signin h4 { font-size: 17px; color: var(--bx-navy); margin: 14px 0 6px; }
+.lp-signin p { font-size: 14px; color: var(--bx-gray-400); margin: 0 0 18px; }
 
 @media (max-width: 992px) {
   .lp { flex-direction: column; }
@@ -130,6 +168,8 @@ body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wra
 .lp-modal-res .r-t { font-size: 14px; font-weight: 700; }
 .lp-modal-res .r-s { font-size: 12px; color: var(--bx-gray-400); margin-top: 2px; }
 .lp-modal-hint { padding: 10px 18px; font-size: 12px; color: var(--bx-gray-400); }
+
+
 
 </style>
 
@@ -162,9 +202,9 @@ body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wra
       <a href="/reports" class="lp-nav-item"><i aria-hidden="true" data-lucide="bar-chart-3"></i>Reports</a>
       <a href="/masters" class="lp-nav-item"><i aria-hidden="true" data-lucide="library"></i>Masters</a>
       <a href="/notifications" class="lp-nav-item"><i aria-hidden="true" data-lucide="bell"></i>Notifications</a>
-      {% if is_manager %}      <a href="/settings" class="lp-nav-item"><i aria-hidden="true" data-lucide="settings"></i>Settings</a>{% endif %}
+      {% if is_manager %}      <a href="/settings" class="lp-nav-item is-active" aria-current="page"><i aria-hidden="true" data-lucide="settings"></i>Settings</a>{% endif %}
       <a href="/workflow" class="lp-nav-item"><i aria-hidden="true" data-lucide="git-branch"></i>Workflow</a>
-      <a href="/about" class="lp-nav-item is-active" aria-current="page"><i aria-hidden="true" data-lucide="info"></i>About</a>
+      <a href="/about" class="lp-nav-item"><i aria-hidden="true" data-lucide="info"></i>About</a>
     </nav>
 
     <div class="lp-user">
@@ -180,129 +220,84 @@ body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wra
       {% endif %}
     </div>
   </aside>
+    <script>window.bxIsGuest = {{ 1 if bx_user == "Guest" else 0 }}; window.bxIsManager = {{ 1 if is_manager else 0 }};</script>
 
   <!-- ── Main ── -->
   <main class="lp-main">
+
     <div class="lp-head">
       <div>
-        <h1 class="lp-h1"><i aria-hidden="true" data-lucide="briefcase"></i> About Chamber</h1>
-        <p class="lp-sub">Legal practice &amp; chamber work management — seven verticals, one platform.</p>
+        <h1 class="lp-h1"><i aria-hidden="true" data-lucide="settings"></i> Settings</h1>
+        <p class="lp-sub">Integration health checks, live eCourts lookup and portal connector dry-runs.</p>
       </div>
     </div>
 
-    <!-- Practice Areas -->
-    <div class="lp-panel lp-section">
-      <h3 class="lp-panel-title"><i aria-hidden="true" data-lucide="building-2"></i> Practice Areas</h3>
+    {% if is_guest %}
+    <div class="lp-panel lp-section lp-signin">
+      <i aria-hidden="true" data-lucide="key"></i>
+      <h4>Sign in to manage settings</h4>
+      <p>Settings are available to signed-in chamber members.</p>
+      <a href="/login" class="lp-btn lp-btn--mint">Sign in</a>
+    </div>
+    {% elif not is_manager %}
+    <div class="lp-panel lp-section lp-signin">
+      <i aria-hidden="true" data-lucide="shield"></i>
+      <h4>Restricted</h4>
+      <p>Settings require the System Manager role. Contact your administrator.</p>
+      <a href="/" class="lp-btn lp-btn--ghost">Back to dashboard</a>
+    </div>
+    {% else %}
+    <div class="lp-tabs" id="se-tabs">
+      <button type="button" class="lp-tab is-active" data-tab="conn">Connections</button>
+      <button type="button" class="lp-tab" data-tab="ec">eCourts</button>
+      <button type="button" class="lp-tab" data-tab="dry">Portal dry-run</button>
+    </div>
 
-      <div class="lp-row">
-        <div class="lp-ico"><i aria-hidden="true" data-lucide="shield"></i></div>
-        <div class="lp-row-body">
-          <div class="lp-row-title">Criminal Defense</div>
-          <div class="lp-row-sub">FIR matters, bail, appeals, cyber crime</div>
-        </div>
-        <div class="lp-row-side"><span class="lp-pill lp-pill--blue">Vertical</span></div>
+    <div class="lp-panel lp-section" id="se-tab-conn">
+      <h3 class="lp-panel-title"><i aria-hidden="true" data-lucide="plug"></i> Integration health</h3>
+      <p class="lp-note">Checks configuration presence and lightweight reachability. No live data calls are made.</p>
+      <div class="dc-actions" style="margin-top: 12px;">
+        <button class="lp-btn lp-btn--mint" id="se-test" type="button"><i aria-hidden="true" data-lucide="flask-conical"></i> Test connections</button>
       </div>
-
-      <div class="lp-row">
-        <div class="lp-ico lp-ico--blue"><i aria-hidden="true" data-lucide="banknote"></i></div>
-        <div class="lp-row-body">
-          <div class="lp-row-title">Cheque Bounce / NI Act 138</div>
-          <div class="lp-row-sub">Demand notices, complaints, trials</div>
-        </div>
-        <div class="lp-row-side"><span class="lp-pill lp-pill--blue">Vertical</span></div>
+      <div class="lp-table-wrap" style="margin-top: 16px;">
+        <table class="lp-table">
+          <thead><tr><th>Integration</th><th>Configured</th><th>Reachable</th><th>Status</th></tr></thead>
+          <tbody id="se-conn-body"></tbody>
+        </table>
       </div>
-
-      <div class="lp-row">
-        <div class="lp-ico lp-ico--navy"><i aria-hidden="true" data-lucide="gavel"></i></div>
-        <div class="lp-row-body">
-          <div class="lp-row-title">Civil Litigation</div>
-          <div class="lp-row-sub">Money suits, property, contracts</div>
-        </div>
-        <div class="lp-row-side"><span class="lp-pill lp-pill--blue">Vertical</span></div>
-      </div>
-
-      <div class="lp-row">
-        <div class="lp-ico"><i aria-hidden="true" data-lucide="users"></i></div>
-        <div class="lp-row-body">
-          <div class="lp-row-title">Family Law</div>
-          <div class="lp-row-sub">Divorce, custody, maintenance</div>
-        </div>
-        <div class="lp-row-side"><span class="lp-pill lp-pill--blue">Vertical</span></div>
-      </div>
-
-      <div class="lp-row">
-        <div class="lp-ico lp-ico--blue"><i aria-hidden="true" data-lucide="house"></i></div>
-        <div class="lp-row-body">
-          <div class="lp-row-title">Property / Real Estate</div>
-          <div class="lp-row-sub">Title, eviction, RERA</div>
-        </div>
-        <div class="lp-row-side"><span class="lp-pill lp-pill--blue">Vertical</span></div>
-      </div>
-
-      <div class="lp-row">
-        <div class="lp-ico lp-ico--navy"><i aria-hidden="true" data-lucide="building-2"></i></div>
-        <div class="lp-row-body">
-          <div class="lp-row-title">Corporate / Commercial</div>
-          <div class="lp-row-sub">Insolvency, contracts</div>
-        </div>
-        <div class="lp-row-side"><span class="lp-pill lp-pill--blue">Vertical</span></div>
-      </div>
-
-      <div class="lp-row">
-        <div class="lp-ico"><i aria-hidden="true" data-lucide="lightbulb"></i></div>
-        <div class="lp-row-body">
-          <div class="lp-row-title">IP Law</div>
-          <div class="lp-row-sub">Trademarks, copyrights, patents</div>
-        </div>
-        <div class="lp-row-side"><span class="lp-pill lp-pill--blue">Vertical</span></div>
+      <div class="lp-empty" id="se-conn-empty">
+        <div class="lp-empty-ico"><i aria-hidden="true" data-lucide="plug"></i></div>
+        <p>Run the test to see integration status</p>
       </div>
     </div>
 
-    <!-- Technology -->
-    <div class="lp-panel lp-section">
-      <h3 class="lp-panel-title"><i aria-hidden="true" data-lucide="zap"></i> Technology-Enabled Legal Services</h3>
-
-      <div class="lp-grid">
-        <div class="lp-panel" style="box-shadow: none;">
-          <div class="lp-row" style="padding-top: 2px;">
-            <div class="lp-ico lp-ico--navy"><i aria-hidden="true" data-lucide="cloud"></i></div>
-            <div class="lp-row-body">
-              <div class="lp-row-title">eCourts CNR Sync</div>
-              <div class="lp-row-sub">Automatic case status updates — hearing dates, order status, and cause list integration.</div>
-            </div>
-          </div>
-          <div class="lp-row">
-            <div class="lp-ico"><i aria-hidden="true" data-lucide="bot"></i></div>
-            <div class="lp-row-body">
-              <div class="lp-row-title">AI-Assisted Drafting</div>
-              <div class="lp-row-sub">Merge fields, clause libraries, and AI extraction from uploaded documents.</div>
-            </div>
-          </div>
-        </div>
-        <div class="lp-panel" style="box-shadow: none;">
-          <div class="lp-row" style="padding-top: 2px;">
-            <div class="lp-ico lp-ico--blue"><i aria-hidden="true" data-lucide="list-checks"></i></div>
-            <div class="lp-row-body">
-              <div class="lp-row-title">Litigation Timelines</div>
-              <div class="lp-row-sub">Full case lifecycle tracking from FIR registration through judgment.</div>
-            </div>
-          </div>
-          <div class="lp-row">
-            <div class="lp-ico"><i aria-hidden="true" data-lucide="bell"></i></div>
-            <div class="lp-row-body">
-              <div class="lp-row-title">Deadline Management</div>
-              <div class="lp-row-sub">Hearing reminders, limitation tracking, and statutory deadline alerts.</div>
-            </div>
-          </div>
-        </div>
+    <div class="lp-panel lp-section" id="se-tab-ec" style="display: none;">
+      <h3 class="lp-panel-title"><i aria-hidden="true" data-lucide="cloud"></i> Live eCourts status check</h3>
+      <p class="lp-note">Read-only CNR lookup using the configured App Code. Nothing is saved.</p>
+      <div class="lp-filters" style="margin-top: 12px;">
+        <div class="form-group grow"><label for="se-cnr">CNR number</label><input type="text" id="se-cnr" class="form-control" placeholder="e.g. MHXX010012342023"></div>
+        <button class="lp-btn lp-btn--mint" id="se-ec-run" type="button"><i aria-hidden="true" data-lucide="search-check"></i> Check</button>
       </div>
+      <pre class="lp-pre" id="se-ec-out" style="margin-top: 14px; display: none;"></pre>
     </div>
 
-    <!-- Actions -->
-    <div class="lp-section ab-actions">
-      <a href="/intake" class="lp-btn lp-btn--mint"><i aria-hidden="true" data-lucide="file-text"></i> Submit Case</a>
-      <a href="/case-status" class="lp-btn lp-btn--navy"><i aria-hidden="true" data-lucide="search"></i> Check Status</a>
+    <div class="lp-panel lp-section" id="se-tab-dry" style="display: none;">
+      <h3 class="lp-panel-title"><i aria-hidden="true" data-lucide="play"></i> Portal connector dry-run</h3>
+      <p class="lp-note">Runs the connector fetch + parse and shows what would be recorded. Nothing is saved.</p>
+      <div class="lp-filters" style="margin-top: 12px;">
+        <div class="form-group">
+          <label for="se-portal">Portal</label>
+          <select id="se-portal" class="form-control">
+            <option>IP India</option><option>NCLT / NCLAT</option><option>State RERA</option>
+          </select>
+        </div>
+        <div class="form-group grow"><label for="se-ref">Reference number</label><input type="text" id="se-ref" class="form-control" placeholder="Application / case / RERA number"></div>
+        <button class="lp-btn lp-btn--mint" id="se-dry-run" type="button"><i aria-hidden="true" data-lucide="play"></i> Dry run</button>
+      </div>
+      <pre class="lp-pre" id="se-dry-out" style="margin-top: 14px; display: none;"></pre>
     </div>
+    {% endif %}
+  
   </main>
 </div>
 
@@ -392,4 +387,83 @@ body > nav.navbar, body > footer.web-footer, .page-breadcrumbs, .page-header-wra
 </script>
 
 <script>window.bxIcons = function () { if (window.lucide && lucide.createIcons) { lucide.createIcons(); } };</script>
+
+<script>
+  (function () {
+    if (window.bxIsGuest || !window.bxIsManager) { return; }
+    function $(id) { return document.getElementById(id); }
+    function esc(s) { return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+
+    Array.prototype.forEach.call(document.querySelectorAll("#se-tabs .lp-tab"), function (tab) {
+      tab.addEventListener("click", function () {
+        Array.prototype.forEach.call(document.querySelectorAll("#se-tabs .lp-tab"), function (t) { t.classList.remove("is-active"); });
+        tab.classList.add("is-active");
+        ["conn", "ec", "dry"].forEach(function (k) {
+          $("se-tab-" + k).style.display = (tab.getAttribute("data-tab") === k) ? "block" : "none";
+        });
+      });
+    });
+
+    $("se-test").addEventListener("click", function () {
+      var btn = this;
+      btn.classList.add("lp-btn--busy");
+      frappe.call({
+        method: "chamber.api.settings.test_connections",
+        callback: function (r) {
+          btn.classList.remove("lp-btn--busy");
+          var data = r.message || {};
+          var names = Object.keys(data);
+          $("se-conn-empty").style.display = names.length ? "none" : "block";
+          $("se-conn-body").innerHTML = names.map(function (n) {
+            var x = data[n] || {};
+            var reach = x.reachable === undefined ? "—" : (x.reachable && x.reachable.ok ? "OK" : "No");
+            return '<tr><td><strong>' + esc(n) + '</strong></td>' +
+              '<td><span class="lp-pill ' + (x.configured ? "lp-pill--mint" : "lp-pill--red") + '">' + (x.configured ? "Yes" : "No") + '</span></td>' +
+              '<td>' + esc(reach) + '</td><td>' + esc(x.status || "—") + '</td></tr>';
+          }).join("");
+        },
+        error: function () { btn.classList.remove("lp-btn--busy"); frappe.msgprint("Connection test failed."); }
+      });
+    });
+
+    $("se-ec-run").addEventListener("click", function () {
+      var cnr = $("se-cnr").value.trim();
+      if (!cnr) { frappe.msgprint("Enter a CNR number."); return; }
+      frappe.call({
+        method: "chamber.api.settings.live_ecourts_check",
+        args: { cnr_number: cnr },
+        callback: function (r) {
+          var out = $("se-ec-out");
+          out.style.display = "block";
+          out.textContent = JSON.stringify(r.message, null, 2);
+        },
+        error: function (e) {
+          var out = $("se-ec-out");
+          out.style.display = "block";
+          out.textContent = "eCourts check failed — set the App Code in Chamber Settings first.";
+        }
+      });
+    });
+
+    $("se-dry-run").addEventListener("click", function () {
+      var ref = $("se-ref").value.trim();
+      if (!ref) { frappe.msgprint("Enter a reference number."); return; }
+      frappe.call({
+        method: "chamber.api.settings.dry_run_portal",
+        args: { portal: $("se-portal").value, reference: ref },
+        callback: function (r) {
+          var out = $("se-dry-out");
+          out.style.display = "block";
+          out.textContent = JSON.stringify(r.message, null, 2);
+        },
+        error: function () {
+          var out = $("se-dry-out");
+          out.style.display = "block";
+          out.textContent = "Dry run failed — check the endpoint override in Chamber Settings.";
+        }
+      });
+    });
+  })();
+</script>
+
 {%- endblock -%}
